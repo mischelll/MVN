@@ -4,6 +4,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
@@ -12,10 +13,20 @@ public class User extends BaseEntity implements UserDetails {
     private String username;
     private String password;
     private String email;
+    private LocalDateTime registeredOn = LocalDateTime.now();
     private Set<Role> authorities;
     private Set<Post> posts;
 
     public User() {
+    }
+
+    @Column(name = "registered_on")
+    public LocalDateTime getRegisteredOn() {
+        return registeredOn;
+    }
+
+    public void setRegisteredOn(LocalDateTime registeredOn) {
+        this.registeredOn = registeredOn;
     }
 
     @OneToMany(mappedBy = "author",targetEntity = Post.class)

@@ -46,6 +46,11 @@ public class PostController {
 
         return new ModelAndView("create-post");
     }
+    @GetMapping("/see/all")
+    public ModelAndView seeAll(Model model){
+        model.addAttribute("posts",postService.findAll());
+        return new ModelAndView("blog");
+    }
 
     @PostMapping("/create")
     public ModelAndView createPostConfirm(@Valid @ModelAttribute("post") PostCreateModel post, BindingResult bindingResult) {
