@@ -3,6 +3,7 @@
  * Copyright 2011-2019 The Bootstrap Authors
  * Copyright 2011-2019 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+  *#0028ff -blue
  */
 :root {
   --blue: #007bff;
@@ -8627,7 +8628,7 @@ h1, h2, h3, h4, h5,
       right: 0;
       bottom: 0;
       content: '';
-      background: #0028ff;
+      background: moccasin;
       z-index: -1;
       opacity: 0;
       -moz-transition: all 0.3s ease;
@@ -8681,7 +8682,8 @@ h1, h2, h3, h4, h5,
         .blog-entry .text .meta-wrap .meta span a {
           color: #000000; }
   .blog-entry.active, .blog-entry:hover {
-    background: #0028ff;
+    background: darksalmon;
+    /*#0028ff*/
     color: rgba(255, 255, 255, 0.8); }
     .blog-entry.active .text h3 a, .blog-entry:hover .text h3 a {
       color: #fff; }
