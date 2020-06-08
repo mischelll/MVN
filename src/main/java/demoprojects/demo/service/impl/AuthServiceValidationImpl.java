@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 @Service
 public class AuthServiceValidationImpl implements AuthServiceValidation {
     private final UserRepository userRepository;
-    private static final String EMAIL_REGEX = "^[A-Za-z_]+@[a-z]+\\.[a-z]{2,4}$";
+    private static final String EMAIL_REGEX = "^[A-Za-z_.]+@[a-z]+\\.[a-z]{2,4}$";
     private static final String PASSWORD_REGEX = "^(?<pass>[A-Z]{1,}[a-z]{1,}[0-9]+)$";
     @Autowired
     public AuthServiceValidationImpl(UserRepository userRepository) {

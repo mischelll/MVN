@@ -68,6 +68,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public boolean deleteByUsername(String username) {
+        User byUsername = this.userRepository.findByUsername(username);
+        if (byUsername == null){
+            return false;
+        }
+
+        this.userRepository.delete(byUsername);
+        return true;
+    }
+
+    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return this.userRepository.findByUsername(username);
     }
