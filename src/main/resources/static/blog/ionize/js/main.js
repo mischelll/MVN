@@ -6,6 +6,10 @@
 (function($) {
 
 	"use strict";
+	// PRE LOADER
+	$(window).load(function(){
+		$('.preloader').delay(100).slideUp('fast'); // set duration in brackets
+	});
 
 	$(window).stellar({
     responsive: true,

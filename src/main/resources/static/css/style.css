@@ -4,7 +4,7 @@ body, html {
 
 body {
     color: white;
-    /*background-image: url(../img/leaves.jpg.jpg);*/
+    background-image: url(/img/project-image3.jpg);
     background-position: center;
     background-attachment: fixed;
     background-size: cover;
@@ -26,17 +26,21 @@ p {
     color: white;
 }
 .jumbotron .container .display-3{
-    background-color: black;
+    background-color: transparent;
     color: white;
+    text-overflow: fade;
 }
 .jumbotron{
-    background-color: black;
+    background-color: transparent;
 }
 
 .btn-secondary{
     color: blue;
     font-size: 20px;
     background: royalblue;
+
+}
+.row{
 
 }
 a.btn-secondary:hover{
