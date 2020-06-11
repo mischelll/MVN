@@ -12,8 +12,10 @@ import org.springframework.stereotype.Service;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -41,8 +43,13 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Post> findLatest5() {
-        return null;
+    public List<Post> findLatest10() {
+        return this.postRepository
+                .findAll()
+                .stream()
+                .sorted(Comparator.comparing(Post::getPostedOn).reversed())
+                .limit(9)
+                .collect(Collectors.toList());
     }
 
     @Override

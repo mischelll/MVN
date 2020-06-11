@@ -36,4 +36,12 @@ public class RoleServiceImpl implements RoleService {
     public Role findByAuthority(String authority) {
         return this.roleRepository.findByAndAuthority(authority);
     }
+
+    @Override
+    public void addNewRole() {
+        this.roleRepository.saveAndFlush(new Role("ROLE_MODERATOR"));
+        this.roleRepository.saveAndFlush(new Role("ROLE_BLOG-KING"));
+        this.roleRepository.saveAndFlush(new Role("ROLE_MICHAEL-SCOTT"));
+        this.roleRepository.saveAndFlush(new Role("ROLE_SALESMAN"));
+    }
 }

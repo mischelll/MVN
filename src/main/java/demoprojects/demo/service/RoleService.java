@@ -8,4 +8,5 @@ public interface RoleService {
     void seedRolesInDb();
     Set<Role> findAll();
     Role findByAuthority(String auth);
+    void addNewRole();
 }

@@ -12,14 +12,14 @@ import javax.validation.constraints.NotEmpty;
 
 public class UserRegisterModel {
     @NotEmpty
-    @Min(value = 3,message = "Username must be ar least 3 chars long")
+    @Min(value = 3,message = "Username must be at least 3 chars long")
     @Max(value = 16, message = "Username cannot be longer than 16 chars")
     private String username;
     @Email(message = "Please enter a valid email")
     @NotEmpty
     private String email;
    @NotEmpty
-   @ValidPassword
+   @ValidPassword(message = "Invalid password")
     private String password;
     private String confirmPassword;
 

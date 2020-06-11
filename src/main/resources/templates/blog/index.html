@@ -1,29 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org" lang="en">
-<head>
-    <title>MVN | Blog</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <base href="/">
-
-    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Abril+Fatface&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="blog/ionize/css/open-iconic-bootstrap.min.css">
-    <link rel="stylesheet" href="blog/ionize/css/animate.css">
-    <link rel="stylesheet" href="blog/ionize/css/owl.carousel.min.css">
-    <link rel="stylesheet" href="blog/ionize/css/owl.theme.default.min.css">
-    <link rel="stylesheet" href="blog/ionize/css/magnific-popup.css">
-    <link rel="stylesheet" href="blog/ionize/css/aos.css">
-    <link rel="stylesheet" href="blog/ionize/css/ionicons.min.css">
-    <link rel="stylesheet" href="blog/ionize/css/bootstrap-datepicker.css">
-    <link rel="stylesheet" href="blog/ionize/css/jquery.timepicker.css">
-    <link rel="stylesheet" href="blog/ionize/css/flaticon.css">
-    <link rel="stylesheet" href="blog/ionize/css/icomoon.css">
-    <link rel="stylesheet" href="blog/ionize/css/style.css">
-</head>
+<th:block th:include="~{blog/blog-fragments/head}"/>
 <body>
 <!-- PRE LOADER -->
 <div class="preloader">
@@ -31,41 +9,9 @@
         <span class="sk-inner-circle"></span>
     </div>
 </div>
-
-<div id="colorlib-page">
-    <a href="#" class="js-colorlib-nav-toggle colorlib-nav-toggle"><i></i></a>
-    <aside id="colorlib-aside" role="complementary" class="js-fullheight img"
-           style="background-image: url(blog/ionize/images/sidebar-bg.jpg);">
-        <h1 id="colorlib-logo" class="mb-4"><a href="index.html">MVN | Blog</a></h1>
-        <nav id="colorlib-main-menu" role="navigation">
-            <ul>
-                <li class="colorlib-active"><a href="index.html">Home</a></li>
-                <li><a href="travel.html">Travel</a></li>
-                <li><a href="lifestyle.html">Food</a></li>
-                <li><a href="lifestyle.html">IT</a></li>
-                <li><a href="lifestyle.html">Business</a></li>
-                <li><a href="lifestyle.html">Science</a></li>
-                <li><a href="lifestyle.html">Sport</a></li>
-                <li><a href="about.html">About</a></li>
-            </ul>
-        </nav>
-        <div class="colorlib-footer">
-            <div class="mb-4">
-                <h3>Become a moderator?</h3>
-                <form action="#" class="colorlib-subscribe-form">
-                    <div class="form-group d-flex">
-                        <div class="icon"><span class="icon-paper-plane"></span></div>
-                        <input type="text" class="form-control" placeholder="Enter Email Address">
-                    </div>
-                </form>
-            </div>
-            <p class="pfooter"><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                Copyright &copy;<script>document.write(new Date().getFullYear());</script>
-                All rights reserved | This template is made with <i class="icon-heart" aria-hidden="true"></i> by <a
-                        href="https://colorlib.com" target="_blank">Colorlib</a>
-                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
-        </div>
-    </aside> <!-- END COLORLIB-ASIDE -->
+<!-- START COLORLIB-ASIDE -->
+<th:block th:include="~{blog/blog-fragments/nav}"/>
+<!-- END COLORLIB-ASIDE -->
     <div id="colorlib-main">
         <section class="ftco-section ftco-no-pt ftco-no-pb bg-light" th:if="${not #lists.isEmpty(posts)}">
             <div class="container px-0">
@@ -79,7 +25,7 @@
                                 <div class="meta-wrap">
                                     <p class="meta">
                                         <span th:text="${post.postedOn}"><i class="icon-calendar mr-2"></i>Sept. 10, 2019</span>
-                                        <span><a href="single.html"><i class="icon-folder-o mr-2"></i>Travel</a></span>
+                                        <span ><a href="single.html"><i class="icon-folder-o mr-2"></i>Travel</a></span>
                                         <span><i class="icon-comment2 mr-2"></i>5 Comment</span>
                                     </p>
                                 </div>
@@ -449,7 +395,7 @@
 
         </section>
     </div><!-- END COLORLIB-MAIN -->
-</div><!-- END COLORLIB-PAGE -->
+<!-- END COLORLIB-PAGE -->
 
 <!-- loader -->
 <div id="ftco-loader" class="show fullscreen">

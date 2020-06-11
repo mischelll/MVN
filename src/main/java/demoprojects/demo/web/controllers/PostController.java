@@ -36,24 +36,25 @@ public class PostController {
 
     @GetMapping("/all")
     public ModelAndView getAllPosts(Model model) {
-        model.addAttribute("posts",postService.findAll());
+        model.addAttribute("posts",postService.findLatest10());
         return new ModelAndView("blog/index");
     }
 
     @GetMapping("/create")
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasRole('ROLE_MODERATOR') or hasRole('ROLE_ADMIN') or hasRole('ROLE_BLOG-KING')")
     public ModelAndView createPost() {
 
         return new ModelAndView("create-post");
     }
     @GetMapping("/see/all")
     public ModelAndView seeAll(Model model){
-        model.addAttribute("posts",postService.findAll());
+        model.addAttribute("posts",postService.findLatest10());
         return new ModelAndView("blog");
     }
 
     @PostMapping("/create")
-    public ModelAndView createPostConfirm(@Valid @ModelAttribute("post") PostCreateModel post, BindingResult bindingResult) {
+    public ModelAndView createPostConfirm(@Valid @ModelAttribute("post") PostCreateModel post, BindingResult bindingResult, Model model) {
+        model.addAttribute("post",post);
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = "";
         if (principal instanceof UserDetails) {

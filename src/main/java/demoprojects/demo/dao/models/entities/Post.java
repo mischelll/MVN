@@ -7,6 +7,7 @@ import javax.validation.constraints.PastOrPresent;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "posts")
@@ -14,8 +15,8 @@ public class Post extends BaseEntity {
     private String title;
     private String content;
     private User author;
-    private Category category;
-    private List<Comment> comments;
+    private Set<Category> categories;
+    private Set<Comment> comments;
     private LocalDateTime postedOn;
 
     public Post() {
@@ -59,5 +60,25 @@ public class Post extends BaseEntity {
 
     public void setPostedOn(LocalDateTime postedOn) {
         this.postedOn = postedOn;
+    }
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "categories", joinColumns = @JoinColumn(name = "id"))
+    @Enumerated(EnumType.STRING)
+    public Set<Category> getCategory() {
+        return categories;
+    }
+
+    public void setCategory(Set<Category> category) {
+        this.categories = category;
+    }
+@OneToMany(mappedBy = "post", targetEntity = Comment.class,
+        fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    public Set<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(Set<Comment> comments) {
+        this.comments = comments;
     }
 }

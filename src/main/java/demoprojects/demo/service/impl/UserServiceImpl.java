@@ -24,6 +24,7 @@ public class UserServiceImpl implements UserService {
     private final ModelMapper mapper;
     private final AuthServiceValidation authServiceValidation;
     private final PasswordEncoder passwordEncoder;
+    private boolean isVerificationReady = false;
 
 
     @Autowired
@@ -37,12 +38,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean register(UserRegisterServiceModel user) {
+    public User register(UserRegisterServiceModel user) {
+        User regUser;
         if (!authServiceValidation.isValid(user)) {
-            return false;
+            return null;
         }
 
-        User regUser = this.mapper.map(user, User.class);
+         regUser = this.mapper.map(user, User.class);
         String pass = regUser.getPassword();
         regUser.setPassword(this.passwordEncoder.encode(user.getPassword()));
         roleService.seedRolesInDb();
@@ -55,13 +57,16 @@ public class UserServiceImpl implements UserService {
         }
 
         this.userRepository.saveAndFlush(regUser);
-        return true;
+        return regUser;
     }
+
+
+
 
     @Override
     public boolean login(UserLoginServiceModel user) {
         User byUsername = this.userRepository.findByUsername(user.getUsername());
-        if (byUsername == null || !this.passwordEncoder.matches(user.getPassword(),byUsername.getPassword())){
+        if (byUsername == null || !this.passwordEncoder.matches(user.getPassword(), byUsername.getPassword())) {
             return false;
         }
         return true;
@@ -70,7 +75,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean deleteByUsername(String username) {
         User byUsername = this.userRepository.findByUsername(username);
-        if (byUsername == null){
+        if (byUsername == null) {
             return false;
         }
 

@@ -1,5 +1,6 @@
 package demoprojects.demo.web.controllers;
 
+import demoprojects.demo.dao.models.entities.User;
 import demoprojects.demo.service.EmailService;
 import demoprojects.demo.service.UserService;
 import demoprojects.demo.service.models.UserRegisterServiceModel;
@@ -32,6 +33,8 @@ public class UserAuthController extends BaseController {
     private int path;
     private String email;
 
+
+
     @Autowired
     public UserAuthController(UserService userService, ModelMapper mapper, EmailService emailService) {
         this.userService = userService;
@@ -58,9 +61,9 @@ public class UserAuthController extends BaseController {
     @PostMapping("/register")
     public ModelAndView getRegisterConfirm(@Valid @ModelAttribute("user") UserRegisterModel user, BindingResult bindingResult, Model model) {
         model.addAttribute(user);
-        if (!this.userService.register(this.mapper.map(user, UserRegisterServiceModel.class))) {
-            return new ModelAndView("auth/register");
 
+        if (this.userService.register(this.mapper.map(user, UserRegisterServiceModel.class)) == null) {
+            return new ModelAndView("auth/register");
         }
         path = getRandomPath();
         email = user.getEmail();
@@ -77,6 +80,8 @@ public class UserAuthController extends BaseController {
         }
         email = null;
         path = 0;
+
+
         return super.redirect("/mvn/users/login");
     }
 
@@ -85,7 +90,7 @@ public class UserAuthController extends BaseController {
         int low = 1000;
         int high = 10000;
 
-        return random.nextInt(high - low) + low;
+        return random.nextInt(high - low) + low;//generate random url number
 
     }
 }

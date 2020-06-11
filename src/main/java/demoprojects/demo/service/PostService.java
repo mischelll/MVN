@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface PostService {
     List<PostViewServiceModel> findAll();
-    List<Post> findLatest5();
+    List<Post> findLatest10();
     Post findById(Long id);
     Post create(PostServiceModel post);
     Post edit(Post post);

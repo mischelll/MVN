@@ -1056,8 +1056,8 @@ pre {
   .col-lg-6 {
     -webkit-box-flex: 0;
     -ms-flex: 0 0 50%;
-    flex: 0 0 50%;
-    max-width: 50%; }
+    flex: 0 0 100%;
+    max-width: 100%;}
   .col-lg-7 {
     -webkit-box-flex: 0;
     -ms-flex: 0 0 58.33333%;
@@ -8987,7 +8987,8 @@ textarea.form-control {
   width: 100%; }
 
 .contact-section .contact-form {
-  width: 100%; }
+  max-height: available;
+  width: 200%; }
 
 .block-9 .form-control {
   outline: none !important;

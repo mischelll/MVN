@@ -1,40 +1,112 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-</head>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" lang="en">
+<th:block th:include="~{blog/blog-fragments/head}"/>
+
 <body>
-<div class="container">
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <h1>Create post</h1>
-            <form action="/posts/create" method="POST">
-                <div class="form-group">
-                    <label  id="title" for="title">Title <span class="require">*</span></label>
-                    <input type="text" class="form-control" name="title" />
-                </div>
-                <div class="form-group">
-                    <label  id="content" for="content">Description</label>
-                    <textarea rows="5" class="form-control" name="content" ></textarea>
-                </div>
-                <div class="form-group">
-                    <p><span class="require">*</span> - required fields</p>
-                </div>
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary">
-                        Create
-                    </button>
-                    <button class="btn btn-default">
-                        Cancel
-                    </button>
-                </div>
-            </form>
-        </div>
+<!-- PRE LOADER -->
+<div class="preloader">
+    <div class="spinner">
+        <span class="sk-inner-circle"></span>
     </div>
 </div>
+<!-- START COLORLIB-ASIDE -->
+<th:block th:include="~{blog/blog-fragments/nav}"/>
+<!-- END COLORLIB-ASIDE -->
+<div id="colorlib-main">
+    <section class="ftco-section ftco-no-pt ftco-no-pb">
+        <div class="container px-0">
+            <div class="row no-gutters block-9">
+                <div class="col-lg-6 order-md-last">
+                    <form th:action="@{/posts/create}"  class="bg-primary p-5 contact-form">
+                        <div class="form-group">
+                            <input type="text" id="title" name="title" class="form-control" placeholder="Title">
+                        </div>
+                        <div class="input-group mb-3">
+                            <select th:field="*{ca}" id="category" class="form-control">
+                                <option th:each="cat : ${T(demoprojects.demo.dao.models.entities.Category).values()}" th:value="${cat}"
+                                        th:text="${cat}" th:selected="${offer.category == cat}">
+                                    Vehicle Category
+                                </option>
+                            </select>
+
+<!--                            <select class="custom-select col-xl-9 col-lg-8 col-md-8 col-sm-7" id="categories"-->
+<!--                                    name="categories" multiple>-->
+<!--                                <option selected >Select categories...</option>-->
+
+<!--                                <option>Exercise One</option>-->
+<!--                                <option>Exercise Two</option>-->
+<!--                                <option>Exercise Three</option>-->
+<!--                                <option>Exercise Four</option>-->
+
+<!--                            </select>-->
+                        </div>
+                        <div class="form-group">
+                                <textarea name="content" id="content" cols="30" rows="7" class="form-control"
+                                          placeholder="Content..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="Create Post" class="btn btn-white py-3 px-5">
+                        </div>
+                    </form>
+                    <!--                    <div class="bg-primary p-5 contact-form">-->
+                    <!--                        <div id="map" class="bg-light"></div>-->
+                    <!--                    </div>-->
+                    <!--                    <div class="bg-primary p-5 contact-form">-->
+                    <!--                        <div id="map" class="bg-light"></div>-->
+                    <!--                    </div>-->
+                </div>
+            </div>
+        </div>
+    </section>
+</div><!-- END COLORLIB-MAIN -->
+<!-- END COLORLIB-PAGE -->
+<!--<div class="container">-->
+<!--    <div class="row">-->
+<!--        <div class="col-md-8 col-md-offset-2">-->
+<!--            <h1>Create post</h1>-->
+<!--            <form action="/posts/create" method="POST">-->
+<!--                <div class="form-group">-->
+<!--                    <label  id="title" for="title">Title <span class="require">*</span></label>-->
+<!--                    <input type="text" class="form-control" name="title" />-->
+<!--                </div>-->
+<!--                <div class="form-group">-->
+<!--                    <label  id="content" for="content">Description</label>-->
+<!--                    <textarea rows="5" class="form-control" name="content" ></textarea>-->
+<!--                </div>-->
+<!--                <div class="form-group">-->
+<!--                    <p><span class="require">*</span> - required fields</p>-->
+<!--                </div>-->
+<!--                <div class="form-group">-->
+<!--                    <button type="submit" class="btn btn-primary">-->
+<!--                        Create-->
+<!--                    </button>-->
+<!--                    <button class="btn btn-default">-->
+<!--                        Cancel-->
+<!--                    </button>-->
+<!--                </div>-->
+<!--            </form>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+<script src="blog/ionize/js/jquery.min.js"></script>
+<script src="blog/ionize/js/jquery-migrate-3.0.1.min.js"></script>
+<script src="blog/ionize/js/popper.min.js"></script>
+<script src="blog/ionize/js/bootstrap.min.js"></script>
+<script src="blog/ionize/js/jquery.easing.1.3.js"></script>
+<script src="blog/ionize/js/jquery.waypoints.min.js"></script>
+<script src="blog/ionize/js/jquery.stellar.min.js"></script>
+<script src="blog/ionize/js/owl.carousel.min.js"></script>
+<script src="blog/ionize/js/jquery.magnific-popup.min.js"></script>
+<script src="blog/ionize/js/aos.js"></script>
+<script src="blog/ionize/js/jquery.animateNumber.min.js"></script>
+<script src="blog/ionize/js/scrollax.min.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
+<script src="blog/ionize/js/google-map.js"></script>
+<script src="blog/ionize/js/main.js"></script>
+<script src="blog/ionize/js/helper.js"></script>
+<script src="blog/ionize/js/multiselect.core.js"></script>
+<script src="blog/ionize/js/multiselect.js"></script>
 </body>
 </html>
