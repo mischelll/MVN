@@ -17,13 +17,13 @@
     <section class="ftco-section ftco-no-pt ftco-no-pb">
         <div class="container px-0">
             <div class="row no-gutters block-9">
-                <div class="col-lg-6 order-md-last">
+                <div class="col-lg-6 order-md-last">                                                
                     <form th:action="@{/posts/create}"  class="bg-primary p-5 contact-form">
                         <div class="form-group">
                             <input type="text" id="title" name="title" class="form-control" placeholder="Title">
                         </div>
                         <div class="input-group mb-3">
-                            <select th:field="*{ca}" id="category" class="form-control">
+                            <select th:field="" id="category" class="form-control">
                                 <option th:each="cat : ${T(demoprojects.demo.dao.models.entities.Category).values()}" th:value="${cat}"
                                         th:text="${cat}" th:selected="${offer.category == cat}">
                                     Vehicle Category
