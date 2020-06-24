@@ -43,13 +43,15 @@ public class UserAuthController extends BaseController {
     }
 
     @GetMapping("/login")
-    public ModelAndView getLogin(HttpSession session) {
+    public ModelAndView getLogin(HttpSession session,Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (!(auth instanceof AnonymousAuthenticationToken)) {
             /* The user is logged in :) */
             return new ModelAndView("redirect:/home");
         }
-
+        Object principal = auth.getPrincipal();
+        Object credentials = auth.getCredentials();
+        Object details = auth.getDetails();
         return new ModelAndView("auth/login");
     }
 

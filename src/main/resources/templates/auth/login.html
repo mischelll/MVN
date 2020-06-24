@@ -36,6 +36,12 @@
 					<span class="login100-form-title">
 						Sign In
 					</span>
+					<div th:if="${param.error}" class="alert alert-error">
+						<small  class="text-danger">Invalid username and password.</small>
+					</div>
+					<div th:if="${param.logout}" class="alert alert-success">
+						<small  class="text-success">You have been logged out..</small>
+					</div>
 					<div class="wrap-input100 validate-input m-b-16" data-validate="Please enter username">
 						<input class="input100" type="text" name="username" placeholder="Username">
 						<span class="focus-input100"></span>
