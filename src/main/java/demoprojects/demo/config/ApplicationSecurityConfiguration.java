@@ -48,7 +48,6 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
                 .usernameParameter("username")
                 .passwordParameter("password")
                 .defaultSuccessUrl("/home",true)
-
                 .and()
                 .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .logoutSuccessUrl("/").permitAll()

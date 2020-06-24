@@ -1,9 +1,14 @@
 package demoprojects.demo.dao.models.entities;
 
+import demoprojects.demo.annottation.ValidPassword;
+import lombok.NonNull;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -29,7 +34,7 @@ public class User extends BaseEntity implements UserDetails {
         this.registeredOn = registeredOn;
     }
 
-    @OneToMany(mappedBy = "author",targetEntity = Post.class)
+    @OneToMany(mappedBy = "author", targetEntity = Post.class)
     public Set<Post> getPosts() {
         return posts;
     }
@@ -39,6 +44,7 @@ public class User extends BaseEntity implements UserDetails {
     }
 
     @Email
+    @NonNull
     @Column(name = "email", nullable = false, unique = true)
     public String getEmail() {
         return email;
@@ -69,14 +75,20 @@ public class User extends BaseEntity implements UserDetails {
     }
 
     @Column(name = "password", nullable = false)
+    @NotEmpty
+    @Min(value = 8,message = "Password must be at least 8 characters long")
     public String getPassword() {
         return this.password;
     }
 
     @Column(name = "username", nullable = false, unique = true, updatable = false)
+    @NotEmpty
+    @Min(value = 3, message = "Username must be at least 3 chars long")
+    @Max(value = 16, message = "Username cannot be longer than 16 chars")
     public String getUsername() {
         return this.username;
     }
+
     public void setUsername(String username) {
         this.username = username;
     }

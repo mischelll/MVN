@@ -1,116 +1,115 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org" lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Register</title>
-    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet"
-          id="bootstrap-css">
-    <!--Navbar-->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/style.css" type="text/css">
+<!--<!DOCTYPE html>-->
+<!--<html xmlns="http://www.w3.org/1999/xhtml"-->
+<!--      xmlns:th="http://www.thymeleaf.org" lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>Register</title>-->
+<!--    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet"-->
+<!--          id="bootstrap-css">-->
+<!--    &lt;!&ndash;Navbar&ndash;&gt;-->
+<!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">-->
+<!--    <link rel="stylesheet" href="/css/style.css" type="text/css">-->
 
-</head>
-<body>
-<header>
-    <nav class="navbar navbar-inverse">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="/">WebSiteName</a>
-            </div>
-            <div class="collapse navbar-collapse" id="myNavbar">
-                <ul class="nav navbar-nav">
-                    <li><a href="/">Home</a></li>
-                    <li><a href="/about">About</a></li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a href="/users/register"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-                    <li><a href="/users/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-</header>
-<div class="container">
-    <div class="row">
-        <div class="span12">
+<!--</head>-->
+<!--<body>-->
+<!--<header>-->
+<!--    <nav class="navbar navbar-inverse">-->
+<!--        <div class="container-fluid">-->
+<!--            <div class="navbar-header">-->
+<!--                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">-->
+<!--                    <span class="icon-bar"></span>-->
+<!--                    <span class="icon-bar"></span>-->
+<!--                    <span class="icon-bar"></span>-->
+<!--                </button>-->
+<!--                <a class="navbar-brand" href="/">WebSiteName</a>-->
+<!--            </div>-->
+<!--            <div class="collapse navbar-collapse" id="myNavbar">-->
+<!--                <ul class="nav navbar-nav">-->
+<!--                    <li><a href="/">Home</a></li>-->
+<!--                    <li><a href="/about">About</a></li>-->
+<!--                </ul>-->
+<!--                <ul class="nav navbar-nav navbar-right">-->
+<!--                    <li><a href="/users/register"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>-->
+<!--                    <li><a href="/users/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>-->
+<!--                </ul>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </nav>-->
+<!--</header>-->
+<!--<div class="container">-->
+<!--    <div class="row">-->
+<!--        <div class="span12">-->
 
-            <!--/*@thymesVar id="userRegisterModel" type="demoprojects.demo.web.models.UserRegisterModel"*/-->
-            <form class="form-horizontal" th:action="@{/users/register}" th:method="post"
-            >
-                <fieldset>
-                    <div id="legend">
-                        <h1 class="">Register</h1>
-                        <hr>
-                    </div>
-                    <div class="control-group">
-                        <!-- Username -->
-                        <label class="control-label" for="username">Username</label>
-                        <div class="controls">
-                            <input type="text" id="username" name="username" placeholder=""
-                                   class="input-xlarge"
-                                   required>
-                            <div class="mx-auto">
-                                <small class="text-danger" style="color: azure">Username must be 3 or more characters
-                                    long</small>
-                            </div>
-                        </div>
+<!--            &lt;!&ndash;/*@thymesVar id="userRegisterModel" type="demoprojects.demo.web.models.UserRegisterModel"*/&ndash;&gt;-->
+<!--            <form class="form-horizontal" th:action="@{/users/register}" th:method="post">-->
+<!--                <fieldset>-->
+<!--                    <div id="legend">-->
+<!--                        <h1 class="">Register</h1>-->
+<!--                        <hr>-->
+<!--                    </div>-->
+<!--                    <div class="control-group">-->
+<!--                        &lt;!&ndash; Username &ndash;&gt;-->
+<!--                        <label class="control-label" for="username">Username</label>-->
+<!--                        <div class="controls">-->
+<!--                            <input type="text" id="username" name="username" placeholder=""-->
+<!--                                   class="input-xlarge"-->
+<!--                                   required>-->
+<!--                            <div class="mx-auto">-->
+<!--                                <small class="text-danger" style="color: azure">Username must be 3 or more characters-->
+<!--                                    long</small>-->
+<!--                            </div>-->
+<!--                        </div>-->
 
-                        <label class="control-label" for="email">Email</label>
-                        <div class="controls">
-                            <input type="text" id="email" name="email" placeholder=""
-                                   class="input-xlarge" required>
-                            <div class="mx-auto">
-                                <small class="text-danger" style="color: azure">Enter a valid email address</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <!-- Password-->
-                        <label class="control-label" for="password">Password</label>
-                        <div class="controls">
-                            <input type="password" id="password" name="password" placeholder=""
-                                   class="input-xlarge"
-                                   required minlength="8">
+<!--                        <label class="control-label" for="email">Email</label>-->
+<!--                        <div class="controls">-->
+<!--                            <input type="text" id="email" name="email" placeholder=""-->
+<!--                                   class="input-xlarge" required>-->
+<!--                            <div class="mx-auto">-->
+<!--                                <small class="text-danger" style="color: azure">Enter a valid email address</small>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="control-group">-->
+<!--                        &lt;!&ndash; Password&ndash;&gt;-->
+<!--                        <label class="control-label" for="password">Password</label>-->
+<!--                        <div class="controls">-->
+<!--                            <input type="password" id="password" name="password" placeholder=""-->
+<!--                                   class="input-xlarge"-->
+<!--                                   required minlength="8">-->
 
-                            <div class="mx-auto">
-                                <small class="text-danger" style="color: azure">Password must be 8 or more characters
-                                    long</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <!--Confirm Password-->
-                        <label class="control-label" for="confirmPassword">Confirm Password</label>
-                        <div class="controls">
-                            <input type="password" id="confirmPassword" name="confirmPassword" placeholder=""
-                                   class="input-xlarge" required minlength="8">
-                            <div class="mx-auto">
-                                <small class="text-danger" style="color: azure">Password must be 8 or more characters
-                                    long</small>
-                            </div>
-                        </div>
-                    </div>
+<!--                            <div class="mx-auto">-->
+<!--                                <small class="text-danger" style="color: azure">Password must be 8 or more characters-->
+<!--                                    long</small>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="control-group">-->
+<!--                        &lt;!&ndash;Confirm Password&ndash;&gt;-->
+<!--                        <label class="control-label" for="confirmPassword">Confirm Password</label>-->
+<!--                        <div class="controls">-->
+<!--                            <input type="password" id="confirmPassword" name="confirmPassword" placeholder=""-->
+<!--                                   class="input-xlarge" required minlength="8">-->
+<!--                            <div class="mx-auto">-->
+<!--                                <small class="text-danger" style="color: azure">Password must be 8 or more characters-->
+<!--                                    long</small>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
 
-                    <div class="control-group">
-                        <!-- Button -->
-                        <div class="controls">
-                            <button class="btn btn-success" type="submit">Register</button>
-                        </div>
-                    </div>
-                </fieldset>
-            </form>
-        </div>
-    </div>
-</div>
-</body>
-<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
-<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-</html>
+<!--                    <div class="control-group">-->
+<!--                        &lt;!&ndash; Button &ndash;&gt;-->
+<!--                        <div class="controls">-->
+<!--                            <button class="btn btn-success" type="submit">Register</button>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </fieldset>-->
+<!--            </form>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+<!--</body>-->
+<!--<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>-->
+<!--<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>-->
+<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>-->
+<!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>-->
+<!--</html>-->

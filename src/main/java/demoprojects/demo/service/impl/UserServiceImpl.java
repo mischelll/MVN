@@ -38,14 +38,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User register(UserRegisterServiceModel user) {
+    public UserRegisterServiceModel register(UserRegisterServiceModel user) {
         User regUser;
         if (!authServiceValidation.isValid(user)) {
             return null;
         }
 
-         regUser = this.mapper.map(user, User.class);
-        String pass = regUser.getPassword();
+        regUser = this.mapper.map(user, User.class);
         regUser.setPassword(this.passwordEncoder.encode(user.getPassword()));
         roleService.seedRolesInDb();
 
@@ -57,10 +56,8 @@ public class UserServiceImpl implements UserService {
         }
 
         this.userRepository.saveAndFlush(regUser);
-        return regUser;
+        return this.mapper.map(regUser, UserRegisterServiceModel.class);
     }
-
-
 
 
     @Override

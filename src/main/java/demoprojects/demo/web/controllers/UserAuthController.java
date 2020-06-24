@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -32,7 +33,6 @@ public class UserAuthController extends BaseController {
     private final EmailService emailService;
     private int path;
     private String email;
-
 
 
     @Autowired
@@ -54,21 +54,34 @@ public class UserAuthController extends BaseController {
     }
 
     @GetMapping("/register")
-    public ModelAndView getRegister() {
-        return new ModelAndView("auth/register2");
+    public ModelAndView getRegister(Model model, ModelAndView modelAndView) {
+        if (!model.containsAttribute("user")) {
+            model.addAttribute("user", new UserRegisterModel());
+        }
+        modelAndView.setViewName("auth/register2");
+        return modelAndView;
     }
 
     @PostMapping("/register")
-    public ModelAndView getRegisterConfirm(@Valid @ModelAttribute("user") UserRegisterModel user, BindingResult bindingResult, Model model) {
-        model.addAttribute(user);
-
-        if (this.userService.register(this.mapper.map(user, UserRegisterServiceModel.class)) == null) {
-            return new ModelAndView("auth/register");
+    public ModelAndView getRegisterConfirm(@Valid @ModelAttribute("user") UserRegisterModel user,
+                                           BindingResult bindingResult,
+                                           RedirectAttributes redirectAttributes,
+                                           ModelAndView modelAndView) {
+        if (bindingResult.hasErrors() || !user.getPassword().equals(user.getConfirmPassword())) {
+            redirectAttributes.addFlashAttribute("user", user);
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.user", bindingResult);
+            modelAndView.setViewName("redirect:/mvn/users/register");
+        } else {
+            UserRegisterServiceModel serviceModel = this.mapper.map(user, UserRegisterServiceModel.class);
+            this.userService.register(serviceModel);
+            modelAndView.setViewName("auth/email-verification");
+            path = getRandomPath();
+            email = user.getEmail();
+            emailService.sendEmail(user.getEmail(), "Successful Registration",
+                    String.format(Messages.getSuccessfulReg(), user.getUsername(), path));
         }
-        path = getRandomPath();
-        email = user.getEmail();
-        emailService.sendEmail(user.getEmail(), "Successful Registration", String.format(Messages.getSuccessfulReg(), user.getUsername(), path));
-        return new ModelAndView("auth/email-verification");
+
+        return modelAndView;
     }
 
     @GetMapping("/registration/{s}")
