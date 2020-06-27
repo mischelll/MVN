@@ -11,7 +11,6 @@ public class MailController {
 
     public MailController(EmailService emailService) {
         this.emailService = emailService;
-
     }
     @RequestMapping("/send/mail")
     public void sendMail() {
