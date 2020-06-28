@@ -38,23 +38,22 @@
 						Sign Up
 					</span>
                 <div class="wrap-input100 validate-input m-b-16" data-validate="Please enter username">
-                    <input th:field="*{username}" class="input100" type="text" name="username" placeholder="Username">
+                    <input th:field="*{username}" th:errorclass="bg-danger" class="input100" type="text" name="username" placeholder="Username">
                     <span class="focus-input100"></span>
                 </div>
                 <th:block th:each="e : ${#fields.errors('username')}">
                     <small th:text="${e}" class="text-danger">Incorrect username!</small>
                 </th:block>
                 <div class="wrap-input100 validate-input m-b-16" data-validate="Please enter email">
-                    <input th:field="*{email}" class="input100" type="text" name="email" placeholder="E-mail">
+                    <input th:field="*{email}" th:errorclass="bg-danger" class="input100" type="text" name="email" placeholder="E-mail">
                     <span class="focus-input100"></span>
                 </div>
                 <th:block th:each="e : ${#fields.errors('email')}">
                     <small th:text="${e}" class="text-danger">Incorrect username!</small>
                 </th:block>
                 <div class="wrap-input100 validate-input" data-validate="Please enter password">
-                    <input th:field="*{password}" class="input100" type="password" name="password" placeholder="Password">
+                    <input th:field="*{password}" th:errorclass="bg-danger" class="input100" type="password" name="password" placeholder="Password">
                     <span class="focus-input100"></span>
-
                 </div>
                 <th:block th:each="e : ${#fields.errors('password')}">
                     <small th:text="${e}" class="text-danger">Incorrect username!</small>
