@@ -468,6 +468,7 @@ pre {
 
 .container-fluid {
   width: 100%;
+  height: 100%;
   padding-right: 15px;
   padding-left: 15px;
   margin-right: auto;
@@ -8742,7 +8743,8 @@ textarea.form-control {
 
 .ftco-section {
   padding: 5em 0;
-  position: relative; }
+  position: relative;
+}
   @media (max-width: 991.98px) {
     .ftco-section {
       padding: 3em 0; } }
@@ -8995,7 +8997,7 @@ textarea.form-control {
   -webkit-box-shadow: none !important;
   box-shadow: none !important;
   font-size: 15px;
-  background: transparent !important;
+  background: #1b36ff !important;
   border: 1px solid rgba(255, 255, 255, 0.2);
   color: rgba(255, 255, 255, 0.7) !important;
   font-size: 16px;

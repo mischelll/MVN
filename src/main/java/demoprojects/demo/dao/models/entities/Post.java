@@ -13,11 +13,20 @@ public class Post extends BaseEntity {
     private String title;
     private String content;
     private User author;
+    private String imgUrl;
     private Set<Category> categories;
     private Set<Comment> comments;
     private LocalDateTime postedOn;
 
     public Post() {
+    }
+    @Column(nullable = false, name = "imgUrl")
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
     }
 
     @Column(nullable = false, name = "title")

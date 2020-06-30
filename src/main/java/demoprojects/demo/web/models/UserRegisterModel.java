@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 
+import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 
@@ -22,7 +23,7 @@ public class UserRegisterModel {
     @NotEmpty(message = "Field cannot be empty")
     private String email;
     @NotEmpty(message = "Field cannot be empty")
-   @Size(min = 8, message = "Password must be at least 8 symbols")
+   @ValidPassword(message = "Invalid password!")
     private String password;
     @NotEmpty(message = "Field cannot be empty")
     @Size(min = 8, message = "Password must be at least 8 symbols")

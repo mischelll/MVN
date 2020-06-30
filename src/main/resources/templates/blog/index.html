@@ -18,8 +18,9 @@
             <div class="row no-gutters">
                 <div class="col-md-4 d-flex" th:each="post,counter : ${posts}">
                     <div class="blog-entry ftco-animate" th:if="${counter.odd}">
-                        <a href="single.html" class="img"
-                           style="background-image: url(blog/ionize/images/image_4.jpg);"></a>
+
+                        <a class="img" href="single.html"
+                           th:style="'background-image:url('+${post.imgUrl}+');'"></a>
                         <div class="text p-4">
                             <h3 class="mb-2" th:text="${post.title}"><a href="single.html">A Loving Heart is the Truest
                                 Wisdom</a></h3>

@@ -25,6 +25,11 @@
                         <th:block th:each="e : ${#fields.errors('title')}">
                             <small th:text="${e}" class="text-danger">Username error message</small>
                         </th:block>
+
+                        <div class="form-group">
+                            <input  type="text" id="imgUrl" name="imgUrl" class="form-control" placeholder="Image Url">
+                        </div>
+
                         <div class="input-group mb-3">
                             <select id="category" name="category" class="form-control">
                                 <option value="">Select category</option>
@@ -35,6 +40,7 @@
                         <th:block th:each="e : ${#fields.errors('category')}">
                             <small th:text="${e}" class="text-danger">Username error message</small>
                         </th:block>
+                        <br>
                         <div class="form-group">
                                 <textarea th:field="*{content}" th:errorclass = "bg-danger" name="content" id="content" cols="30" rows="7" class="form-control"
                                           placeholder="Content..."></textarea>
@@ -42,6 +48,10 @@
                         <th:block th:each="e : ${#fields.errors('content')}">
                             <small th:text="${e}" class="text-danger">Username error message</small>
                         </th:block>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
                         <br>
                         <div class="form-group">
                             <input type="submit" value="Create Post" class="btn btn-white py-3 px-5">
@@ -51,6 +61,7 @@
             </div>
         </div>
     </section>
+
 </div><!-- END COLORLIB-MAIN -->
 <!-- END COLORLIB-PAGE -->
 <script src="blog/ionize/js/jquery.min.js"></script>
