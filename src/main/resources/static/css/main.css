@@ -50,7 +50,8 @@ a:focus {
 
 a:hover {
 	text-decoration: none;
-  color: #1b3815;
+  font-size: 17px;
+  color: blanchedalmond;
 }
 
 /*---------------------------------------------*/
@@ -99,15 +100,15 @@ textarea:focus, input:focus {
 }
 
 
-input::-webkit-input-placeholder { color: #1b3815;}
-input:-moz-placeholder { color: #1b3815;}
-input::-moz-placeholder { color: #1b3815;}
-input:-ms-input-placeholder { color: #1b3815;}
+input::-webkit-input-placeholder { color: whitesmoke;}
+input:-moz-placeholder { color: whitesmoke;}
+input::-moz-placeholder { color: whitesmoke;}
+input:-ms-input-placeholder { color: whitesmoke;}
 
-textarea::-webkit-input-placeholder { color: #1b3815;}
-textarea:-moz-placeholder { color: #1b3815;}
-textarea::-moz-placeholder { color: #1b3815;}
-textarea:-ms-input-placeholder { color: #1b3815;}
+textarea::-webkit-input-placeholder { color: whitesmoke;}
+textarea:-moz-placeholder { color: whitesmoke;}
+textarea::-moz-placeholder { color: whitesmoke;}
+textarea:-ms-input-placeholder { color: whitesmoke;}
 
 /*---------------------------------------------*/
 button {
@@ -156,7 +157,7 @@ iframe {
 .limiter {
   width: 100%;
   margin: 0 auto;
-  background-image: url(/img/pat-whelen-HOWfdzh1Q0g-unsplash.jpg);
+  background-image: url(/img/ryan-tang-8OyZGH43-p4-unsplash.jpg);
 
 }
 
@@ -235,7 +236,7 @@ iframe {
 .input100 {
   font-family: Ubuntu-Bold;
   font-size: 20px;
-  color: #1b3815;
+  color: white;
   line-height: 1.2;
 
   position: relative;
@@ -243,7 +244,7 @@ iframe {
   width: 100%;
   height: 55px;
   background: transparent;
-  backdrop-filter: blur(20px);
+  backdrop-filter: blur(30px);
   border-radius: 27px;
   padding: 0 35px 0 35px;
 }
@@ -321,6 +322,7 @@ iframe {
 
 .login100-form-btn:hover {
   background-color: #325dff;
+  font-size: 18px;
 }
 
 
