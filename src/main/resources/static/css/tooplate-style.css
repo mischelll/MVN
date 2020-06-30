@@ -353,12 +353,14 @@ a:hover, a:active, a:focus {
   height: 100vh;
   position: relative;
   padding-top: 10em;
+  background-image: url(/img/ryan-tang-8OyZGH43-p4-unsplash.jpg);
 }
 
 #home h1 {
   color: #ffffff;
   font-size: 6em;
   line-height: 1.2em;
+
 }
 
 #home p {

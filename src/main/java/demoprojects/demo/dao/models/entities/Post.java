@@ -5,8 +5,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import javax.validation.constraints.PastOrPresent;
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -62,18 +60,20 @@ public class Post extends BaseEntity {
         this.postedOn = postedOn;
     }
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "categories", joinColumns = @JoinColumn(name = "id"))
-    @Enumerated(EnumType.STRING)
-    public Set<Category> getCategory() {
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "posts_categories",
+            joinColumns = @JoinColumn(name = "post_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id", referencedColumnName = "id"))
+    public Set<Category> getCategories() {
         return categories;
     }
 
-    public void setCategory(Set<Category> category) {
+    public void setCategories(Set<Category> category) {
         this.categories = category;
     }
-@OneToMany(mappedBy = "post", targetEntity = Comment.class,
-        fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+
+    @OneToMany(mappedBy = "post", targetEntity = Comment.class,
+            fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     public Set<Comment> getComments() {
         return comments;
     }

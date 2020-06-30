@@ -129,23 +129,24 @@ iframe {
 .txt1 {
   font-family: Ubuntu-Regular;
   font-size: 15px;
-  color: #999999;
+  color: #fff;
   line-height: 1.4;
 }
 
 .txt2 {
   font-family: Ubuntu-Regular;
   font-size: 15px;
-  color: #57b846;
+  color: coral;
   line-height: 1.4;
 }
 
 .txt3 {
   font-family: Ubuntu-Bold;
   font-size: 15px;
-  color: #57b846;
+  color: coral;
   line-height: 1.4;
   text-transform: uppercase;
+  backdrop-filter: blur(10px);
 }
 
 
@@ -155,6 +156,8 @@ iframe {
 .limiter {
   width: 100%;
   margin: 0 auto;
+  background-image: url(/img/pat-whelen-HOWfdzh1Q0g-unsplash.jpg);
+
 }
 
 .container-login100 {
@@ -170,12 +173,14 @@ iframe {
   align-items: center;
   padding: 15px;
   position: relative;
-  background-color: #fff;
+
+
 }
 
 .wrap-login100 {
   width: 500px;
-  background: #fff;
+  background: transparent;
+  backdrop-filter: blur(6px);
   border-radius: 20px;
   overflow: hidden;
   box-shadow: 0 3px 20px 0px rgba(0, 0, 0, 0.1);
@@ -192,7 +197,9 @@ iframe {
 .login100-form {
   width: 100%;
   position: relative;
+
 }
+
 
 .login100-form-title {
   font-family: JosefinSans-Bold;
@@ -206,7 +213,8 @@ iframe {
   width: 100%;
   top: 0;
   left: 0;
-  background-color: #57b846;
+  background-color: transparent;
+
   padding-top: 50px;
   padding-bottom: 39px;
 }
@@ -257,7 +265,7 @@ iframe {
   border-radius: 31px;
   background-color: #ebebeb;
   pointer-events: none;
-  
+
   -webkit-transition: all 0.4s;
   -o-transition: all 0.4s;
   -moz-transition: all 0.4s;
