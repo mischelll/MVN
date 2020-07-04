@@ -40,9 +40,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserRegisterServiceModel register(UserRegisterServiceModel user) {
         User regUser;
-        if (!authServiceValidation.isValid(user)) {
-            return null;
-        }
+
 
         regUser = this.mapper.map(user, User.class);
         regUser.setPassword(this.passwordEncoder.encode(user.getPassword()));

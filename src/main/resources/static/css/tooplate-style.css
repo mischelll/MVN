@@ -88,7 +88,7 @@ p {
   font-weight: normal;
   letter-spacing: 0.5px;
   padding: 0 25px;
-  background: #4dc47d;
+  background: #102634;
   border-radius: 1px;
   -webkit-transition: -webkit-transform 0.3s;
   -moz-transition: -moz-transform 0.3s;
@@ -108,7 +108,7 @@ p {
   left: 0;
   width: 100%;
   height: 100%;
-  background: #000000;
+  background: whitesmoke;
   border-radius: 1px;
   color: #ffffff;
   padding: 0 25px;
@@ -124,22 +124,22 @@ p {
   transform-origin: 50% 0;
 }
 
-.section-btn a:hover span,
-.section-btn a:focus span,
+/*.section-btn a:hover span,*/
+/*.section-btn a:focus span,*/
 
-.section-btn button:hover span,
-.section-btn button:focus span {
-  -webkit-transform: rotateX(90deg) translateY(-22px);
-  -moz-transform: rotateX(90deg) translateY(-22px);
-  transform: rotateX(90deg) translateY(-22px);
-}
+/*.section-btn button:hover span,*/
+/*.section-btn button:focus span {*/
+/*  -webkit-transform: rotateX(90deg) translateY(-22px);*/
+/*  -moz-transform: rotateX(90deg) translateY(-22px);*/
+/*  transform: rotateX(90deg) translateY(-22px);*/
+
+/*}*/
 
 .csstransforms3d .section-btn a:hover span::before,
 .csstransforms3d .section-btn a:focus span::before,
-
 .csstransforms3d .section-btn button:hover span::before,
 .csstransforms3d .section-btn button:hover span::before {
-  background: #000000;  
+  background: whitesmoke;
 }
 
 
@@ -158,7 +158,7 @@ a {
 }
 
 a:hover, a:active, a:focus {
-  color: #000000;
+  color: coral;
   outline: none;
 }
 
@@ -195,7 +195,8 @@ a:hover, a:active, a:focus {
 
 #about, #project,
 #team, #contact, footer {
-  background: #ffffff;
+  background: whitesmoke;
+
 }
 
 #about,
@@ -566,7 +567,8 @@ a:hover, a:active, a:focus {
   line-height: 45px;
 }
 
-#contact .section-btn {
+#contact .section-btn:hover {
+
   margin: 5px 0 0 0;
 }
 

@@ -49,14 +49,17 @@ public class UserAuthController extends BaseController {
             /* The user is logged in :) */
             return new ModelAndView("redirect:/home");
         }
-        Object principal = auth.getPrincipal();
-        Object credentials = auth.getCredentials();
-        Object details = auth.getDetails();
+
         return new ModelAndView("auth/login");
     }
 
     @GetMapping("/register")
     public ModelAndView getRegister(Model model, ModelAndView modelAndView) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (!(auth instanceof AnonymousAuthenticationToken)) {
+            /* The user is logged in :) */
+            return new ModelAndView("redirect:/home");
+        }
         if (!model.containsAttribute("user")) {
             model.addAttribute("user", new UserRegisterModel());
         }

@@ -26,7 +26,7 @@ public class UserRegisterModel {
    @ValidPassword(message = "Invalid password!")
     private String password;
     @NotEmpty(message = "Field cannot be empty")
-    @Size(min = 8, message = "Password must be at least 8 symbols")
+    @ValidPassword(message = "Invalid password!")
     private String confirmPassword;
 
 }

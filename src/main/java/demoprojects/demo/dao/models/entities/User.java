@@ -5,10 +5,7 @@ import lombok.NonNull;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.*;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -43,8 +40,8 @@ public class User extends BaseEntity implements UserDetails {
         this.posts = posts;
     }
 
-    @Email
-    @NonNull
+    @Email(message = "Please enter a valid email")
+    @NotEmpty(message = "Field cannot be empty")
     @Column(name = "email", nullable = false, unique = true)
     public String getEmail() {
         return email;
@@ -75,16 +72,14 @@ public class User extends BaseEntity implements UserDetails {
     }
 
     @Column(name = "password", nullable = false)
-    @NotEmpty
-    @Min(value = 8,message = "Password must be at least 8 characters long")
+    @NotEmpty(message = "Field cannot be empty")
     public String getPassword() {
         return this.password;
     }
 
     @Column(name = "username", nullable = false, unique = true, updatable = false)
-    @NotEmpty
-    @Min(value = 3, message = "Username must be at least 3 chars long")
-    @Max(value = 16, message = "Username cannot be longer than 16 chars")
+    @NotEmpty(message = "Field cannot be empty")
+    @Size(min = 3, max = 32, message = "Username must be between 3 and 32 characters")
     public String getUsername() {
         return this.username;
     }
