@@ -7,10 +7,16 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("/shop")
-public class ShopController extends BaseController{
+public class ShopController extends BaseController {
     @GetMapping("/")
-    public ModelAndView getShopIndex(ModelAndView modelAndView){
+    public ModelAndView getShopIndex(ModelAndView modelAndView) {
         modelAndView.setViewName("shop/index");
+        return modelAndView;
+    }
+
+    @GetMapping("/categories")
+    public ModelAndView getCategories(ModelAndView modelAndView) {
+        modelAndView.setViewName("shop/categories");
         return modelAndView;
     }
 
