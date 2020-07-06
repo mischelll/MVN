@@ -23,11 +23,11 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
 //        this.userService = userService;
 //    }
 //
-//    @Override
-//    @Bean
-//    public AuthenticationManager authenticationManagerBean() throws Exception {
-//        return super.authenticationManagerBean();
-//    }
+@Bean("authenticationManager")
+@Override
+public AuthenticationManager authenticationManagerBean() throws Exception {
+    return super.authenticationManagerBean();
+}
 //
 //    @Override
 //    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -50,6 +50,12 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
                 .usernameParameter("username")
                 .passwordParameter("password")
                 .defaultSuccessUrl("/home",true)
+                .and()
+                .rememberMe()
+                .key("rem-me-key")
+                .rememberMeParameter("remember") // it is name of checkbox at login page
+                .rememberMeCookieName("rememberlogin") // it is name of the cookie
+                .tokenValiditySeconds(100) // remember for number of seconds
                 .and()
                 .logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
