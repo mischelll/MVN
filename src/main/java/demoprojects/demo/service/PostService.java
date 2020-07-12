@@ -9,8 +9,9 @@ import java.util.List;
 public interface PostService {
     List<PostViewServiceModel> findAll();
     List<PostViewServiceModel> findLatest10();
-    Post findById(Long id);
+    PostViewServiceModel findById(String id);
     PostCreateServiceModel create(PostCreateServiceModel post);
     Post edit(Post post);
     void deleteById(String id);
+    List<PostViewServiceModel> findPostsByCategory(String category);
 }

@@ -1,9 +1,6 @@
 package demoprojects.demo.dao.models.entities;
 
-import demoprojects.demo.annottation.ValidPassword;
-import lombok.NonNull;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.time.LocalDateTime;
@@ -15,11 +12,22 @@ public class User extends BaseEntity implements UserDetails {
     private String username;
     private String password;
     private String email;
+    private Gender gender;
     private LocalDateTime registeredOn = LocalDateTime.now();
     private Set<Role> authorities;
     private Set<Post> posts;
 
     public User() {
+    }
+
+    @Column(name = "gender")
+    @Enumerated(EnumType.STRING)
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
     }
 
     @Column(name = "registered_on")

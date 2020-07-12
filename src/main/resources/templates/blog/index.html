@@ -31,9 +31,9 @@
                                     <i class="icon-comment2 mr-2"></i><span th:text="${post.commentsCount}">5 Comment</span>
                                 </p>
                             </div>
-                            <p class="mb-4" th:text="${post.content}">A small river named Duden flows by their place and
+                            <p class="mb-4" th:text="${post.preview}">A small river named Duden flows by their place and
                                 supplies</p>
-                            <p><a href="#" class="btn-custom">Read More <span class="ion-ios-arrow-forward"></span></a>
+                            <p><a th:href="@{/posts/article (id = ${post.id})}" class="btn-custom">Read More <span class="ion-ios-arrow-forward"></span></a>
                             </p>
                         </div>
                     </div>
@@ -65,7 +65,7 @@
                                     <i class="icon-comment2 mr-2"></i><span th:text="${post.commentsCount}">5 Comment</span>
                                 </p>
                             </div>
-                            <p class="mb-4" th:text="${post.content}">A small river named Duden flows by
+                            <p class="mb-4" th:text="${post.preview}">A small river named Duden flows by
                                 their place and supplies</p>
                             <p><a href="#" class="btn-custom">Read More <span
                                     class="ion-ios-arrow-forward"></span></a>

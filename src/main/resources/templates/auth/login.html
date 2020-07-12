@@ -35,7 +35,7 @@
                   th:method="post">
                 <span class="login100-form-title">Sign In</span>
                 <div th:if="${param.error}" class="alert alert-error">
-                    <small class="text-danger">Invalid username and password.</small>
+                    <small class="text-danger">Invalid username or password.</small>
                 </div>
                 <div th:if="${param.logout}" class="alert alert-success">
                     <small class="text-success">You have been logged out..</small>

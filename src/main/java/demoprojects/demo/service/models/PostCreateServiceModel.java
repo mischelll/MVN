@@ -16,16 +16,25 @@ import java.util.Set;
 public class PostCreateServiceModel {
     @NotEmpty(message = "Post must have a title!")
     @NotBlank(message = "Title cannot be empty!")
-    @Size(min = 2,  message = "Title must be minimum 3 characters!")
+    @Size(min = 2, message = "Title must be minimum 3 characters!")
     private String title;
+
+    @NotEmpty(message = "Post must have a preview!")
+    @NotBlank(message = "Preview cannot be empty!")
+    @Size(min = 2, message = "Preview must be minimum 3 characters!")
+    private String preview;
+
     @NotEmpty(message = "Post must have some content!")
     @NotBlank(message = "Content cannot be empty!")
     @Size(min = 10, message = "Content must be more than 10 characters ")
     private String content;
+
     @NotNull(message = "Please select a category!")
     private CategoryName category;
+
     @NotBlank(message = "URL cannot be empty!")
     private String imgUrl;
+
     @NonNull
     private String author;
 }

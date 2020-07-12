@@ -15,7 +15,9 @@ import java.util.Set;
 @Getter
 @Setter
 public class PostViewServiceModel {
+    private String id;
     private String title;
+    private String preview;
     private String content;
     private String author;
     private String imgUrl;

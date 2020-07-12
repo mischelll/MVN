@@ -11,6 +11,7 @@ import java.util.Set;
 @Table(name = "posts")
 public class Post extends BaseEntity {
     private String title;
+    private String preview;
     private String content;
     private User author;
     private String imgUrl;
@@ -20,6 +21,7 @@ public class Post extends BaseEntity {
 
     public Post() {
     }
+
     @Column(nullable = false, name = "imgUrl")
     public String getImgUrl() {
         return imgUrl;
@@ -36,6 +38,15 @@ public class Post extends BaseEntity {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    @Column(nullable = false, name = "preview")
+    public String getPreview() {
+        return preview;
+    }
+
+    public void setPreview(String preview) {
+        this.preview = preview;
     }
 
     @Lob

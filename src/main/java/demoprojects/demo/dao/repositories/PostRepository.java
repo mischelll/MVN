@@ -12,4 +12,5 @@ public interface PostRepository extends JpaRepository<Post, String> {
     Post findByTitle(String title);
     Post findByAuthor(User author);
 
+
 }

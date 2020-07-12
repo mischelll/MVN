@@ -1,22 +1,23 @@
 package demoprojects.demo.web.controllers;
 
+import demoprojects.demo.dao.models.entities.CategoryName;
 import demoprojects.demo.service.PostService;
 import demoprojects.demo.service.models.PostCreateServiceModel;
+import demoprojects.demo.service.models.PostViewServiceModel;
 import demoprojects.demo.web.models.PostCreateModel;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.Arrays;
+import java.util.List;
 
 @Controller
 @RequestMapping("/posts")
@@ -46,7 +47,7 @@ public class PostController {
         if (!model.containsAttribute("post")) {
             model.addAttribute("post", new PostCreateModel());
         }
-        modelAndView.setViewName("create-post");
+        modelAndView.setViewName("blog/create-post");
         return modelAndView;
     }
 
@@ -83,5 +84,23 @@ public class PostController {
     public ModelAndView seeAll(Model model) {
         model.addAttribute("posts", postService.findLatest10());
         return new ModelAndView("blog");
+    }
+
+    @GetMapping("/article")
+    public ModelAndView getSinglePost(ModelAndView modelAndView,@RequestParam String id){
+        PostViewServiceModel byId = this.postService.findById(id);
+        List<CategoryName> categoriesNames = getCategoriesNames();
+        categoriesNames.forEach(categoryName -> {
+            modelAndView.addObject(categoryName.name(),
+                    this.postService.findPostsByCategory(categoryName.name()));
+        });
+        modelAndView.addObject("post",this.postService.findById(id));
+        modelAndView.setViewName("blog/single");
+
+        return modelAndView;
+    }
+
+    private List<CategoryName> getCategoriesNames(){
+        return Arrays.asList(CategoryName.values());
     }
 }

@@ -66,8 +66,12 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Post findById(Long id) {
-        return null;
+    public PostViewServiceModel findById(String id) {
+        Post byId = this.postRepository.findById(id).orElse(null);
+        PostViewServiceModel map = this.modelMapper.map(byId, PostViewServiceModel.class);
+        map.setCommentsCount(byId.getComments().size());
+        map.setAuthor(byId.getAuthor().getUsername());
+        return map;
     }
 
     @Override
@@ -97,5 +101,27 @@ public class PostServiceImpl implements PostService {
     @Override
     public void deleteById(String id) {
 
+    }
+
+    @Override
+    public List<PostViewServiceModel> findPostsByCategory(String category) {
+        Category byName = this.categoryService.findByName(category);
+        List<Post> collect = this.postRepository
+                .findAll()
+                .stream()
+               .collect(Collectors.toList());
+        return this.postRepository
+                .findAll()
+                .stream()
+                .filter(post -> {
+                    boolean equals = false;
+                    for (Category postCategory : post.getCategories()) {
+                        equals = postCategory.getName().name().equals(byName.getName().name());
+                    }
+
+                    return equals;
+                })
+                .map(post -> this.modelMapper.map(post,PostViewServiceModel.class))
+                .collect(Collectors.toList());
     }
 }
