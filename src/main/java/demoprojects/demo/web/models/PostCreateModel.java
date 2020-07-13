@@ -28,7 +28,7 @@ public class PostCreateModel {
 
     @NotEmpty(message = "Post must have some content!")
     @NotBlank(message = "Content cannot be empty!")
-    @Size(min = 10, message = "Content must be more than 10 characters ")
+    @Size(min = 100, message = "Content must be more than 100 characters ")
     private String content;
 
     @NotBlank(message = "URL cannot be empty!")

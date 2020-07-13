@@ -7,12 +7,16 @@ import demoprojects.demo.dao.repositories.PostRepository;
 import demoprojects.demo.dao.repositories.UserRepository;
 import demoprojects.demo.service.CategoryService;
 import demoprojects.demo.service.PostService;
+import demoprojects.demo.service.models.PostCategoryCountModel;
 import demoprojects.demo.service.models.PostCreateServiceModel;
+import demoprojects.demo.service.models.PostPopularViewModel;
 import demoprojects.demo.service.models.PostViewServiceModel;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -60,6 +64,8 @@ public class PostServiceImpl implements PostService {
                     map.setCategories(post.getCategories().iterator().next().getName());
                     map.setCommentsCount(post.getComments().size());
 
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm");
+                    map.setPostedOn(post.getPostedOn().format(formatter));
                     return map;
                 })
                 .collect(Collectors.toList());
@@ -77,10 +83,8 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostCreateServiceModel create(PostCreateServiceModel post) {
         Post map = this.modelMapper.map(post, Post.class);
-
         map.setAuthor(this.userRepository.findByUsername(post.getAuthor()));
         map.setPostedOn(LocalDateTime.now());
-
 
         map.setCategories(Set.of(this.
                 categoryService.
@@ -100,28 +104,42 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void deleteById(String id) {
-
+        this.postRepository.deleteById(id);
     }
 
     @Override
-    public List<PostViewServiceModel> findPostsByCategory(String category) {
+    public PostCategoryCountModel findPostsByCategory(String category) {
         Category byName = this.categoryService.findByName(category);
         List<Post> collect = this.postRepository
                 .findAll()
                 .stream()
-               .collect(Collectors.toList());
-        return this.postRepository
-                .findAll()
-                .stream()
                 .filter(post -> {
                     boolean equals = false;
+
                     for (Category postCategory : post.getCategories()) {
                         equals = postCategory.getName().name().equals(byName.getName().name());
                     }
-
                     return equals;
+                }).collect(Collectors.toList());
+        return new PostCategoryCountModel(collect.size(), category);
+    }
+
+    @Override
+    public List<PostPopularViewModel> getTopThreePosts() {
+        return this.postRepository
+                .findAll()
+                .stream()
+                .sorted((a, b) -> Integer.compare(b.getComments().size(), a.getComments().size()))
+                .limit(3)
+                .map(post -> {
+                    PostPopularViewModel map = this.modelMapper.map(post, PostPopularViewModel.class);
+                    map.setCommentsCount(post.getComments().size());
+                    map.setAuthor(post.getAuthor().getUsername());
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm");
+                    map.setPostedOn(post.getPostedOn().format(formatter));
+                    return map;
                 })
-                .map(post -> this.modelMapper.map(post,PostViewServiceModel.class))
                 .collect(Collectors.toList());
+
     }
 }

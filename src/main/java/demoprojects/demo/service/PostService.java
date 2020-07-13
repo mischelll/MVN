@@ -1,7 +1,9 @@
 package demoprojects.demo.service;
 
 import demoprojects.demo.dao.models.entities.Post;
+import demoprojects.demo.service.models.PostCategoryCountModel;
 import demoprojects.demo.service.models.PostCreateServiceModel;
+import demoprojects.demo.service.models.PostPopularViewModel;
 import demoprojects.demo.service.models.PostViewServiceModel;
 
 import java.util.List;
@@ -13,5 +15,6 @@ public interface PostService {
     PostCreateServiceModel create(PostCreateServiceModel post);
     Post edit(Post post);
     void deleteById(String id);
-    List<PostViewServiceModel> findPostsByCategory(String category);
+    PostCategoryCountModel findPostsByCategory(String category);
+    List<PostPopularViewModel> getTopThreePosts();
 }

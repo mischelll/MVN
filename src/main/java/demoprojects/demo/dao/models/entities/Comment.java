@@ -1,5 +1,7 @@
 package demoprojects.demo.dao.models.entities;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -10,12 +12,32 @@ public class Comment extends BaseEntity {
     private Post post;
     private LocalDateTime date;
     private String text;
+    private Integer likes;
+    private Integer dislikes;
 
     public Comment() {
     }
 
+    @Column(name = "likes")
+    public Integer getLikes() {
+        return likes;
+    }
+
+    public void setLikes(Integer likes) {
+        this.likes = likes;
+    }
+
+    @Column(name = "dislikes")
+    public Integer getDislikes() {
+        return dislikes;
+    }
+
+    public void setDislikes(Integer dislikes) {
+        this.dislikes = dislikes;
+    }
+
     @ManyToOne
-    @JoinColumn(name="user_id", referencedColumnName = "id")
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     public User getAuthor() {
         return author;
     }
@@ -25,7 +47,7 @@ public class Comment extends BaseEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name="post_id", referencedColumnName = "id")
+    @JoinColumn(name = "post_id", referencedColumnName = "id")
     public Post getPost() {
         return post;
     }

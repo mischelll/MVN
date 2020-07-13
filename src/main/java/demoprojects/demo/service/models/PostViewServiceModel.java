@@ -23,5 +23,5 @@ public class PostViewServiceModel {
     private String imgUrl;
     private CategoryName categories;
     private Integer commentsCount;
-    private LocalDateTime postedOn;
+    private String postedOn;
 }

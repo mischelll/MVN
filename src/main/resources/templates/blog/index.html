@@ -18,9 +18,17 @@
             <div class="row no-gutters">
                 <div class="col-md-4 d-flex" th:each="post,counter : ${posts}">
                     <div class="blog-entry ftco-animate" th:if="${counter.odd}">
-
-                        <a class="img" href="single.html"
-                           th:style="'background-image:url('+${post.imgUrl}+');'"></a>
+                        <div class="carousel-blog owl-carousel">
+                            <div class="item">
+<!--                                <a th:href="@{/posts/article (id = ${post.id})}" class="img"-->
+<!--                                   style="background-image: url(blog/ionize/images/image_11.jpg);"></a>-->
+                                <a th:href="@{/posts/article (id = ${post.id})}">
+                                <img th:href="@{/posts/article (id = ${post.id})}" class="img" th:if="${post.imgUrl}" th:src="${post.imgUrl}" alt="Post image">
+                                </a>
+                            </div>
+                        </div>
+<!--                        <a class="img" href="single.html"-->
+<!--                           th:style="'background-image:url('+${post.imgUrl}+');'"></a>-->
                         <div class="text p-4">
                             <h3 class="mb-2" th:text="${post.title}"><a href="single.html">A Loving Heart is the Truest
                                 Wisdom</a></h3>
@@ -40,20 +48,11 @@
                     <div class="blog-entry ftco-animate active" th:if="${counter.even}">
                         <div class="carousel-blog owl-carousel">
                             <div class="item">
-                                <a href="single.html" class="img"
-                                   style="background-image: url(blog/ionize/images/image_1.jpg);"></a>
-                            </div>
-                            <div class="item">
-                                <a href="single.html" class="img"
-                                   style="background-image: url(blog/ionize/images/image_6.jpg);"></a>
-                            </div>
-                            <div class="item">
-                                <a href="single.html" class="img"
-                                   style="background-image: url(blog/ionize/images/image_7.jpg);"></a>
-                            </div>
-                            <div class="item">
-                                <a href="single.html" class="img"
-                                   style="background-image: url(blog/ionize/images/image_8.jpg);"></a>
+                                <!--                                <a th:href="@{/posts/article (id = ${post.id})}" class="img"-->
+                                <!--                                   style="background-image: url(blog/ionize/images/image_11.jpg);"></a>-->
+                                <a th:href="@{/posts/article (id = ${post.id})}">
+                                    <img th:href="@{/posts/article (id = ${post.id})}" class="img" th:if="${post.imgUrl}" th:src="${post.imgUrl}" alt="Post image">
+                                </a>
                             </div>
                         </div>
                         <div class="text p-4">
@@ -67,12 +66,11 @@
                             </div>
                             <p class="mb-4" th:text="${post.preview}">A small river named Duden flows by
                                 their place and supplies</p>
-                            <p><a href="#" class="btn-custom">Read More <span
+                            <p><a th:href="@{/posts/article (id = ${post.id})}" class="btn-custom">Read More <span
                                     class="ion-ios-arrow-forward"></span></a>
                             </p>
                         </div>
                     </div>
-
                 </div>
 
 

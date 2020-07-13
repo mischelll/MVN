@@ -2,6 +2,7 @@ package demoprojects.demo.web.controllers;
 
 import demoprojects.demo.dao.models.entities.CategoryName;
 import demoprojects.demo.service.PostService;
+import demoprojects.demo.service.models.PostCategoryCountModel;
 import demoprojects.demo.service.models.PostCreateServiceModel;
 import demoprojects.demo.service.models.PostViewServiceModel;
 import demoprojects.demo.web.models.PostCreateModel;
@@ -16,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -87,20 +89,21 @@ public class PostController {
     }
 
     @GetMapping("/article")
-    public ModelAndView getSinglePost(ModelAndView modelAndView,@RequestParam String id){
-        PostViewServiceModel byId = this.postService.findById(id);
-        List<CategoryName> categoriesNames = getCategoriesNames();
-        categoriesNames.forEach(categoryName -> {
-            modelAndView.addObject(categoryName.name(),
-                    this.postService.findPostsByCategory(categoryName.name()));
+    public ModelAndView getSinglePost(ModelAndView modelAndView, @RequestParam String id) {
+        List< PostCategoryCountModel> categories = new ArrayList<>();
+
+        getCategoriesNames().forEach(categoryName -> {
+            categories.add(this.postService.findPostsByCategory(categoryName.name()));
         });
-        modelAndView.addObject("post",this.postService.findById(id));
+        modelAndView.addObject("popular",this.postService.getTopThreePosts());
+        modelAndView.addObject("categories",categories);
+        modelAndView.addObject("post", this.postService.findById(id));
         modelAndView.setViewName("blog/single");
 
         return modelAndView;
     }
 
-    private List<CategoryName> getCategoriesNames(){
+    private List<CategoryName> getCategoriesNames() {
         return Arrays.asList(CategoryName.values());
     }
 }

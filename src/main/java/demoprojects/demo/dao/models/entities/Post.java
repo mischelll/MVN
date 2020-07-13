@@ -70,7 +70,7 @@ public class Post extends BaseEntity {
     }
 
     @Column(name = "posted_on", nullable = false)
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+//    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     @PastOrPresent(message = "The date cannot be in the future")
     public LocalDateTime getPostedOn() {
         return postedOn;
