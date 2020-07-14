@@ -8,36 +8,41 @@
 <th:block th:include="~{blog/blog-fragments/nav}"/>
 <!-- END COLORLIB-ASIDE -->
 <div id="colorlib-main">
-    <section class="ftco-section ftco-no-pt ftco-no-pb" >
+    <section class="ftco-section ftco-no-pt ftco-no-pb">
         <div class="container px-0">
             <div class="row d-flex no-gutters">
                 <div class="col-lg-8 px-md-5 py-5">
                     <div class="row" th:object="${post}">
                         <h1 class="mb-3" th:text="*{title}">A Loving Heart is the Truest Wisdom</h1>
                         <br>
-                        <p class="mb-3" th:text="*{content}">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis, eius mollitia suscipit,
+                        <p class="mb-3" th:text="*{content}">Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                            Reiciendis, eius mollitia suscipit,
                             quisquam doloremque distinctio perferendis et doloribus unde architecto optio laboriosam
                             porro adipisci sapiente officiis nemo accusamus ad praesentium? Esse minima nisi et. Dolore
                             perferendis, enim praesentium omnis, iste doloremque quia officia optio deserunt molestiae
                             voluptates soluta architecto tempora.</p>
-                        <img th:if="${post.imgUrl}" th:src="${post.imgUrl}" alt="Post image">
-
+                        <img height="600px" width="700px" th:if="${post.imgUrl}" th:src="${post.imgUrl}"
+                             alt="Post image">
+                        <br>
+                        <br>
+                        <br>
+                        <h1 class="mb-3">About the author</h1>
                         <div class="about-author d-flex p-4 bg-light">
-                            <br>
                             <div class="bio mr-5">
-                                <img src="blog/ionize/images/person_1.jpg" alt="Image placeholder" height="200" width="200">
+                                <img src="blog/ionize/images/person_1.jpg" alt="Image placeholder" height="200"
+                                     width="200">
                             </div>
                             <div class="desc">
                                 <h3 th:text="*{author}">George Washington</h3>
                                 <p>Add author bioOOOOOOOOOOOOOOOOOOOOPPPPPPPPPPPPPPPPPPP
-                                OOOOOOOOOOOOOOOOOOOOOOOOOOOO</p>
+                                    OOOOOOOOOOOOOOOOOOOOOOOOOOOO</p>
                             </div>
                         </div>
 
 
                         <div class="pt-5 mt-5">
                             <h3 class="mb-5 font-weight-bold" th:text="|*{commentsCount} Comments|">6 Comments</h3>
-                            <ul class="comment-list" >
+                            <ul class="comment-list">
 
                                 <li class="comment">
                                     <div class="vcard bio">
@@ -47,7 +52,7 @@
                                         <h3>Comment Author</h3>
                                         <div class="meta">Comment date</div>
                                         <p>Comment Content</p>
-                                        <p> <a href="#" class="reply">Like</a> <a href="#" class="reply">Dislike</a></p>
+                                        <p><a href="#" class="reply">Like</a> <a href="#" class="reply">Dislike</a></p>
                                     </div>
                                 </li>
 
@@ -86,10 +91,12 @@
 
                             <div class="comment-form-wrap pt-5">
                                 <h3 class="mb-5">Leave a comment</h3>
-                                <form action="#" class="p-3 p-md-4 bg-light">
+                                <form action="" method="post" class="p-3 p-md-4 bg-light">
                                     <div class="form-group">
                                         <textarea name="" id="comment" cols="30" rows="10"
-                                                  class="form-control" placeholder="Write your comment here..."></textarea>
+                                                  class="form-control"
+                                                  placeholder="Write your comment here..."></textarea>
+                                        <input type="hidden" name="postID" id="postID" th:value="${post.id}">
                                     </div>
                                     <div class="form-group">
                                         <input type="submit" value="Post Comment" class="btn py-3 px-4 btn-primary">
@@ -111,7 +118,7 @@
                     </div>
                     <div class="sidebar-box ftco-animate">
                         <h3 class="sidebar-heading">Categories</h3>
-                        <ul class="categories"  th:each="cat : ${categories}">
+                        <ul class="categories" th:each="cat : ${categories}">
                             <li><a href="#" th:text="|${cat.categoryName} (${cat.count})|">Fashion </a></li>
 
                         </ul>
@@ -120,38 +127,46 @@
                     <div class="sidebar-box ftco-animate">
                         <h3 class="sidebar-heading">Popular Articles</h3>
                         <div class="block-21 mb-4 d-flex" th:each="popularPost : ${popular}">
-                            <a class="blog-img mr-4" >
+                            <a class="blog-img mr-4">
                                 <img class="blog-img mr-4" th:src="${popularPost.imgUrl}">
                             </a>
                             <div class="text">
-                                <h3 class="heading"><a th:href="@{/posts/article (id = ${popularPost.id})}" th:text="${popularPost.title}">Even the all-powerful Pointing has no control</a></h3>
+                                <h3 class="heading"><a th:href="@{/posts/article (id = ${popularPost.id})}"
+                                                       th:text="${popularPost.title}">Even the all-powerful Pointing has
+                                    no control</a></h3>
                                 <div class="meta">
-                                    <div><a href="#" th:text="${popularPost.postedOn}"><span class="icon-calendar"></span> Sept. 12, 2019</a></div>
-                                    <div><a href="#" th:text="${popularPost.author}"><span class="icon-person"></span> Dave Lewis</a></div>
-                                    <div><a href="#" th:text="${popularPost.commentsCount}"><span class="icon-chat"></span> 19</a></div>
+                                    <div><a href="#" th:text="${popularPost.postedOn}"><span
+                                            class="icon-calendar"></span> Sept. 12, 2019</a></div>
+                                    <div><a href="#" th:text="${popularPost.author}"><span class="icon-person"></span>
+                                        Dave Lewis</a></div>
+                                    <div><a href="#" th:text="${popularPost.commentsCount}"><span
+                                            class="icon-chat"></span> 19</a></div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-<!--                    <div class="sidebar-box ftco-animate">-->
-<!--                        <h3 class="sidebar-heading">Tag Cloud</h3>-->
-<!--                        <ul class="tagcloud">-->
-<!--                            <a href="#" class="tag-cloud-link">animals</a>-->
-<!--                            <a href="#" class="tag-cloud-link">human</a>-->
-<!--                            <a href="#" class="tag-cloud-link">people</a>-->
-<!--                            <a href="#" class="tag-cloud-link">cat</a>-->
-<!--                            <a href="#" class="tag-cloud-link">dog</a>-->
-<!--                            <a href="#" class="tag-cloud-link">nature</a>-->
-<!--                            <a href="#" class="tag-cloud-link">leaves</a>-->
-<!--                            <a href="#" class="tag-cloud-link">food</a>-->
-<!--                        </ul>-->
-<!--                    </div>-->
+                    <!--                    <div class="sidebar-box ftco-animate">-->
+                    <!--                        <h3 class="sidebar-heading">Tag Cloud</h3>-->
+                    <!--                        <ul class="tagcloud">-->
+                    <!--                            <a href="#" class="tag-cloud-link">animals</a>-->
+                    <!--                            <a href="#" class="tag-cloud-link">human</a>-->
+                    <!--                            <a href="#" class="tag-cloud-link">people</a>-->
+                    <!--                            <a href="#" class="tag-cloud-link">cat</a>-->
+                    <!--                            <a href="#" class="tag-cloud-link">dog</a>-->
+                    <!--                            <a href="#" class="tag-cloud-link">nature</a>-->
+                    <!--                            <a href="#" class="tag-cloud-link">leaves</a>-->
+                    <!--                            <a href="#" class="tag-cloud-link">food</a>-->
+                    <!--                        </ul>-->
+                    <!--                    </div>-->
 
-                    <div class="sidebar-box subs-wrap img px-4 py-5" style="background-image: url(blog/ionize/images/bg_1.jpg);">
+                    <div class="sidebar-box subs-wrap img px-4 py-5"
+                         style="background-image: url(blog/ionize/images/bg_1.jpg);">
                         <div class="overlay"></div>
                         <h3 class="mb-4 sidebar-heading">Become a moderator?</h3>
-                        <p class="mb-4">See what are the requirements for becoming a proud moderator in the MVN | Blog Society.</p>
+                        <p class="mb-4">See what are the <a th:href="@{/posts/about}" style="color: whitesmoke">requirements</a> for becoming a proud
+                            <i>Moderator</i> in the MVN | Blog
+                            Society.</p>
                         <form action="#" class="subscribe-form">
                             <div class="form-group">
                                 <input type="text" class="form-control" placeholder="Email Address">

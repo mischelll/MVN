@@ -1,4 +1,4 @@
-package demoprojects.demo.service.models;
+package demoprojects.demo.service.models.view;
 
 import demoprojects.demo.dao.models.entities.CategoryName;
 import demoprojects.demo.dao.models.entities.User;

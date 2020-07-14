@@ -1,21 +1,19 @@
 package demoprojects.demo.service.impl;
 
 import demoprojects.demo.dao.models.entities.Category;
-import demoprojects.demo.dao.models.entities.CategoryName;
 import demoprojects.demo.dao.models.entities.Post;
 import demoprojects.demo.dao.repositories.PostRepository;
 import demoprojects.demo.dao.repositories.UserRepository;
 import demoprojects.demo.service.CategoryService;
 import demoprojects.demo.service.PostService;
-import demoprojects.demo.service.models.PostCategoryCountModel;
-import demoprojects.demo.service.models.PostCreateServiceModel;
-import demoprojects.demo.service.models.PostPopularViewModel;
-import demoprojects.demo.service.models.PostViewServiceModel;
+import demoprojects.demo.service.models.view.PostCategoryCountModel;
+import demoprojects.demo.service.models.bind.PostCreateServiceModel;
+import demoprojects.demo.service.models.view.PostPopularViewModel;
+import demoprojects.demo.service.models.view.PostViewServiceModel;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -85,7 +83,7 @@ public class PostServiceImpl implements PostService {
         Post map = this.modelMapper.map(post, Post.class);
         map.setAuthor(this.userRepository.findByUsername(post.getAuthor()));
         map.setPostedOn(LocalDateTime.now());
-
+        Set<Category> categories = new HashSet<>();
         map.setCategories(Set.of(this.
                 categoryService.
                 findByName(post.

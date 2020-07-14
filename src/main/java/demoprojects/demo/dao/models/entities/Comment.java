@@ -16,6 +16,8 @@ public class Comment extends BaseEntity {
     private Integer dislikes;
 
     public Comment() {
+        this.likes = 0;
+        this.dislikes = 0;
     }
 
     @Column(name = "likes")

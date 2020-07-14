@@ -1,7 +1,7 @@
 ﻿function Multiselect(item, opts) {
 	//if item is not a select - it is an error
 	if ((typeof($) != 'undefined' && !$(item).is('select')) ||
-		(typeof($) == 'undefined' && item.tagName != 'SELECT')) {
+		(typeof($) == 'undefined' && item.tagName !== 'SELECT')) {
 		throw "Multiselect: passed object must be a select";
 	}
 	

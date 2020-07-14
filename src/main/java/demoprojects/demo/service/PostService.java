@@ -1,10 +1,10 @@
 package demoprojects.demo.service;
 
 import demoprojects.demo.dao.models.entities.Post;
-import demoprojects.demo.service.models.PostCategoryCountModel;
-import demoprojects.demo.service.models.PostCreateServiceModel;
-import demoprojects.demo.service.models.PostPopularViewModel;
-import demoprojects.demo.service.models.PostViewServiceModel;
+import demoprojects.demo.service.models.view.PostCategoryCountModel;
+import demoprojects.demo.service.models.bind.PostCreateServiceModel;
+import demoprojects.demo.service.models.view.PostPopularViewModel;
+import demoprojects.demo.service.models.view.PostViewServiceModel;
 
 import java.util.List;
 

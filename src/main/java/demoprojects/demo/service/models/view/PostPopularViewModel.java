@@ -1,4 +1,4 @@
-package demoprojects.demo.service.models;
+package demoprojects.demo.service.models.view;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

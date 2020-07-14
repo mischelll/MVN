@@ -1,9 +1,8 @@
 package demoprojects.demo.web.controllers;
 
-import demoprojects.demo.dao.models.entities.User;
 import demoprojects.demo.service.EmailService;
 import demoprojects.demo.service.UserService;
-import demoprojects.demo.service.models.UserRegisterServiceModel;
+import demoprojects.demo.service.models.bind.UserRegisterServiceModel;
 import demoprojects.demo.util.Messages;
 import demoprojects.demo.web.models.UserRegisterModel;
 import org.modelmapper.ModelMapper;
@@ -22,8 +21,6 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import java.util.Random;
-
-import static demoprojects.demo.util.Messages.SUCCESSFUL_REG;
 
 @Controller
 @RequestMapping("/mvn/users")

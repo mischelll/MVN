@@ -10,10 +10,10 @@ if (typeof ($) != 'undefined') {
 			window.multiselects._items = [];
 		}
 
-		if (this.length != 0) {
+		if (this.length !== 0) {
 			$(this).each(function (i, e) {
 				var index = window.multiselects._items.indexOf(e);
-				if (index == -1) {
+				if (index === -1) {
 					var inputItem = new Multiselect(e);
 					window.multiselects.push(inputItem);
 					window.multiselects._items.push(e);
@@ -25,7 +25,7 @@ if (typeof ($) != 'undefined') {
 			});
 		}
 
-		return res.length == 1 ? res[0] : $(res);
+		return res.length === 1 ? res[0] : $(res);
 	};
 	
 	$(document).click(function (event) {
@@ -40,7 +40,7 @@ if (typeof ($) != 'undefined') {
 		
 		m_helper.each(document.querySelectorAll(selector), function(e) {
 			var index = window.multiselects._items.indexOf(e);
-			if (index == -1) {
+			if (index === -1) {
 				var inputItem = new Multiselect(e);
 				window.multiselects.push(inputItem);
 				window.multiselects._items.push(e);
@@ -51,7 +51,7 @@ if (typeof ($) != 'undefined') {
 			}
 		});
 		
-		return res.length == 1 ? res[0] : res;
+		return res.length === 1 ? res[0] : res;
 	}
 	
 	window.onclick = function(event) {

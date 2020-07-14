@@ -2,9 +2,9 @@ package demoprojects.demo.web.controllers;
 
 import demoprojects.demo.dao.models.entities.CategoryName;
 import demoprojects.demo.service.PostService;
-import demoprojects.demo.service.models.PostCategoryCountModel;
-import demoprojects.demo.service.models.PostCreateServiceModel;
-import demoprojects.demo.service.models.PostViewServiceModel;
+import demoprojects.demo.service.models.view.PostCategoryCountModel;
+import demoprojects.demo.service.models.bind.PostCreateServiceModel;
+import demoprojects.demo.web.models.CommentCreateModel;
 import demoprojects.demo.web.models.PostCreateModel;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -30,11 +30,6 @@ public class PostController {
     public PostController(PostService postService, ModelMapper mapper) {
         this.postService = postService;
         this.mapper = mapper;
-    }
-
-    @GetMapping("/about")
-    public ModelAndView getPostsAbout() {
-        return new ModelAndView("blog/about");
     }
 
     @GetMapping("/all")
@@ -89,21 +84,27 @@ public class PostController {
     }
 
     @GetMapping("/article")
-    public ModelAndView getSinglePost(ModelAndView modelAndView, @RequestParam String id) {
-        List< PostCategoryCountModel> categories = new ArrayList<>();
+    public ModelAndView getSinglePost(ModelAndView modelAndView, @RequestParam String id, Model model) {
 
-        getCategoriesNames().forEach(categoryName -> {
-            categories.add(this.postService.findPostsByCategory(categoryName.name()));
-        });
-        modelAndView.addObject("popular",this.postService.getTopThreePosts());
-        modelAndView.addObject("categories",categories);
+        List<PostCategoryCountModel> categories = new ArrayList<>();
+        getCategoriesNames().forEach(categoryName -> categories
+                .add(this.postService
+                        .findPostsByCategory(categoryName.name())));
+        modelAndView.addObject("popular", this.postService.getTopThreePosts());
+        modelAndView.addObject("categories", categories);
         modelAndView.addObject("post", this.postService.findById(id));
         modelAndView.setViewName("blog/single");
 
         return modelAndView;
     }
-
     private List<CategoryName> getCategoriesNames() {
         return Arrays.asList(CategoryName.values());
+    }
+
+    @GetMapping("/about")
+    public ModelAndView getAbout(ModelAndView modelAndView){
+        modelAndView.setViewName("blog/about");
+
+        return modelAndView;
     }
 }

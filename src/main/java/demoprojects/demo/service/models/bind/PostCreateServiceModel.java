@@ -1,4 +1,4 @@
-package demoprojects.demo.service.models;
+package demoprojects.demo.service.models.bind;
 
 import demoprojects.demo.dao.models.entities.CategoryName;
 import lombok.*;

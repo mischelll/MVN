@@ -2,7 +2,7 @@ package demoprojects.demo.service.impl;
 
 import demoprojects.demo.dao.repositories.UserRepository;
 import demoprojects.demo.service.AuthServiceValidation;
-import demoprojects.demo.service.models.UserRegisterServiceModel;
+import demoprojects.demo.service.models.bind.UserRegisterServiceModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
