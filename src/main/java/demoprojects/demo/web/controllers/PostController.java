@@ -1,7 +1,9 @@
 package demoprojects.demo.web.controllers;
 
 import demoprojects.demo.dao.models.entities.CategoryName;
+import demoprojects.demo.service.CommentService;
 import demoprojects.demo.service.PostService;
+import demoprojects.demo.service.models.bind.CommentCreateServiceModel;
 import demoprojects.demo.service.models.view.PostCategoryCountModel;
 import demoprojects.demo.service.models.bind.PostCreateServiceModel;
 import demoprojects.demo.web.models.CommentCreateModel;
@@ -18,6 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -27,10 +30,12 @@ import java.util.List;
 public class PostController {
     private final PostService postService;
     private final ModelMapper mapper;
+    private final CommentService commentService;
 
-    public PostController(PostService postService, ModelMapper mapper) {
+    public PostController(PostService postService, ModelMapper mapper, CommentService commentService) {
         this.postService = postService;
         this.mapper = mapper;
+        this.commentService = commentService;
     }
 
     @GetMapping("/all")
@@ -48,7 +53,7 @@ public class PostController {
             model.addAttribute("postSearch", new PostSearchModel());
         }
         String name = title;
-        model.addAttribute("posts",this.postService.findByTitle(title));
+        model.addAttribute("posts", this.postService.findByTitle(title));
         modelAndView.setViewName("blog/index");
 
         return modelAndView;
@@ -111,19 +116,50 @@ public class PostController {
     }
 
     @GetMapping("/article")
-    public ModelAndView getSinglePost(ModelAndView modelAndView, @RequestParam String id, Model model) {
-        if (!model.containsAttribute("postSearch")) {
+    public ModelAndView getSinglePost(ModelAndView modelAndView, @RequestParam String id,
+                                      Model model,
+                                      RedirectAttributes redirectAttributes) {
+        redirectAttributes.addAttribute("id", id);
+        if (!model.containsAttribute("postSearch") || !model.containsAttribute("comment")) {
+            model.addAttribute("comment",new CommentCreateModel());
             model.addAttribute("postSearch", new PostSearchModel());
         }
         List<PostCategoryCountModel> categories = new ArrayList<>();
         getCategoriesNames().forEach(categoryName -> categories
                 .add(this.postService
                         .findPostsByCategory(categoryName.name())));
-        modelAndView.addObject("popular", this.postService.getTopThreePosts());
+
         modelAndView.addObject("categories", categories);
+        modelAndView.addObject("popular", this.postService.getTopThreePosts());
         modelAndView.addObject("post", this.postService.findById(id));
+        modelAndView.addObject("comments",this.commentService.commentsOfPost(id));
         modelAndView.setViewName("blog/single");
 
+        return modelAndView;
+    }
+
+    @PostMapping("/article")
+    public ModelAndView createComment(@Valid @ModelAttribute("comment") CommentCreateModel comment,
+                                      BindingResult bindingResult,
+                                      RedirectAttributes redirectAttributes,
+                                      ModelAndView modelAndView,
+                                      Principal principal,
+                                      @RequestParam String id) {
+
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("comment", comment);
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.comment", bindingResult);
+        } else {
+            CommentCreateServiceModel map = this.mapper.map(comment, CommentCreateServiceModel.class);
+            map.setAuthor(principal.getName());
+            map.setDate(LocalDateTime.now());
+            map.setPostID(id);
+
+            CommentCreateServiceModel comment1 =
+                    this.commentService.createComment(map);
+        }
+
+        modelAndView.setViewName("redirect:/posts/article?id=" + id);
         return modelAndView;
     }
 
@@ -132,7 +168,7 @@ public class PostController {
     }
 
     @GetMapping("/about")
-    public ModelAndView getAbout(ModelAndView modelAndView,Model model) {
+    public ModelAndView getAbout(ModelAndView modelAndView, Model model) {
         if (!model.containsAttribute("postSearch")) {
             model.addAttribute("postSearch", new PostSearchModel());
         }

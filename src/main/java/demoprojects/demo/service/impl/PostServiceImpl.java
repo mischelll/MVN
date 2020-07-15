@@ -1,6 +1,7 @@
 package demoprojects.demo.service.impl;
 
 import demoprojects.demo.dao.models.entities.Category;
+import demoprojects.demo.dao.models.entities.CategoryName;
 import demoprojects.demo.dao.models.entities.Post;
 import demoprojects.demo.dao.repositories.PostRepository;
 import demoprojects.demo.dao.repositories.UserRepository;
@@ -141,7 +142,6 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<PostViewServiceModel> findByTitle(String title) {
-        List<Post> allByTitleContains = this.postRepository.findAllByTitleContains(title);
         return this.postRepository
                 .findAllByTitleContains(title)
                 .stream()
@@ -156,5 +156,40 @@ public class PostServiceImpl implements PostService {
                     return map;
                 })
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Post findByIdentificationNumber(String id) {
+        return this
+                .postRepository
+                .findById(id)
+                .orElse(null);
+    }
+
+    @Override
+    public List<PostViewServiceModel> findByCategories(String category) {
+        Category byName = this.categoryService.findByName(category);
+        return this.postRepository
+                .findAll()
+                .stream()
+                .filter(post -> {
+                    boolean equals = false;
+
+                    for (Category postCategory : post.getCategories()) {
+                        equals = postCategory.getName().name().equals(byName.getName().name());
+                    }
+                    return equals;
+                })
+                .map(post -> {
+                    PostViewServiceModel map = this.modelMapper.map(post, PostViewServiceModel.class);
+                    map.setCommentsCount(post.getComments().size());
+                    map.setAuthor(post.getAuthor().getUsername());
+                    map.setCategories(CategoryName.valueOf(category));
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm");
+                    map.setPostedOn(post.getPostedOn().format(formatter));
+                    return map;
+                })
+                .collect(Collectors.toList());
+
     }
 }

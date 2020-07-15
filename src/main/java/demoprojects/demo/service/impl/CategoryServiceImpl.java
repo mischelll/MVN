@@ -21,12 +21,15 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void initCategories() {
-        if (this.categoryRepository.count() == 0) {
+        if (this.categoryRepository.count() < CategoryName.values().length) {
             Arrays
                     .stream(CategoryName.values())
                     .forEach(categoryName -> {
-                        this.categoryRepository.saveAndFlush(new Category(categoryName,
-                                String.format("Some description for %s.", categoryName.name())));
+                        if(this.categoryRepository.findByName(categoryName) == null){
+                            this.categoryRepository.saveAndFlush(new Category(categoryName,
+                                    String.format("Some description for %s.", categoryName.name())));
+                        }
+
                     });
         }
     }

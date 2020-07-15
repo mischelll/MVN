@@ -10,12 +10,24 @@ import java.util.List;
 
 public interface PostService {
     List<PostViewServiceModel> findAll();
+
     List<PostViewServiceModel> findLatest10();
+
     PostViewServiceModel findById(String id);
+
     PostCreateServiceModel create(PostCreateServiceModel post);
+
     Post edit(Post post);
+
     void deleteById(String id);
+
     PostCategoryCountModel findPostsByCategory(String category);
+
     List<PostPopularViewModel> getTopThreePosts();
+
     List<PostViewServiceModel> findByTitle(String title);
+
+    Post findByIdentificationNumber(String id);
+
+    List<PostViewServiceModel> findByCategories(String category);
 }
