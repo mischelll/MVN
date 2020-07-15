@@ -20,4 +20,11 @@ public class ShopController extends BaseController {
         return modelAndView;
     }
 
+    @GetMapping("/cart")
+    public ModelAndView getCart(ModelAndView modelAndView){
+        modelAndView.setViewName("shop/cart");
+
+        return modelAndView;
+    }
+
 }

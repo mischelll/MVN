@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org" lang="en">
+      xmlns:th="http://www.thymeleaf.org" lang="en"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <th:block th:include="~{blog/blog-fragments/head}"/>
 <body>
 <!-- PRE LOADER -->
@@ -21,21 +22,23 @@
                             porro adipisci sapiente officiis nemo accusamus ad praesentium? Esse minima nisi et. Dolore
                             perferendis, enim praesentium omnis, iste doloremque quia officia optio deserunt molestiae
                             voluptates soluta architecto tempora.</p>
-                        <img height="600px" width="700px" th:if="${post.imgUrl}" th:src="${post.imgUrl}"
+                        <img th:if="${post.imgUrl}" th:src="${post.imgUrl}"
                              alt="Post image">
                         <br>
                         <br>
                         <br>
-                        <h1 class="mb-3">About the author</h1>
+                        <br>
+                        <div>
+                            <h1 class="mb-3">About the author</h1>
+                        </div>
                         <div class="about-author d-flex p-4 bg-light">
                             <div class="bio mr-5">
                                 <img src="blog/ionize/images/person_1.jpg" alt="Image placeholder" height="200"
                                      width="200">
                             </div>
                             <div class="desc">
-                                <h3 th:text="*{author}">George Washington</h3>
-                                <p>Add author bioOOOOOOOOOOOOOOOOOOOOPPPPPPPPPPPPPPPPPPP
-                                    OOOOOOOOOOOOOOOOOOOOOOOOOOOO</p>
+                                <h3 class="mb-3" th:text="*{author}">George Washington</h3>
+                                <p>Add author bio</p>
                             </div>
                         </div>
 
@@ -91,7 +94,7 @@
 
                             <div class="comment-form-wrap pt-5">
                                 <h3 class="mb-5">Leave a comment</h3>
-                                <form action="" method="post" class="p-3 p-md-4 bg-light">
+                                <form action="#" method="" class="p-3 p-md-4 bg-light">
                                     <div class="form-group">
                                         <textarea name="" id="comment" cols="30" rows="10"
                                                   class="form-control"
@@ -145,26 +148,12 @@
                             </div>
                         </div>
                     </div>
-
-                    <!--                    <div class="sidebar-box ftco-animate">-->
-                    <!--                        <h3 class="sidebar-heading">Tag Cloud</h3>-->
-                    <!--                        <ul class="tagcloud">-->
-                    <!--                            <a href="#" class="tag-cloud-link">animals</a>-->
-                    <!--                            <a href="#" class="tag-cloud-link">human</a>-->
-                    <!--                            <a href="#" class="tag-cloud-link">people</a>-->
-                    <!--                            <a href="#" class="tag-cloud-link">cat</a>-->
-                    <!--                            <a href="#" class="tag-cloud-link">dog</a>-->
-                    <!--                            <a href="#" class="tag-cloud-link">nature</a>-->
-                    <!--                            <a href="#" class="tag-cloud-link">leaves</a>-->
-                    <!--                            <a href="#" class="tag-cloud-link">food</a>-->
-                    <!--                        </ul>-->
-                    <!--                    </div>-->
-
                     <div class="sidebar-box subs-wrap img px-4 py-5"
                          style="background-image: url(blog/ionize/images/bg_1.jpg);">
                         <div class="overlay"></div>
                         <h3 class="mb-4 sidebar-heading">Become a moderator?</h3>
-                        <p class="mb-4">See what are the <a th:href="@{/posts/about}" style="color: whitesmoke">requirements</a> for becoming a proud
+                        <p class="mb-4">See what are the <a th:href="@{/posts/about}" style="color: whitesmoke">requirements</a>
+                            for becoming a proud
                             <i>Moderator</i> in the MVN | Blog
                             Society.</p>
                         <form action="#" class="subscribe-form">

@@ -723,6 +723,7 @@ textarea.form-control {
 		@include border-radius(50%);
 	}
 	.desc{
+		display: grid;
 		h3{
 			font-size: 20px;
 		}

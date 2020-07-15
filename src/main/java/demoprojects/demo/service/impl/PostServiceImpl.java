@@ -84,12 +84,10 @@ public class PostServiceImpl implements PostService {
         map.setAuthor(this.userRepository.findByUsername(post.getAuthor()));
         map.setPostedOn(LocalDateTime.now());
         Set<Category> categories = new HashSet<>();
-        map.setCategories(Set.of(this.
-                categoryService.
-                findByName(post.
-                        getCategory()
-                        .name())));
-
+        post.getCategory().forEach(categoryName -> {
+            categories.add(this.categoryService.findByName(categoryName.name()));
+        });
+        map.setCategories(categories);
         return this.modelMapper
                 .map(this.postRepository.saveAndFlush(map),
                         PostCreateServiceModel.class);
@@ -139,5 +137,24 @@ public class PostServiceImpl implements PostService {
                 })
                 .collect(Collectors.toList());
 
+    }
+
+    @Override
+    public List<PostViewServiceModel> findByTitle(String title) {
+        List<Post> allByTitleContains = this.postRepository.findAllByTitleContains(title);
+        return this.postRepository
+                .findAllByTitleContains(title)
+                .stream()
+                .sorted(Comparator.comparing(Post::getPostedOn).reversed())
+                .map(post -> {
+                    PostViewServiceModel map = this.modelMapper.map(post, PostViewServiceModel.class);
+                    map.setCategories(post.getCategories().iterator().next().getName());
+                    map.setCommentsCount(post.getComments().size());
+
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm");
+                    map.setPostedOn(post.getPostedOn().format(formatter));
+                    return map;
+                })
+                .collect(Collectors.toList());
     }
 }

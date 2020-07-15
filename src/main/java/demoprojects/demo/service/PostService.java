@@ -17,4 +17,5 @@ public interface PostService {
     void deleteById(String id);
     PostCategoryCountModel findPostsByCategory(String category);
     List<PostPopularViewModel> getTopThreePosts();
+    List<PostViewServiceModel> findByTitle(String title);
 }

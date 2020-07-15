@@ -9,6 +9,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.List;
 import java.util.Set;
 
 @NoArgsConstructor
@@ -35,5 +36,5 @@ public class PostCreateModel {
     private String imgUrl;
 
     @NotNull(message = "Please select a category!")
-    private CategoryName category;
+    private List<CategoryName> category;
 }

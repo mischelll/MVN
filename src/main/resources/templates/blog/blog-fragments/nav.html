@@ -1,33 +1,57 @@
 <th:block th:fragment xmlns:th="http://www.w3.org/1999/xhtml">
 
     <div id="colorlib-page">
-        <a href="#" class="js-colorlib-nav-toggle colorlib-nav-toggle"><i>l</i></a>
+        <a href="#" class="js-colorlib-nav-toggle colorlib-nav-toggle"><i></i></a>
         <aside id="colorlib-aside" role="complementary" class="js-fullheight img"
                style="background-image: url(blog/ionize/images/sidebar-bg.jpg);">
             <h1 id="colorlib-logo" class="mb-4"><a href="/posts/all">MVN | Blog</a></h1>
             <nav id="colorlib-main-menu" role="navigation">
                 <ul>
-                    <li class="colorlib-active"><a th:href="@{/posts/all}">Home</a></li>
-                    
+                    <li class="colorlib-active"><a th:href="@{/home}">Home</a></li>
+                    <li sec:authorize="hasAuthority('ROLE_MODERATOR')"><a th:href="@{/posts/create}">Create Post</a>
+                    </li>
+                    <div class="dropdown">
+                        <li><a class="dropbtn">Categories</a></li>
+                        <div class="dropdown-content">
+                            <a href="#">Link 1</a>
+                            <a href="#">Link 2</a>
+                            <a href="#">Link 3</a>
+                            <a href="#">Link 4</a>
+                            <a href="#">Link 5</a>
+                            <a href="#">Link 6</a>
+                            <a href="#">Link 7</a>
+                        </div>
+                    </div>
                     <li><a th:href="@{/posts/about}">About</a></li>
+                    <div class="dropdown">
+                        <li><a class="dropbtn">More</a></li>
+                        <div class="dropdown-content">
+                            <a th:href="@{/posts/about}">Shop</a>
+                            <a th:href="@{/posts/about}">Gallery</a>
+                            <a th:href="@{/posts/about}">Profile</a>
+                            <a th:href="@{/posts/about}">Logout</a>
+                        </div>
+                    </div>
                 </ul>
+
             </nav>
             <div class="colorlib-footer">
                 <div class="mb-4">
-                    <h3>Become a moderator?</h3>
-                    <form action="#" class="colorlib-subscribe-form">
+                    <h3>Search</h3>
+                    <form th:action="@{/posts/all/search}" th:object="${postSearch}" class="colorlib-subscribe-form">
                         <div class="form-group d-flex">
                             <div class="icon">
-                                <span class="icon-paper-plane"></span>
+                                <button style="background-color: transparent" type="submit" class="icon icon-search"></button>
                             </div>
-                            <input type="text" class="form-control" placeholder="Enter Email Address">
+                            <input th:field="*{title}" type="text" id="title" class="form-control" placeholder="Type article title here...">
                         </div>
                     </form>
                 </div>
-                <p class="pfooter"><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                <p class="pfooter">
+                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
                     Copyright &copy;<script>document.write(new Date().getFullYear());</script>
                     All rights reserved | This template is made with <i class="icon-heart" aria-hidden="true"></i> by <a
-                            href="https://colorlib.com" target="_blank">Colorlib</a>
+                        href="https://colorlib.com" target="_blank">Colorlib</a>
                     <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
             </div>
         </aside>
