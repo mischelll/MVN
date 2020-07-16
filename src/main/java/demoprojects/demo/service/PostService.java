@@ -30,4 +30,6 @@ public interface PostService {
     Post findByIdentificationNumber(String id);
 
     List<PostViewServiceModel> findByCategories(String category);
+
+
 }

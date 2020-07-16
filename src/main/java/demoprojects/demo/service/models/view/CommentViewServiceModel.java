@@ -8,6 +8,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class CommentViewServiceModel {
+    private String id;
+    private String postID;
     private String author;
     private String date;
     private String text;

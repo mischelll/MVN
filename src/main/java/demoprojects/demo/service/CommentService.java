@@ -9,4 +9,10 @@ public interface CommentService {
     CommentCreateServiceModel createComment(CommentCreateServiceModel comment);
 
     List<CommentViewServiceModel> commentsOfPost(String postId);
+
+    void delete(String commentId, String postId);
+
+    void like(String commentId);
+
+    void dislike(String commentId);
 }

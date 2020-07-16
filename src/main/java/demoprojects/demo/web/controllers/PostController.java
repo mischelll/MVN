@@ -71,10 +71,11 @@ public class PostController {
     @GetMapping("/create")
     @PreAuthorize("hasRole('ROLE_MODERATOR') or hasRole('ROLE_ADMIN') or hasRole('ROLE_BLOG-KING')")
     public ModelAndView createPost(ModelAndView modelAndView, Model model) {
-
-        if (!model.containsAttribute("post") || !model.containsAttribute("postSearch")) {
-            model.addAttribute("post", new PostCreateModel());
+        if(!model.containsAttribute("postSearch")){
             model.addAttribute("postSearch", new PostSearchModel());
+        }
+        if (!model.containsAttribute("post")) {
+            model.addAttribute("post", new PostCreateModel());
         }
         modelAndView.setViewName("blog/create-post");
         return modelAndView;

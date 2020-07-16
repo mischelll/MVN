@@ -93,7 +93,7 @@ public class Post extends BaseEntity {
     }
 
     @OneToMany(mappedBy = "post", targetEntity = Comment.class,
-            fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+            fetch = FetchType.EAGER)
     public Set<Comment> getComments() {
         return comments;
     }

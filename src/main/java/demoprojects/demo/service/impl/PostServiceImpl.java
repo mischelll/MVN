@@ -132,7 +132,7 @@ public class PostServiceImpl implements PostService {
                     PostPopularViewModel map = this.modelMapper.map(post, PostPopularViewModel.class);
                     map.setCommentsCount(post.getComments().size());
                     map.setAuthor(post.getAuthor().getUsername());
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm");
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
                     map.setPostedOn(post.getPostedOn().format(formatter));
                     return map;
                 })

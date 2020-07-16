@@ -55,7 +55,7 @@ public class CommentServiceImpl implements CommentService {
                 .filter(comment -> comment.getPost().getId().equals(postId))
                 .sorted((a, b) -> {
                     int sort = Integer.compare(b.getLikes(), a.getLikes());
-                    if (sort == 0){
+                    if (sort == 0) {
                         return a.getDate().compareTo(b.getDate());
                     }
 
@@ -68,9 +68,34 @@ public class CommentServiceImpl implements CommentService {
                     map.setAuthor(comment.getAuthor().getUsername());
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm");
                     map.setDate(comment.getDate().format(formatter));
+                    map.setPostID(postId);
 
                     return map;
                 })
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void delete(String commentId, String postId) {
+
+        this.commentRepository.deleteById(commentId);
+    }
+
+    @Override
+    public void like(String commentId) {
+        Comment comment = this.commentRepository.findById(commentId).orElse(null);
+        assert comment != null;
+        comment.setLikes(comment.getLikes() + 1);
+
+        this.commentRepository.saveAndFlush(comment);
+    }
+
+    @Override
+    public void dislike(String commentId) {
+        Comment comment = this.commentRepository.findById(commentId).orElse(null);
+        assert comment != null;
+        comment.setDislikes(comment.getDislikes() + 1);
+
+        this.commentRepository.saveAndFlush(comment);
     }
 }
