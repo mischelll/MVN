@@ -30,6 +30,7 @@ public class UserAuthController extends BaseController {
     private final EmailService emailService;
     private int path;
     private String email;
+    private String username;
 
 
     @Autowired
@@ -68,7 +69,8 @@ public class UserAuthController extends BaseController {
     public ModelAndView getRegisterConfirm(@Valid @ModelAttribute("user") UserRegisterModel user,
                                            BindingResult bindingResult,
                                            RedirectAttributes redirectAttributes,
-                                           ModelAndView modelAndView) {
+                                           ModelAndView modelAndView
+                                           ) {
         if (bindingResult.hasErrors() || !user.getPassword().equals(user.getConfirmPassword())) {
             redirectAttributes.addFlashAttribute("user", user);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.user", bindingResult);
@@ -76,26 +78,29 @@ public class UserAuthController extends BaseController {
         } else {
             UserRegisterServiceModel serviceModel = this.mapper.map(user, UserRegisterServiceModel.class);
             this.userService.register(serviceModel);
+
             modelAndView.setViewName("auth/email-verification");
             path = getRandomPath();
             email = user.getEmail();
             emailService.sendEmail(user.getEmail(), "Successful Registration",
-                    String.format(Messages.getSuccessfulReg(), user.getUsername(), path));
+                    String.format(Messages.getSuccessfulReg(), user.getUsername(), path,user.getUsername()));
         }
 
         return modelAndView;
     }
 
-    @GetMapping("/registration/{s}")
-    public ModelAndView emailConfirmRegistration(@PathVariable("s") int code) {
+    @GetMapping("/registration/{code}/{username}")
+    public ModelAndView emailConfirmRegistration(@PathVariable("code") int code,@PathVariable("username") String username ) {
+
         if (path != code) {
             path = getRandomPath();
             emailService.sendEmail(email, "Successful Registration", String.format(Messages.resendVerification(), path));
             return super.redirect("/mvn/users/login");
         }
+        this.userService.activateAccount(username);
+        this.username = null;
         email = null;
         path = 0;
-
 
         return super.redirect("/mvn/users/login");
     }

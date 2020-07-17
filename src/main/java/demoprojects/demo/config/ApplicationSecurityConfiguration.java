@@ -41,7 +41,7 @@ public AuthenticationManager authenticationManagerBean() throws Exception {
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("video/mp4","/vendor/**","/js/**", "/img/**","/css/**").permitAll()
-                .antMatchers("/","/mvn/users/register","/about","/about/goal").permitAll()
+                .antMatchers("/","/mvn/users/register","/about","/about/goal","/mvn/users/registration/{code}/{username}").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()

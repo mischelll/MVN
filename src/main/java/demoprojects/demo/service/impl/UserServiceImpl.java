@@ -1,5 +1,6 @@
 package demoprojects.demo.service.impl;
 
+import demoprojects.demo.dao.models.entities.Gender;
 import demoprojects.demo.dao.models.entities.User;
 import demoprojects.demo.dao.repositories.UserRepository;
 import demoprojects.demo.service.AuthServiceValidation;
@@ -7,6 +8,8 @@ import demoprojects.demo.service.UserService;
 import demoprojects.demo.service.RoleService;
 import demoprojects.demo.service.models.bind.UserLoginServiceModel;
 import demoprojects.demo.service.models.bind.UserRegisterServiceModel;
+import demoprojects.demo.service.models.view.UserIdUsernameViewModel;
+import demoprojects.demo.service.models.view.UserProfileViewServiceModel;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,6 +17,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashSet;
 
 @Service
@@ -40,9 +44,9 @@ public class UserServiceImpl implements UserService {
     public UserRegisterServiceModel register(UserRegisterServiceModel user) {
         User regUser;
 
-
         regUser = this.mapper.map(user, User.class);
         regUser.setPassword(this.passwordEncoder.encode(user.getPassword()));
+        regUser.setGender(Gender.Other);
         roleService.seedRolesInDb();
 
         if (this.userRepository.count() == 0) {
@@ -82,6 +86,37 @@ public class UserServiceImpl implements UserService {
         return this
                 .userRepository
                 .findByUsername(name);
+    }
+
+    @Override
+    public UserProfileViewServiceModel getUserProfile(String id) {
+        User user = this.userRepository.findById(id).orElse(null);
+        UserProfileViewServiceModel map = this.mapper.map(user, UserProfileViewServiceModel.class);
+        map.setFullName(user.getFirstName() + " " + user.getLastName());
+        map.setRegisteredOn(user.getRegisteredOn().format(DateTimeFormatter.ofPattern("dd/MMM/yyyy")));
+
+        return map;
+    }
+
+    @Override
+    public UserIdUsernameViewModel getUserHome(String username) {
+
+        return this.mapper
+                .map(this.userRepository
+                                .findByUsername(username),
+                        UserIdUsernameViewModel.class);
+
+    }
+
+    @Override
+    public void activateAccount(String username) {
+        User byUsername = this.userRepository.findByUsername(username);
+        byUsername.setAccountNonExpired(true);
+        byUsername.setAccountNonLocked(true);
+        byUsername.setCredentialsNonExpired(true);
+        byUsername.setEnabled(true);
+
+        this.userRepository.saveAndFlush(byUsername);
     }
 
     @Override

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="|${user.fullName}|">MVN | User Profile</title>
+    <base href="/">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link href="user/css/style.css" rel="stylesheet">
+
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<body>
+<form th:action="@{/mvn/users/api/profile/edit(id=${user.id})}" th:method="post" th:object=" ${user2}">
+<div class="container emp-profile" th:object="${user}">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="profile-img">
+                <th:block th:if="${user.gender.equals('Male')}">
+                    <img src="img/male-profile.jpg" alt="Could not load image"/>
+                </th:block>
+                <th:block th:if="${user.gender.equals('Female')}">
+                    <img  src="img/female-profile.jpg" alt="Could not load image"/>
+                </th:block>
+                <th:block th:if="${user.gender.equals('Other')}">
+                    <img  src="img/no-gender-profile.jpg" alt="Could not load image"/>
+                </th:block>
+
+<!--                <div class="file btn btn-lg btn-primary">-->
+<!--                    Change Photo-->
+<!--                    <input type="file" name="file"/>-->
+<!--                </div>-->
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="profile-head">
+                <h5 th:text="${user.fullName}">
+                    Kshiti Ghelani</h5>
+                <input th:field="${user2.bio}" name="bio" type="text" th:placeholder="|Current: ${user.bio}|">
+
+                <h6 th:text="|Member since: ${user.registeredOn}|"></h6>
+                <p class="proile-rating">RANKINGS : <span>10/10</span></p>
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile-tab" role="tab" aria-controls="profile" aria-selected="false">Timeline</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <a href="/home" class="profile-edit-btn"  >Home</a><br><br>
+<button type="submit" class="profile-edit-btn">Save</button>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="profile-work">
+                <p>Social Accounts</p>
+                <textarea >Website Link</textarea><br/>
+                <textarea >Bootsnipp Profile</textarea><br/>
+                <textarea >Bootply Profile</textarea>
+                <p>SKILLS</p>
+                <textarea href="">Web Designer</textarea><br/>
+                <textarea href="">Web Developer</textarea><br/>
+                <textarea href="">WordPress</textarea><br/>
+                <textarea href="">WooCommerce</textarea><br/>
+                <textarea href="">PHP, .Net</textarea><br/>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="tab-content profile-tab" id="myTabContent">
+                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>User Id</label>
+                        </div>
+                        <div class="col-md-6">
+                            <p th:text="${user.username}">Kshiti123</p>
+                            <h6>To change username, please write us at admin@mvn.com.</h6>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Name</label>
+                        </div>
+                        <div class="col-md-6">
+                            <input th:field="${user2.fullName}" name="fullName" type="text" th:placeholder="|Current: ${user.fullName}|">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Email</label>
+                        </div>
+                        <div class="col-md-6">
+                            <input th:field="${user2.email}" name="email" type="text" th:placeholder="|Current: ${user.email}|">
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Blog Posts</label>
+                        </div>
+                        <div class="col-md-6">
+                            <p>99</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Blog Comments Likes</label>
+                        </div>
+                        <div class="col-md-6">
+                            <p>99</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Shop Products</label>
+                        </div>
+                        <div class="col-md-6">
+                            <p>99</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Shop Comments Likes</label>
+                        </div>
+                        <div class="col-md-6">
+                            <p>99</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+</form>
+</body>
+</html>

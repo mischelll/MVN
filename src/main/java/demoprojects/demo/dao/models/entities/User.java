@@ -20,6 +20,11 @@ public class User extends BaseEntity implements UserDetails {
     private LocalDateTime registeredOn = LocalDateTime.now();
     private Set<Role> authorities;
     private Set<Post> posts;
+    private boolean isAccountNonExpired;
+    private boolean isAccountNonLocked;
+    private boolean isCredentialsNonExpired;
+    private boolean isEnabled;
+
 
     public User() {
     }
@@ -132,26 +137,42 @@ public class User extends BaseEntity implements UserDetails {
     }
 
     @Override
-    @Transient
+
     public boolean isAccountNonExpired() {
-        return true;
+        return this.isAccountNonExpired;
+    }
+
+    public void setAccountNonExpired(boolean accountNonExpired) {
+        this.isAccountNonExpired = accountNonExpired;
     }
 
     @Override
-    @Transient
+
     public boolean isAccountNonLocked() {
-        return true;
+        return this.isAccountNonLocked;
+    }
+
+    public void setAccountNonLocked(boolean accountNonLocked) {
+        isAccountNonLocked = accountNonLocked;
     }
 
     @Override
-    @Transient
+
     public boolean isCredentialsNonExpired() {
-        return true;
+        return this.isCredentialsNonExpired;
     }
 
     @Override
-    @Transient
+
     public boolean isEnabled() {
-        return true;
+        return this.isEnabled;
+    }
+
+    public void setEnabled(boolean isEnabled) {
+        this.isEnabled = isEnabled;
+    }
+
+    public void setCredentialsNonExpired(boolean credentialsNonExpired) {
+        isCredentialsNonExpired = credentialsNonExpired;
     }
 }
