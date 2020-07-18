@@ -1,5 +1,6 @@
 package demoprojects.demo.web.controllers;
 
+import demoprojects.demo.annottation.PageTitle;
 import demoprojects.demo.dao.models.entities.CategoryName;
 import demoprojects.demo.service.CommentService;
 import demoprojects.demo.service.PostService;
@@ -39,6 +40,7 @@ public class PostController {
     }
 
     @GetMapping("/all")
+    @PageTitle("Blog")
     public ModelAndView getAllPosts(Model model) {
         if (!model.containsAttribute("postSearch")) {
             model.addAttribute("postSearch", new PostSearchModel());
@@ -70,6 +72,7 @@ public class PostController {
 
     @GetMapping("/create")
     @PreAuthorize("hasRole('ROLE_MODERATOR') or hasRole('ROLE_ADMIN') or hasRole('ROLE_BLOG-KING')")
+    @PageTitle("Blog | Create")
     public ModelAndView createPost(ModelAndView modelAndView, Model model) {
         if(!model.containsAttribute("postSearch")){
             model.addAttribute("postSearch", new PostSearchModel());
@@ -117,6 +120,7 @@ public class PostController {
     }
 
     @GetMapping("/article")
+    @PageTitle("Article")
     public ModelAndView getSinglePost(ModelAndView modelAndView, @RequestParam String id,
                                       Model model,
                                       RedirectAttributes redirectAttributes) {
@@ -169,6 +173,7 @@ public class PostController {
     }
 
     @GetMapping("/about")
+    @PageTitle("Blog | About")
     public ModelAndView getAbout(ModelAndView modelAndView, Model model) {
         if (!model.containsAttribute("postSearch")) {
             model.addAttribute("postSearch", new PostSearchModel());

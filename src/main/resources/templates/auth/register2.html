@@ -58,6 +58,9 @@
                 <th:block th:each="e : ${#fields.errors('password')}">
                     <small th:text="${e}" class="text-danger">Incorrect username!</small>
                 </th:block>
+                <th:block th:if="${noM}">
+                    <small th:text="${e}" class="text-danger">Incorrect username!</small>
+                </th:block>
                 <br>
                 <div class="wrap-input100 validate-input m-b-16" data-validate="Please confirm password">
                     <input class="input100" type="password" name="confirmPassword" placeholder="Confirm password">

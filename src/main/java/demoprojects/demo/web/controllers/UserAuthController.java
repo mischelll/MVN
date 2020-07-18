@@ -72,6 +72,7 @@ public class UserAuthController extends BaseController {
                                            ModelAndView modelAndView
                                            ) {
         if (bindingResult.hasErrors() || !user.getPassword().equals(user.getConfirmPassword())) {
+
             redirectAttributes.addFlashAttribute("user", user);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.user", bindingResult);
             modelAndView.setViewName("redirect:/mvn/users/register");

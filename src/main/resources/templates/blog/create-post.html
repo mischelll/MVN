@@ -22,7 +22,7 @@
                           class="bg-primary p-5 contact-form">
                         <div class="form-group">
                             <input th:field="*{title}" th:errorclass="bg-danger" type="text" id="title" name="title"
-                                   class="form-control" placeholder="Title">
+                                   class="form-control" placeholder="Title" required>
                         </div>
                         <th:block th:each="e : ${#fields.errors('title')}">
                             <small th:text="${e}" class="text-danger">Username error message</small>
@@ -30,14 +30,14 @@
 
                         <div class="form-group">
                             <input th:field="*{preview}" th:errorclass="bg-danger" type="text" id="preview"
-                                   name="preview" class="form-control" placeholder="Preview">
+                                   name="preview" class="form-control" placeholder="Preview" required>
                         </div>
                         <th:block th:each="e : ${#fields.errors('preview')}">
                             <small th:text="${e}" class="text-danger"></small>
                         </th:block>
 
                         <div class="form-group">
-                            <input type="text" id="imgUrl" name="imgUrl" class="form-control" placeholder="Image Url">
+                            <input type="text" id="imgUrl" name="imgUrl" class="form-control" placeholder="Image Url" required>
                         </div>
 
                         <div class="input-group mb-3">
@@ -55,7 +55,7 @@
                         <div class="form-group">
                                 <textarea th:field="*{content}" th:errorclass="bg-danger" name="content" id="content"
                                           cols="30" rows="7" class="form-control"
-                                          placeholder="Content..."></textarea>
+                                          placeholder="Content..." required></textarea>
                         </div>
                         <th:block th:each="e : ${#fields.errors('content')}">
                             <small th:text="${e}" class="text-danger">Username error message</small>

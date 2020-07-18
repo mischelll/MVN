@@ -1,6 +1,7 @@
 package demoprojects.demo.web.controllers;
 
 import demoprojects.demo.service.UserService;
+import demoprojects.demo.util.messaging.SmsSenderAndReceiver;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,9 +14,11 @@ import java.security.Principal;
 @Controller
 public class HomeController extends BaseController {
     private final UserService userService;
+    private final SmsSenderAndReceiver smsSenderAndReceiver;
 
-    public HomeController(UserService userService) {
+    public HomeController(UserService userService, SmsSenderAndReceiver smsSenderAndReceiver) {
         this.userService = userService;
+        this.smsSenderAndReceiver = smsSenderAndReceiver;
     }
 
 
@@ -30,10 +33,11 @@ public class HomeController extends BaseController {
     }
 
     @GetMapping("/home")
-    public ModelAndView getHome(ModelAndView modelAndView, Principal principal) {
+    public ModelAndView getHome(ModelAndView modelAndView, Principal principal) throws Exception {
         modelAndView.addObject("user",
                 this.userService.findByUsername(principal.getName()));
         modelAndView.setViewName("home/home");
+        smsSenderAndReceiver.sendMessage();
         return modelAndView;
     }
 

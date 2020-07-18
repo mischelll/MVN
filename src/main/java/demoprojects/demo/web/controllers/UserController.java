@@ -1,5 +1,6 @@
 package demoprojects.demo.web.controllers;
 
+import demoprojects.demo.annottation.PageTitle;
 import demoprojects.demo.service.RoleService;
 import demoprojects.demo.service.UserService;
 import demoprojects.demo.web.models.ProfileEditModel;

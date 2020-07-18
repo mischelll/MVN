@@ -1,5 +1,6 @@
 package demoprojects.demo.web.controllers;
 
+import demoprojects.demo.annottation.PageTitle;
 import demoprojects.demo.service.PostService;
 import demoprojects.demo.web.models.PostSearchModel;
 import org.springframework.stereotype.Controller;
@@ -18,6 +19,7 @@ private final PostService postService;
     }
 
     @GetMapping("/travel")
+    @PageTitle("Blog | Travel")
     public ModelAndView getTravel(ModelAndView modelAndView, Model model){
         if (!model.containsAttribute("postSearch")) {
             model.addAttribute("postSearch", new PostSearchModel());
@@ -29,6 +31,7 @@ private final PostService postService;
 
     }
     @GetMapping("/lifestyle")
+    @PageTitle("Blog | Lifestyle")
     public ModelAndView getLifestyle(ModelAndView modelAndView, Model model){
         if (!model.containsAttribute("postSearch")) {
             model.addAttribute("postSearch", new PostSearchModel());
@@ -40,6 +43,7 @@ private final PostService postService;
 
     }
     @GetMapping("/sport")
+    @PageTitle("Blog | Sport")
     public ModelAndView getSport(ModelAndView modelAndView, Model model){
         if (!model.containsAttribute("postSearch")) {
             model.addAttribute("postSearch", new PostSearchModel());
@@ -51,6 +55,7 @@ private final PostService postService;
 
     }
     @GetMapping("/music")
+    @PageTitle("Blog | Music")
     public ModelAndView getMusic(ModelAndView modelAndView, Model model){
         if (!model.containsAttribute("postSearch")) {
             model.addAttribute("postSearch", new PostSearchModel());
@@ -62,6 +67,7 @@ private final PostService postService;
 
     }
     @GetMapping("/it")
+    @PageTitle("Blog | IT")
     public ModelAndView getIT(ModelAndView modelAndView, Model model){
         if (!model.containsAttribute("postSearch")) {
             model.addAttribute("postSearch", new PostSearchModel());
@@ -73,6 +79,7 @@ private final PostService postService;
 
     }
     @GetMapping("/cars")
+    @PageTitle("Blog | About")
     public ModelAndView getCars(ModelAndView modelAndView, Model model){
         if (!model.containsAttribute("postSearch")) {
             model.addAttribute("postSearch", new PostSearchModel());
