@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org" lang="en">
+      xmlns:th="http://www.thymeleaf.org" lang="en"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title th:text="|${user.fullName}|">MVN | User Profile</title>
@@ -14,7 +15,6 @@
 </head>
 <body>
 <div class="container emp-profile"  th:object="${user}">
-
         <div class="row">
             <div class="col-md-4">
                 <div class="profile-img">
@@ -55,7 +55,8 @@
             <div class="col-md-2">
                 <a href="/home" class="profile-edit-btn"  >Home</a><br><br>
                 <a th:href="@{/mvn/users/api/profile/edit (id=*{id})}" class="profile-edit-btn"  >Edit Profile</a><br><br>
-                <a href="/home" class="profile-edit-btn"  >Change Password</a>
+                <a href="/home" class="profile-edit-btn"  >Change Password</a><br><br>
+                <a sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_ROOT')"th:href="@{/mvn/admin/}" class="profile-edit-btn" >Admin Panel</a><br><br>
 
             </div>
         </div>

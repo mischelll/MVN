@@ -338,7 +338,7 @@ iframe {
   position: absolute;
   z-index: 1000;
   max-width: 70%;
-  background-color: transparent;
+  background-color: white;
   border: 1px solid #c80000;
   border-radius: 14px;
   padding: 4px 25px 4px 10px;

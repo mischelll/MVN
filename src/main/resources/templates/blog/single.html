@@ -8,16 +8,19 @@
 <th:block th:include="~{blog/blog-fragments/nav}"/>
 <!-- END COLORLIB-ASIDE -->
 <div id="colorlib-main">
+
     <section class="ftco-section ftco-no-pt ftco-no-pb">
+
         <div class="container px-0">
             <div class="row d-flex no-gutters">
                 <div class="col-lg-8 px-md-5 py-5">
+                    <button class="btn" onclick="myFunction()">Toggle Content</button>
                     <div class="row" th:object="${post}">
                         <h1 class="mb-3" th:text="*{title}">A Loving Heart is the Truest Wisdom</h1>
                         <br>
                         <p class="mb-3" th:text="*{content}"></p>
                         <img th:if="${post.imgUrl}" th:src="${post.imgUrl}" height="500" width="700"
-                             alt="Post image">
+                             alt="Post image" class="img-fluid mb-4">
                         <br>
                         <br>
                         <br>
@@ -32,7 +35,7 @@
                             </div>
                             <div class="desc">
                                 <h3 class="mb-3" th:text="*{author}">George Washington</h3>
-                                <p>Add author bio</p>
+                                <p class="mb-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
                             </div>
                         </div>
 
@@ -50,11 +53,11 @@
                                         <div class="meta" th:text="${comment1.date}">Comment date</div>
                                         <p class="mb-3" th:text="${comment1.text}">Comment Content</p>
 
-                                            <a th:href="@{/comments/like (postID=${comment1.postID}, commentId=(${comment1.id}))}"
-                                               class="reply">Like <span th:text="|(${comment1.likes})|"></span></a>
-                                            <a th:href="@{/comments/dislike (postID=${comment1.postID}, commentId=(${comment1.id}))}"
-                                               class="reply">Dislike <span
-                                                    th:text="|(${comment1.dislikes})|"></span></a></p>
+                                        <a th:href="@{/comments/like (postID=${comment1.postID}, commentId=(${comment1.id}))}"
+                                           class="reply">Like <span th:text="|(${comment1.likes})|"></span></a>
+                                        <a th:href="@{/comments/dislike (postID=${comment1.postID}, commentId=(${comment1.id}))}"
+                                           class="reply">Dislike <span
+                                                th:text="|(${comment1.dislikes})|"></span></a></p>
                                         <p sec:authorize="hasAnyRole('ROLE_MODERATOR', 'ROLE_ADMIN','ROLE_BLOG-KING','ROLE_ROOT')">
                                             <a th:href="@{/comments/delete (postID=${comment1.postID}, commentId=(${comment1.id}))}"
                                                class="reply">Delete</a></p>
@@ -67,14 +70,17 @@
                                 <form th:action="@{/posts/article (id = ${post.id})}" th:method="post"
                                       th:object="${comment}" class="p-3 p-md-4 bg-light">
                                     <div class="form-group">
-                                        <textarea th:field="*{text}" name="" id="text" cols="30" rows="10"
-                                                  class="form-control"
-                                                  placeholder="Write your comment here..."></textarea>
-                                        <th:block th:each="e : ${#fields.errors('text')}">
-                                            <small th:text="${e}" class="text-danger">Incorrect username!</small>
-                                        </th:block>
-                                        <input type="hidden" name="postID" id="postID" th:value="${post.id}">
+                                 <textarea th:field="*{text}" name="" id="text" cols="30" rows="10"
+                                           class="form-control"
+                                           placeholder="Write your comment here..."></textarea>
+
                                     </div>
+                                    <th:block th:each="e : ${#fields.errors('text')}">
+                                        <small th:text="${e}" class="text-danger">Incorrect username!</small>
+                                    </th:block>
+
+                                        <input type="hidden" name="postID" id="postID" th:value="${post.id}">
+
                                     <div class="form-group">
                                         <input type="submit" value="Post Comment" class="btn py-3 px-4 btn-primary">
                                     </div>
@@ -83,7 +89,8 @@
                         </div>
                     </div><!-- END-->
                 </div>
-                <div class="col-lg-4 sidebar ftco-animate bg-light pt-5">
+
+                <div class="col-lg-4 sidebar ftco-animate bg-light pt-5" id="toToggle">
 
                     <div class="sidebar-box ftco-animate">
                         <h3 class="sidebar-heading">Categories</h3>
@@ -161,5 +168,15 @@
 
 
 <th:block th:include="~{blog/blog-fragments/footer-scripts}"/>
+<script>
+    function myFunction() {
+        var x = document.getElementById("toToggle");
+        if (x.style.display === "none") {
+            x.style.display = "block";
+        } else {
+            x.style.display = "none";
+        }
+    }
+</script>
 </body>
 </html>

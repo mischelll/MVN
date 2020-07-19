@@ -80,7 +80,7 @@ public class UserAuthController extends BaseController {
             UserRegisterServiceModel serviceModel = this.mapper.map(user, UserRegisterServiceModel.class);
             this.userService.register(serviceModel);
 
-            modelAndView.setViewName("auth/email-verification");
+            modelAndView.setViewName("redirect:/mvn/users/auth/email-verification");
             path = getRandomPath();
             email = user.getEmail();
             emailService.sendEmail(user.getEmail(), "Successful Registration",
@@ -113,6 +113,13 @@ public class UserAuthController extends BaseController {
 
         return random.nextInt(high - low) + low;//generate random url number
 
+    }
+
+    @GetMapping("/auth/email-verification")
+    public ModelAndView emailVerification(ModelAndView modelAndView){
+        modelAndView.setViewName("auth/email-verification");
+
+        return modelAndView;
     }
 }
 

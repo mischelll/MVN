@@ -6,25 +6,37 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.*;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserRegisterServiceModel  {
-    @NotEmpty
-    @Min(value = 3,message = "Username must be at least 3 chars long")
-    @Max(value = 16, message = "Username cannot be longer than 16 chars")
+public class UserRegisterServiceModel {
+    @NotEmpty(message = "Field cannot be empty")
+    @Size(min = 3, max = 32, message = "Username must be between 3 and 32 characters")
     private String username;
+
+    @NotEmpty(message = "Field cannot be empty")
+    @Size(min = 2, message = "First name must be minimum 2 characters")
+    private String firstName;
+
+    @NotEmpty(message = "Field cannot be empty")
+    @Size(min = 2, message = "Last name must be minimum 2 characters")
+    private String lastName;
+
+    @NotEmpty(message = "Field cannot be empty")
+    private String gender;
+
     @Email(message = "Please enter a valid email")
-    @NotEmpty
+    @NotEmpty(message = "Field cannot be empty")
     private String email;
-    @NotEmpty
-    @ValidPassword(message = "Invalid password")
+
+    @NotEmpty(message = "Field cannot be empty")
+    @ValidPassword(message = "Invalid password!")
     private String password;
+
+    @NotEmpty(message = "Field cannot be empty")
+    @ValidPassword(message = "Invalid password!")
     private String confirmPassword;
 }

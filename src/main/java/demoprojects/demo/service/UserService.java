@@ -5,7 +5,10 @@ import demoprojects.demo.service.models.bind.UserLoginServiceModel;
 import demoprojects.demo.service.models.bind.UserRegisterServiceModel;
 import demoprojects.demo.service.models.view.UserIdUsernameViewModel;
 import demoprojects.demo.service.models.view.UserProfileViewServiceModel;
+import demoprojects.demo.service.models.view.UserResponseModel;
 import org.springframework.security.core.userdetails.UserDetailsService;
+
+import java.util.List;
 
 public interface UserService extends UserDetailsService {
     UserRegisterServiceModel register(UserRegisterServiceModel user);
@@ -21,4 +24,6 @@ public interface UserService extends UserDetailsService {
     UserIdUsernameViewModel getUserHome(String username);
 
     void activateAccount(String username);
+
+    List<UserResponseModel> listAll();
 }

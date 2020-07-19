@@ -37,7 +37,7 @@ public class HomeController extends BaseController {
         modelAndView.addObject("user",
                 this.userService.findByUsername(principal.getName()));
         modelAndView.setViewName("home/home");
-        smsSenderAndReceiver.sendMessage();
+
         return modelAndView;
     }
 

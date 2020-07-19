@@ -1,15 +1,18 @@
 package demoprojects.demo.service.impl;
 
 import demoprojects.demo.dao.models.entities.Gender;
+import demoprojects.demo.dao.models.entities.Role;
 import demoprojects.demo.dao.models.entities.User;
 import demoprojects.demo.dao.repositories.UserRepository;
 import demoprojects.demo.service.AuthServiceValidation;
+import demoprojects.demo.service.PostService;
 import demoprojects.demo.service.UserService;
 import demoprojects.demo.service.RoleService;
 import demoprojects.demo.service.models.bind.UserLoginServiceModel;
 import demoprojects.demo.service.models.bind.UserRegisterServiceModel;
 import demoprojects.demo.service.models.view.UserIdUsernameViewModel;
 import demoprojects.demo.service.models.view.UserProfileViewServiceModel;
+import demoprojects.demo.service.models.view.UserResponseModel;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,11 +22,14 @@ import org.springframework.stereotype.Service;
 
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RoleService roleService;
+    private final PostService postService;
     private final ModelMapper mapper;
     private final AuthServiceValidation authServiceValidation;
     private final PasswordEncoder passwordEncoder;
@@ -31,9 +37,10 @@ public class UserServiceImpl implements UserService {
 
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, RoleService roleService, ModelMapper mapper, AuthServiceValidation authServiceValidation, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, RoleService roleService, PostService postService, ModelMapper mapper, AuthServiceValidation authServiceValidation, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleService = roleService;
+        this.postService = postService;
         this.mapper = mapper;
         this.authServiceValidation = authServiceValidation;
         this.passwordEncoder = passwordEncoder;
@@ -46,7 +53,7 @@ public class UserServiceImpl implements UserService {
 
         regUser = this.mapper.map(user, User.class);
         regUser.setPassword(this.passwordEncoder.encode(user.getPassword()));
-        regUser.setGender(Gender.Other);
+        regUser.setGender(Gender.valueOf(user.getGender()));
         roleService.seedRolesInDb();
 
         if (this.userRepository.count() == 0) {
@@ -117,6 +124,26 @@ public class UserServiceImpl implements UserService {
         byUsername.setEnabled(true);
 
         this.userRepository.saveAndFlush(byUsername);
+    }
+
+    @Override
+    public List<UserResponseModel> listAll() {
+        return this.userRepository
+                .findAll()
+                .stream().map(user -> {
+                    UserResponseModel mapUser = this.mapper.map(user, UserResponseModel.class);
+                    mapUser.setGender(user.getGender().toString());
+                    mapUser.setRegisteredOn(user.getRegisteredOn().format(DateTimeFormatter.ofPattern("dd MMM yyyy")));
+                    mapUser.setPostsCount(99);
+                    mapUser.setRoles(user
+                            .getAuthorities()
+                            .stream()
+                            .map(Role::getAuthority)
+                            .collect(Collectors.joining(", ")));
+
+                    return mapUser;
+                })
+                .collect(Collectors.toList());
     }
 
     @Override

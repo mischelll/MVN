@@ -28,7 +28,6 @@
     <!--===============================================================================================-->
 </head>
 <body>
-
 <div class="limiter">
     <div class="container-login100">
         <div class="wrap-login100">
@@ -37,29 +36,54 @@
 					<span class="login100-form-title">
 						Sign Up
 					</span>
+                <div class="wrap-input100 validate-input m-b-16" data-validate="Please enter first name">
+                    <input th:field="*{firstName}" th:errorclass="bg-danger" class="input100" type="text"
+                           name="firstName" placeholder="First name">
+                    <span class="focus-input100"></span>
+                </div>
+                <th:block th:each="e : ${#fields.errors('firstName')}">
+                    <small th:text="${e}" class="text-danger"></small>
+                </th:block>
+                <div class="wrap-input100 validate-input m-b-16" data-validate="Please enter last name">
+                    <input th:field="*{lastName}" th:errorclass="bg-danger" class="input100" type="text" name="lastName"
+                           placeholder="Last name">
+                    <span class="focus-input100"></span>
+                </div>
+                <th:block th:each="e : ${#fields.errors('lastName')}">
+                    <small th:text="${e}" class="text-danger"></small>
+                </th:block>
+
+                <p class="input100">Please select your gender:</p>
+                <input type="radio" id="male" checked name="gender" value="Male">
+                <label style="color: white; font-size:20px;;" for="male">Male</label><br>
+                <input type="radio"  id="female" name="gender" value="Female">
+                <label style="color: white; font-size:20px ;text-align: center" for="female">Female</label><br>
+                <input type="radio" id="other" name="gender" value="Other">
+                <label style="color: white; font-size:20px ;text-align: center" for="other">Other</label>
+
                 <div class="wrap-input100 validate-input m-b-16" data-validate="Please enter username">
-                    <input th:field="*{username}" th:errorclass="bg-danger" class="input100" type="text" name="username" placeholder="Username">
+                    <input th:field="*{username}" th:errorclass="bg-danger" class="input100" type="text" name="username"
+                           placeholder="Username">
                     <span class="focus-input100"></span>
                 </div>
                 <th:block th:each="e : ${#fields.errors('username')}">
-                    <small th:text="${e}" class="text-danger">Incorrect username!</small>
+                    <small th:text="${e}" class="text-danger"></small>
                 </th:block>
                 <div class="wrap-input100 validate-input m-b-16" data-validate="Please enter email">
-                    <input th:field="*{email}" th:errorclass="bg-danger" class="input100" type="text" name="email" placeholder="E-mail">
+                    <input th:field="*{email}" th:errorclass="bg-danger" class="input100" type="text" name="email"
+                           placeholder="E-mail">
                     <span class="focus-input100"></span>
                 </div>
                 <th:block th:each="e : ${#fields.errors('email')}">
-                    <small th:text="${e}" class="text-danger">Incorrect username!</small>
+                    <small th:text="${e}" class="text-danger"></small>
                 </th:block>
                 <div class="wrap-input100 validate-input" data-validate="Please enter password">
-                    <input th:field="*{password}" th:errorclass="bg-danger" class="input100" type="password" name="password" placeholder="Password">
+                    <input th:field="*{password}" th:errorclass="bg-danger" class="input100" type="password"
+                           name="password" placeholder="Password">
                     <span class="focus-input100"></span>
                 </div>
                 <th:block th:each="e : ${#fields.errors('password')}">
-                    <small th:text="${e}" class="text-danger">Incorrect username!</small>
-                </th:block>
-                <th:block th:if="${noM}">
-                    <small th:text="${e}" class="text-danger">Incorrect username!</small>
+                    <small th:text="${e}" class="text-danger"></small>
                 </th:block>
                 <br>
                 <div class="wrap-input100 validate-input m-b-16" data-validate="Please confirm password">
