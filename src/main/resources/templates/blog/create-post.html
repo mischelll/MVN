@@ -42,7 +42,7 @@
 
                         <div class="input-group mb-3">
                             <select id="category" name="category" class="form-control" multiple >
-                                <option th:each="cat : ${T(demoprojects.demo.dao.models.entities.CategoryName).values()}"
+                                <option th:each="cat : ${T(demoprojects.demo.dao.models.entities.PostCategoryName).values()}"
                                         th:value="${cat}"
                                         th:text="${cat}" th:selected="${post.category == cat}" >Vehicle Category
                                 </option>

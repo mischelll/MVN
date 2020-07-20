@@ -1,7 +1,7 @@
 package demoprojects.demo.web.controllers;
 
-import demoprojects.demo.service.EmailService;
-import demoprojects.demo.service.UserService;
+import demoprojects.demo.service.interfaces.user.EmailService;
+import demoprojects.demo.service.interfaces.user.UserService;
 import demoprojects.demo.service.models.bind.UserRegisterServiceModel;
 import demoprojects.demo.util.Messages;
 import demoprojects.demo.web.models.UserRegisterModel;

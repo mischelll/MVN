@@ -1,7 +1,7 @@
 package demoprojects.demo.web.controllers;
 
 import demoprojects.demo.annottation.PageTitle;
-import demoprojects.demo.service.PostService;
+import demoprojects.demo.service.interfaces.blog.PostService;
 import demoprojects.demo.web.models.PostSearchModel;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

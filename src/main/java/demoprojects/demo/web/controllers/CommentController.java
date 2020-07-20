@@ -1,9 +1,8 @@
 package demoprojects.demo.web.controllers;
 
-import demoprojects.demo.service.CommentService;
+import demoprojects.demo.service.interfaces.blog.PostCommentService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -11,9 +10,9 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 @RequestMapping("/comments")
 public class CommentController {
-    private final CommentService commentService;
+    private final PostCommentService commentService;
 
-    public CommentController(CommentService commentService) {
+    public CommentController(PostCommentService commentService) {
         this.commentService = commentService;
     }
 

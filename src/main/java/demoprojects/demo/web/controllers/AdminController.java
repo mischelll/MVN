@@ -1,8 +1,8 @@
 package demoprojects.demo.web.controllers;
 
 import demoprojects.demo.annottation.PageTitle;
-import demoprojects.demo.service.PostService;
-import demoprojects.demo.service.UserService;
+import demoprojects.demo.service.interfaces.blog.PostService;
+import demoprojects.demo.service.interfaces.user.UserService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,7 +38,7 @@ public class AdminController {
     @PageTitle("Blog Settings")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_ROOT')")
     public ModelAndView getBlogSettings(ModelAndView modelAndView) {
-        modelAndView.setViewName("admin/index");
+        modelAndView.setViewName("admin/blog-settings");
         return modelAndView;
     }
     @GetMapping("/shop")

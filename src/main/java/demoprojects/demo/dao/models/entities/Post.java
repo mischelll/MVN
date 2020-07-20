@@ -1,7 +1,5 @@
 package demoprojects.demo.dao.models.entities;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
 import javax.persistence.*;
 import javax.validation.constraints.PastOrPresent;
 import java.time.LocalDateTime;
@@ -15,8 +13,8 @@ public class Post extends BaseEntity {
     private String content;
     private User author;
     private String imgUrl;
-    private Set<Category> categories;
-    private Set<Comment> comments;
+    private Set<PostCategory> categories;
+    private Set<PostComment> comments;
     private LocalDateTime postedOn;
 
     public Post() {
@@ -84,21 +82,21 @@ public class Post extends BaseEntity {
     @JoinTable(name = "posts_categories",
             joinColumns = @JoinColumn(name = "post_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "category_id", referencedColumnName = "id"))
-    public Set<Category> getCategories() {
+    public Set<PostCategory> getCategories() {
         return categories;
     }
 
-    public void setCategories(Set<Category> category) {
+    public void setCategories(Set<PostCategory> category) {
         this.categories = category;
     }
 
-    @OneToMany(mappedBy = "post", targetEntity = Comment.class,
+    @OneToMany(mappedBy = "post", targetEntity = PostComment.class,
             fetch = FetchType.EAGER)
-    public Set<Comment> getComments() {
+    public Set<PostComment> getComments() {
         return comments;
     }
 
-    public void setComments(Set<Comment> comments) {
+    public void setComments(Set<PostComment> comments) {
         this.comments = comments;
     }
 }

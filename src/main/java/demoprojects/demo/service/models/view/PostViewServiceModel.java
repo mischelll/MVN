@@ -1,14 +1,10 @@
 package demoprojects.demo.service.models.view;
 
-import demoprojects.demo.dao.models.entities.CategoryName;
-import demoprojects.demo.dao.models.entities.User;
+import demoprojects.demo.dao.models.entities.PostCategoryName;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.time.LocalDateTime;
-import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,7 +17,7 @@ public class PostViewServiceModel {
     private String content;
     private String author;
     private String imgUrl;
-    private CategoryName categories;
+    private PostCategoryName categories;
     private Integer commentsCount;
     private String postedOn;
 }

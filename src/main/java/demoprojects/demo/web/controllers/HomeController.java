@@ -1,6 +1,6 @@
 package demoprojects.demo.web.controllers;
 
-import demoprojects.demo.service.UserService;
+import demoprojects.demo.service.interfaces.user.UserService;
 import demoprojects.demo.util.messaging.SmsSenderAndReceiver;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -37,6 +37,7 @@ public class HomeController extends BaseController {
         modelAndView.addObject("user",
                 this.userService.findByUsername(principal.getName()));
         modelAndView.setViewName("home/home");
+
 
         return modelAndView;
     }

@@ -1,8 +1,7 @@
 package demoprojects.demo.web.models;
 
 
-import demoprojects.demo.dao.models.entities.CategoryName;
-import demoprojects.demo.dao.models.entities.User;
+import demoprojects.demo.dao.models.entities.PostCategoryName;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
@@ -10,7 +9,6 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
-import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -36,5 +34,5 @@ public class PostCreateModel {
     private String imgUrl;
 
     @NotNull(message = "Please select a category!")
-    private List<CategoryName> category;
+    private List<PostCategoryName> category;
 }

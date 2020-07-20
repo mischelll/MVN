@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.util.backoff.BackOff;
 
 import java.util.List;
 
@@ -20,4 +21,5 @@ public class UserResponseModel {
     private String registeredOn;
     private String gender;
     private Integer postsCount;
+    private String active;
 }

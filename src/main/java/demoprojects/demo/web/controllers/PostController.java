@@ -1,9 +1,9 @@
 package demoprojects.demo.web.controllers;
 
 import demoprojects.demo.annottation.PageTitle;
-import demoprojects.demo.dao.models.entities.CategoryName;
-import demoprojects.demo.service.CommentService;
-import demoprojects.demo.service.PostService;
+import demoprojects.demo.dao.models.entities.PostCategoryName;
+import demoprojects.demo.service.interfaces.blog.PostCommentService;
+import demoprojects.demo.service.interfaces.blog.PostService;
 import demoprojects.demo.service.models.bind.CommentCreateServiceModel;
 import demoprojects.demo.service.models.view.PostCategoryCountModel;
 import demoprojects.demo.service.models.bind.PostCreateServiceModel;
@@ -31,9 +31,9 @@ import java.util.List;
 public class PostController {
     private final PostService postService;
     private final ModelMapper mapper;
-    private final CommentService commentService;
+    private final PostCommentService commentService;
 
-    public PostController(PostService postService, ModelMapper mapper, CommentService commentService) {
+    public PostController(PostService postService, ModelMapper mapper, PostCommentService commentService) {
         this.postService = postService;
         this.mapper = mapper;
         this.commentService = commentService;
@@ -168,8 +168,8 @@ public class PostController {
         return modelAndView;
     }
 
-    private List<CategoryName> getCategoriesNames() {
-        return Arrays.asList(CategoryName.values());
+    private List<PostCategoryName> getCategoriesNames() {
+        return Arrays.asList(PostCategoryName.values());
     }
 
     @GetMapping("/about")

@@ -1,8 +1,7 @@
 package demoprojects.demo.web.controllers;
 
-import demoprojects.demo.annottation.PageTitle;
-import demoprojects.demo.service.RoleService;
-import demoprojects.demo.service.UserService;
+import demoprojects.demo.service.interfaces.user.RoleService;
+import demoprojects.demo.service.interfaces.user.UserService;
 import demoprojects.demo.web.models.ProfileEditModel;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;

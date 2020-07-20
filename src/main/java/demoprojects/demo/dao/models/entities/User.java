@@ -5,6 +5,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -20,6 +21,8 @@ public class User extends BaseEntity implements UserDetails {
     private LocalDateTime registeredOn = LocalDateTime.now();
     private Set<Role> authorities;
     private Set<Post> posts;
+    private List<Product> soldProducts;
+    private List<Product> boughtProducts;
     private boolean isAccountNonExpired;
     private boolean isAccountNonLocked;
     private boolean isCredentialsNonExpired;
@@ -88,6 +91,25 @@ public class User extends BaseEntity implements UserDetails {
         return authorities;
     }
 
+    @OneToMany(mappedBy = "seller", targetEntity = Product.class,
+            fetch = FetchType.LAZY)
+    public List<Product> getSoldProducts() {
+        return soldProducts;
+    }
+
+    public void setSoldProducts(List<Product> soldProducts) {
+        this.soldProducts = soldProducts;
+    }
+    @OneToMany(mappedBy = "buyer", targetEntity = Product.class,
+            fetch = FetchType.LAZY)
+    public List<Product> getBoughtProducts() {
+        return boughtProducts;
+    }
+
+    public void setBoughtProducts(List<Product> boughtProducts) {
+        this.boughtProducts = boughtProducts;
+    }
+
     @Column(name = "password", nullable = false)
     @NotEmpty(message = "Field cannot be empty")
     public String getPassword() {
@@ -137,7 +159,6 @@ public class User extends BaseEntity implements UserDetails {
     }
 
     @Override
-
     public boolean isAccountNonExpired() {
         return this.isAccountNonExpired;
     }
@@ -147,7 +168,6 @@ public class User extends BaseEntity implements UserDetails {
     }
 
     @Override
-
     public boolean isAccountNonLocked() {
         return this.isAccountNonLocked;
     }
@@ -157,13 +177,11 @@ public class User extends BaseEntity implements UserDetails {
     }
 
     @Override
-
     public boolean isCredentialsNonExpired() {
         return this.isCredentialsNonExpired;
     }
 
     @Override
-
     public boolean isEnabled() {
         return this.isEnabled;
     }

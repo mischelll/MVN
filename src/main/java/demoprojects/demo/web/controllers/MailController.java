@@ -1,6 +1,6 @@
 package demoprojects.demo.web.controllers;
 
-import demoprojects.demo.service.EmailService;
+import demoprojects.demo.service.interfaces.user.EmailService;
 import demoprojects.demo.util.Messages;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

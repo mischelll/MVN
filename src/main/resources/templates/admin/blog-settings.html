@@ -1,1 +1,47 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" lang="en">
+<th:block th:include="~{admin/admin-fragments/head}"/>
+<body>
 
+<div class="wrapper d-flex align-items-stretch">
+    <th:block th:include="~{admin/admin-fragments/nav}"/>
+
+    <!-- Page Content  -->
+    <div id="content" class="p-4 p-md-5 pt-5">
+        <h2 class="mb-4">MVN | Blog Settings</h2>
+        <p>This is the Blog Settings Station.</p>
+        <p>This is the place where you decide what happens to all the posts(articles).</p>
+        <p>Some of the things you have control of are as follows:</p>
+        <p>        - Manage Posts -> CRUD Operations</p>
+        <p>             ->"View" button - Redirects to post.</p>
+        <p>             ->"Edit" button - Edit post credentials.</p>
+        <p>             ->"Delete" button - Deletes post and everything connected with it.</p><br>
+        <p>Here you can also <a href="/posts/create" style="font-size: 22px"> Create </a> a new Post.</p>
+        <br>
+        <p>In the table below are listed all of the posts.</p>
+        <br>
+
+        <table style="width:100%;text-align: center">
+            <thead>
+            <tr>
+                <th>Title</th>
+                <th>Posted On</th>
+                <th>Author</th>
+                <th>Categories</th>
+                <th>Comments Count</th>
+            </tr>
+            </thead>
+            <tbody id="posts-table">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<th:block th:include="~{admin/admin-fragments/footer}"/>
+<div id="page-loader">
+    <div class="loader-text"></div>
+</div>
+<script src="/admin/js/posts.js"></script>
+</body>
+</html>
