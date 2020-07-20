@@ -28,6 +28,20 @@ public class ShopController extends BaseController {
         return modelAndView;
     }
 
+    @GetMapping("/about")
+    public ModelAndView getAbout(ModelAndView modelAndView){
+        modelAndView.setViewName("shop/contact");
+
+        return modelAndView;
+    }
+
+    @GetMapping("/product")
+    public ModelAndView getProduct(ModelAndView modelAndView){
+        modelAndView.setViewName("shop/product");
+
+        return modelAndView;
+    }
+
 
 
 }
