@@ -26,4 +26,7 @@ public interface UserService extends UserDetailsService {
     void activateAccount(String username);
 
     List<UserResponseModel> listAll();
+
+    boolean isEmailAvailable(String email);
+    boolean isUsernameAvailable(String username);
 }

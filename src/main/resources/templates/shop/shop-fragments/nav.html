@@ -5,7 +5,7 @@
                 <div class="row">
                     <div class="col">
                         <div class="header_content d-flex flex-row align-items-center justify-content-start">
-                            <div class="logo"><a href="#">MVN | Shop</a></div>
+                            <div class="logo"><a href="/mvn/shop/">MVN | Shop</a></div>
                             <nav class="main_nav">
                                 <ul>
                                     <li class="hassubs active">
@@ -18,22 +18,28 @@
                                         </ul>
                                     </li>
                                     <li class="hassubs">
-                                        <a th:href="@{/shop/categories}">Categories</a>
+                                        <a>Categories</a>
                                         <ul>
-                                            <li><a href="categories.html">Smartphones</a></li>
-                                            <li><a href="categories.html">Laptops</a></li>
-                                            <li><a href="categories.html">Sport</a></li>
-                                            <li><a href="categories.html">Books</a></li>
-                                            <li><a href="categories.html">Furniture</a></li>
-                                            <li><a href="categories.html">Fashion</a></li>
-                                            <li><a href="categories.html">Clothes</a></li>
-                                            <li><a href="categories.html">Garden</a></li>
-                                            <li><a href="categories.html">Tools</a></li>
-                                            <li><a href="categories.html">Cars</a></li>
+                                            <li><a href="/mvn/shop/category/smartphones">Smartphones</a></li>
+                                            <li><a href="/mvn/shop/category/laptops">Laptops</a></li>
+                                            <li><a href="/mvn/shop/category/sport">Sport</a></li>
+                                            <li><a href="/mvn/shop/category/books">Books</a></li>
+                                            <li><a href="/mvn/shop/category/furniture">Furniture</a></li>
+                                            <li><a href="/mvn/shop/category/fashion">Fashion</a></li>
+                                            <li><a href="/mvn/shop/category/clothes">Clothes</a></li>
+                                            <li><a href="/mvn/shop/category/garden">Garden</a></li>
+                                            <li><a href="/mvn/shop/category/tools">Tools</a></li>
+                                            <li><a href="/mvn/shop/category/cars">Cars</a></li>
                                         </ul>
                                     </li>
-                                    <li><a href="#">Products</a></li>
-                                    <li><a href="/shop/about">About</a></li>
+                                    <li class="hassubs">
+                                        <a th:href="@{/mvn/shop/products}">Products</a>
+                                        <ul>
+                                            <li><a th:href="@{/mvn/shop/product/create}">Create Product</a></li>
+
+                                        </ul>
+                                    </li>
+                                    <li><a href="/mvn/shop/about">About</a></li>
                                 </ul>
                             </nav>
                             <div class="header_extra ml-auto">
@@ -51,7 +57,7 @@
 													c0,7.5,6,13.5,13.5,13.5s13.5-6,13.5-13.5v-41h45.2l26.9,302.3C412.8,445.2,392.1,462,366.8,462z"/>
 											</g>
 										</svg>
-                                        <div>Cart <span>(0)</span></div>
+                                        <div>WishList <span>(0)</span></div>
                                     </a>
                                 </div>
                                 <div class="search">

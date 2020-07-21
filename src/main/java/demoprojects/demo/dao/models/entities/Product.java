@@ -10,9 +10,11 @@ import java.util.Set;
 public class Product extends BaseEntity {
     private String title;
     private String description;
+    private String preview;
     private BigDecimal price;
     private User seller;
     private User buyer;
+    private String telephoneNumber;
     private Set<ProductCategory> categories;
     private Set<ProductComment> comments;
     private LocalDateTime created;
@@ -30,8 +32,8 @@ public class Product extends BaseEntity {
     public void setTitle(String title) {
         this.title = title;
     }
-
-    @Column(name = "description", nullable = false)
+@Lob
+    @Column(name = "description")
     public String getDescription() {
         return description;
     }
@@ -78,7 +80,7 @@ public class Product extends BaseEntity {
         this.created = created;
     }
 
-    @Column(name = "sold_on", nullable = false)
+    @Column(name = "sold_on")
     public LocalDateTime getSold() {
         return sold;
     }
@@ -107,5 +109,23 @@ public class Product extends BaseEntity {
 
     public void setComments(Set<ProductComment> comments) {
         this.comments = comments;
+    }
+
+    @Column(name = "preview", nullable = false)
+    public String getPreview() {
+        return preview;
+    }
+
+    public void setPreview(String preview) {
+        this.preview = preview;
+    }
+
+    @Column(name = "contact_number", nullable = false)
+    public String getTelephoneNumber() {
+        return telephoneNumber;
+    }
+
+    public void setTelephoneNumber(String telephoneNumber) {
+        this.telephoneNumber = telephoneNumber;
     }
 }

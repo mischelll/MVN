@@ -15,12 +15,14 @@ import demoprojects.demo.service.models.view.UserProfileViewServiceModel;
 import demoprojects.demo.service.models.view.UserResponseModel;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -49,9 +51,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserRegisterServiceModel register(UserRegisterServiceModel user) {
-        User regUser;
+        User regUser = this.mapper.map(user, User.class);
 
-        regUser = this.mapper.map(user, User.class);
         regUser.setPassword(this.passwordEncoder.encode(user.getPassword()));
         regUser.setGender(Gender.valueOf(user.getGender()));
         roleService.seedRolesInDb();
@@ -149,7 +150,31 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public boolean isEmailAvailable(String email) {
+        boolean check = true;
+        if (this.userRepository.findByEmail(email) != null) {
+            check = false;
+        }
+        return check;
+    }
+
+    @Override
+    public boolean isUsernameAvailable(String username) {
+        boolean check = true;
+        if (this.userRepository.findByUsername(username) != null) {
+            check = false;
+        }
+        return check;
+    }
+
+    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User byUsername = this.userRepository.findByUsername(username);
+        if (byUsername == null) {
+            throw new UsernameNotFoundException("User not found!");
+        }
         return this.userRepository.findByUsername(username);
+
+
     }
 }

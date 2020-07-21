@@ -24,12 +24,19 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
             Arrays
                     .stream(ProductCategoryName.values())
                     .forEach(categoryName -> {
-                        if(this.productCategoryRepository.findByName(categoryName) == null){
+                        if (this.productCategoryRepository.findByName(categoryName) == null) {
                             this.productCategoryRepository.saveAndFlush(new ProductCategory(categoryName,
                                     String.format("Some description for %s.", categoryName.name())));
                         }
 
                     });
         }
+    }
+
+    @Override
+    public ProductCategory findByName(String name) {
+        return this
+                .productCategoryRepository
+                .findByName(ProductCategoryName.valueOf(name));
     }
 }

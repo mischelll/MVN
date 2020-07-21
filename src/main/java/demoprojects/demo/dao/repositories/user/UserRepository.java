@@ -7,4 +7,5 @@ import demoprojects.demo.dao.models.entities.User;
 @Repository
 public interface UserRepository extends JpaRepository<User,String> {
     User findByUsername(String username);
+    User findByEmail(String email);
 }

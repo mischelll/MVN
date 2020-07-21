@@ -41,7 +41,7 @@ public class UserAuthController extends BaseController {
     }
 
     @GetMapping("/login")
-    public ModelAndView getLogin(HttpSession session,Model model) {
+    public ModelAndView getLogin(HttpSession session, Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (!(auth instanceof AnonymousAuthenticationToken)) {
             /* The user is logged in :) */
@@ -70,28 +70,41 @@ public class UserAuthController extends BaseController {
                                            BindingResult bindingResult,
                                            RedirectAttributes redirectAttributes,
                                            ModelAndView modelAndView
-                                           ) {
-        if (bindingResult.hasErrors() || !user.getPassword().equals(user.getConfirmPassword())) {
-
+    ) {
+        boolean matching = user.getPassword().equals(user.getConfirmPassword());
+        if (bindingResult.hasErrors() || !matching) {
             redirectAttributes.addFlashAttribute("user", user);
+            redirectAttributes.addFlashAttribute("matching", !matching);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.user", bindingResult);
             modelAndView.setViewName("redirect:/mvn/users/register");
         } else {
             UserRegisterServiceModel serviceModel = this.mapper.map(user, UserRegisterServiceModel.class);
-            this.userService.register(serviceModel);
+            boolean emailAvailable = this.userService.isEmailAvailable(serviceModel.getEmail());
+            boolean usernameAvailable = this.userService.isUsernameAvailable(serviceModel.getUsername());
 
-            modelAndView.setViewName("redirect:/mvn/users/auth/email-verification");
-            path = getRandomPath();
-            email = user.getEmail();
-            emailService.sendEmail(user.getEmail(), "Successful Registration",
-                    String.format(Messages.getSuccessfulReg(), user.getUsername(), path,user.getUsername()));
+            if (!usernameAvailable) {
+                redirectAttributes.addFlashAttribute("user", user);
+                redirectAttributes.addFlashAttribute("foundUsername", true);
+                modelAndView.setViewName("redirect:/mvn/users/register");
+            } else if (!emailAvailable) {
+                redirectAttributes.addFlashAttribute("user", user);
+                redirectAttributes.addFlashAttribute("foundEmail", true);
+                modelAndView.setViewName("redirect:/mvn/users/register");
+            } else {
+                UserRegisterServiceModel register = this.userService.register(serviceModel);
+                modelAndView.setViewName("redirect:/mvn/users/auth/email-verification");
+                path = getRandomPath();
+                email = user.getEmail();
+                emailService.sendEmail(user.getEmail(), "Successful Registration",
+                        String.format(Messages.getSuccessfulReg(), user.getUsername(), path, user.getUsername()));
+            }
         }
 
         return modelAndView;
     }
 
     @GetMapping("/registration/{code}/{username}")
-    public ModelAndView emailConfirmRegistration(@PathVariable("code") int code,@PathVariable("username") String username ) {
+    public ModelAndView emailConfirmRegistration(@PathVariable("code") int code, @PathVariable("username") String username) {
 
         if (path != code) {
             path = getRandomPath();
@@ -116,7 +129,7 @@ public class UserAuthController extends BaseController {
     }
 
     @GetMapping("/auth/email-verification")
-    public ModelAndView emailVerification(ModelAndView modelAndView){
+    public ModelAndView emailVerification(ModelAndView modelAndView) {
         modelAndView.setViewName("auth/email-verification");
 
         return modelAndView;
