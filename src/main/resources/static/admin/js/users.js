@@ -62,6 +62,7 @@ const loader = {
         $('#page-loader').hide();
     },
 };
+
 loader.show();
 fetch(URLS.items)
     .then(response => response.json())

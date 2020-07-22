@@ -9,7 +9,7 @@
                             <nav class="main_nav">
                                 <ul>
                                     <li class="hassubs active">
-                                        <a href="/shop/">Home</a>
+                                        <a href="/mvn/shop/">Home</a>
                                         <ul>
                                             <li><a href="/home">Homepage</a></li>
                                             <li><a href="/posts/all">Blog</a></li>
@@ -40,6 +40,13 @@
                                         </ul>
                                     </li>
                                     <li><a href="/mvn/shop/about">About</a></li>
+                                    <li class="hassubs">
+                                        <a href="/mvn/shop/about">My Products</a>
+                                        <ul>
+                                            <li><a th:href="@{/mvn/shop/product/create}">Bought</a></li>
+                                            <li><a th:href="@{/mvn/shop/product/create}">Sold</a></li>
+                                        </ul>
+                                    </li>
                                 </ul>
                             </nav>
                             <div class="header_extra ml-auto">
@@ -127,38 +134,67 @@
                 </div>
                 <ul class="page_menu_nav menu_mm">
                     <li class="page_menu_item has-children menu_mm">
-                        <a href="index.html">Home<i class="fa fa-angle-down"></i></a>
+                        <a href="/mvn/shop/">Home<i class="fa fa-angle-down"></i></a>
                         <ul class="page_menu_selection menu_mm">
-                            <li class="page_menu_item menu_mm"><a href="categories.html">Categories<i
+                            <li class="page_menu_item menu_mm"><a href="/mvn/shop/">Home<i
                                     class="fa fa-angle-down"></i></a></li>
-                            <li class="page_menu_item menu_mm"><a href="product.html">Product<i
+                            <li class="page_menu_item menu_mm"><a href="/home">Homepage<i
                                     class="fa fa-angle-down"></i></a></li>
-                            <li class="page_menu_item menu_mm"><a href="cart.html">Cart<i class="fa fa-angle-down"></i></a>
+                            <li class="page_menu_item menu_mm"><a href="/posts/all">Blog<i
+                                    class="fa fa-angle-down"></i></a></li>
+                            <li class="page_menu_item menu_mm"><a href="/gallery/">Gallery<i class="fa fa-angle-down"></i></a>
                             </li>
-                            <li class="page_menu_item menu_mm"><a href="checkout.html">Checkout<i
+                            <li class="page_menu_item menu_mm"><a href="/logout">Logout<i
                                     class="fa fa-angle-down"></i></a></li>
-                            <li class="page_menu_item menu_mm"><a href="contact.html">Contact<i
+
+                        </ul>
+                    </li>
+                    <li class="page_menu_item has-children menu_mm">
+                        <a>Categories<i class="fa fa-angle-down"></i></a>
+                        <ul class="page_menu_selection menu_mm">
+                            <li class="page_menu_item menu_mm"><a href="/mvn/shop/category/smartphones">Smartphones<i
+                                    class="fa fa-angle-down"></i></a></li>
+                            <li class="page_menu_item menu_mm"><a href="categories.html">Laptops<i
+                                    class="fa fa-angle-down"></i></a></li>
+                            <li class="page_menu_item menu_mm"><a href="categories.html">Sport<i
+                                    class="fa fa-angle-down"></i></a></li>
+                            <li class="page_menu_item menu_mm"><a href="categories.html">Books<i
+                                    class="fa fa-angle-down"></i></a></li>
+                            <li class="page_menu_item menu_mm"><a href="/mvn/shop/category/furniture">Furniture<i
+                                    class="fa fa-angle-down"></i></a></li>
+                            <li class="page_menu_item menu_mm"><a href="/mvn/shop/category/fashion">Fashion<i
+                                    class="fa fa-angle-down"></i></a></li>
+                            <li class="page_menu_item menu_mm"><a href="/mvn/shop/category/clothes">Clothes<i
+                                    class="fa fa-angle-down"></i></a></li>
+                            <li class="page_menu_item menu_mm"><a href="/mvn/shop/category/garden">Garden<i
+                                    class="fa fa-angle-down"></i></a></li>
+                            <li class="page_menu_item menu_mm"><a href="/mvn/shop/category/tools">Tools<i
+                                    class="fa fa-angle-down"></i></a></li>
+                            <li class="page_menu_item menu_mm"><a href="/mvn/shop/category/cars">Cars<i
+                                    class="fa fa-angle-down"></i></a></li>
+
+                        </ul>
+                    </li>
+                    <li class="page_menu_item has-children menu_mm">
+                        <a th:href="@{/mvn/shop/products}">Products<i class="fa fa-angle-down"></i></a>
+                        <ul class="page_menu_selection menu_mm">
+                            <li class="page_menu_item menu_mm"><a th:href="@{/mvn/shop/products}">All Products<i
+                                    class="fa fa-angle-down"></i></a></li>
+                            <li class="page_menu_item menu_mm"><a th:href="@{/mvn/shop/product/create}">Create Product<i
                                     class="fa fa-angle-down"></i></a></li>
                         </ul>
                     </li>
                     <li class="page_menu_item has-children menu_mm">
-                        <a href="categories.html">Categories<i class="fa fa-angle-down"></i></a>
+                        <a href="contact.html">My Products<i
+                            class="fa fa-angle-down"></i></a>
                         <ul class="page_menu_selection menu_mm">
-                            <li class="page_menu_item menu_mm"><a href="categories.html">Category<i
+                            <li class="page_menu_item menu_mm"><a th:href="@{/mvn/shop/product/create}">Bought<i
                                     class="fa fa-angle-down"></i></a></li>
-                            <li class="page_menu_item menu_mm"><a href="categories.html">Category<i
-                                    class="fa fa-angle-down"></i></a></li>
-                            <li class="page_menu_item menu_mm"><a href="categories.html">Category<i
-                                    class="fa fa-angle-down"></i></a></li>
-                            <li class="page_menu_item menu_mm"><a href="categories.html">Category<i
+                            <li class="page_menu_item menu_mm"><a th:href="@{/mvn/shop/product/create}">Sold<i
                                     class="fa fa-angle-down"></i></a></li>
                         </ul>
                     </li>
-                    <li class="page_menu_item menu_mm"><a href="index.html">Accessories<i class="fa fa-angle-down"></i></a>
-                    </li>
-                    <li class="page_menu_item menu_mm"><a href="#">Offers<i class="fa fa-angle-down"></i></a></li>
-                    <li class="page_menu_item menu_mm"><a href="contact.html">Contact<i
-                            class="fa fa-angle-down"></i></a></li>
+                    <li class="page_menu_item menu_mm"><a href="/mvn/shop/about">About<i class="fa fa-angle-down"></i></a></li>
                 </ul>
             </div>
         </div>

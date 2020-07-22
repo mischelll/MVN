@@ -68,14 +68,14 @@
                 <div class="col"  >
                     <div  class="product_grid" >
                         <div class="product" th:each="product : ${products}">
-                            <div class="product_image"><img src="shop/images/product_1.jpg" alt=""></div>
-                            <div class="product_extra product_new"><a href="categories.html">New</a></div>
+                            <div class="product_image"><img src="shop/images/mazda.jpg" alt=""></div>
+
                             <div class="product_content">
-                                <div class="product_title">Item: <a th:href="@{/mvn/shop/product(id=${product.id})}" th:text="${product.title}">${title}</a></div>
-                                <div class="product_title">Seller: <a href="product.html" th:text="${product.fullName}">${fullName}</a></div>
-                                <div class="product_title">Username: <a href="product.html" th:text="${product.username}">${username}</a></div>
-                                <div class="product_title">Created On: <a href="product.html" th:text="${product.created}">${created}</a></div>
-                                <div class="product_price" th:text="${product.price}">Price: ${price}</div>
+                                <div class="product_title"><a style="font-size: 22px" th:href="@{/mvn/shop/product(id=${product.id})}" th:text="${product.title}">${title}</a></div>
+                                <div class="product_title"><a style="font-size: 13px" th:text="|Seller: ${product.fullName}|">${fullName}</a></div>
+                                <div class="product_title"><a style="font-size: 13px" href="product.html" th:text="|Username: ${product.username}|">${username}</a></div>
+                                <div class="product_title"><a style="font-size: 13px"  th:text="|Created On: ${product.created}|">${created}</a></div>
+                                <div class="product_price" th:text="|Price: ${product.price} lv|">Price: ${price}</div>
                             </div>
                         </div>
                     </div>

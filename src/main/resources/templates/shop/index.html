@@ -17,12 +17,9 @@
                 <div class="avds_background" style="background-image:url(shop/images/avds_small.jpg)"></div>
                 <div class="avds_small_inner">
                     <div class="avds_discount_container">
-                        <img src="shop/images/discount.png" alt="">
+
                         <div>
-                            <div class="avds_discount">
-                                <div>20<span> %</span></div>
-                                <div>Now</div>
-                            </div>
+
                         </div>
                     </div>
                     <div class="avds_small_content">
@@ -53,25 +50,17 @@
                 <div class="col">
                     <div id="products_grid" class="product_grid">
 
-<!--                         Product -->
-
-
-
-
-                        <!-- Product -->
-
-
-
-
-                        <!-- Product -->
-
-
-
-
-                        <!-- Product -->
-
-
-                        <!-- Product -->
+                        <div class="product" th:each="newProduct : ${newestProducts}">
+                            <div class="product_image"><img src="shop/images/shoes-books.jpg" alt=""></div>
+                            <div class="product_extra product_new"><a href="categories.html">New</a></div>
+                            <div class="product_content">
+                                <div class="product_title"><a th:href="@{/mvn/shop/product(id=${newProduct.id})}" style="font-size: 22px" th:text=" ${newProduct.title}">Smart Phone</a></div>
+                                <div class="product_title"><a href="product.html" style="font-size: 13px" th:text="|Seller: ${newProduct.fullName}|">Smart Phone</a></div>
+                                <div class="product_title"><a href="product.html" style="font-size: 13px" th:text="|Username: ${newProduct.username}|">Smart Phone</a></div>
+                                <div class="product_title"><a href="product.html" style="font-size: 13px" th:text="|Created on: ${newProduct.created}|">Smart Phone</a></div>
+                                <div class="product_price" th:text="|Price: ${newProduct.price} lv.|">$670</div>
+                            </div>
+                        </div>
 
 
                     </div>
@@ -88,7 +77,7 @@
             <div class="row">
                 <div class="col">
                     <div class="avds_xl_container clearfix">
-                        <div class="avds_xl_background" style="background-image:url(shop/images/avds_xl.jpg)"></div>
+                        <div class="avds_xl_background" style="background-image:url(shop/images/rsz_11chanel.jpg)"></div>
                         <div class="avds_xl_content">
                             <div class="avds_title">Amazing Offers</div>
                             <div class="avds_text">Check the many great offers by our users.

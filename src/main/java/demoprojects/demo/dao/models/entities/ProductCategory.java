@@ -36,7 +36,7 @@ public class ProductCategory extends BaseEntity {
     public void setDescription(String description) {
         this.description = description;
     }
-    @ManyToMany(mappedBy = "categories",targetEntity = Product.class)
+    @ManyToMany(mappedBy = "categories",targetEntity = Product.class, fetch = FetchType.EAGER)
     public Set<Product> getProducts() {
         return products;
     }

@@ -1,16 +1,15 @@
 package demoprojects.demo.web.controllers;
 
+import demoprojects.demo.annottation.PageTitle;
 import demoprojects.demo.service.interfaces.shop.ProductService;
 import demoprojects.demo.service.models.bind.ProductCreateServiceModel;
+import demoprojects.demo.service.models.view.ProductViewServiceModel;
 import demoprojects.demo.web.models.ProductCreateModel;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -29,14 +28,17 @@ public class ShopController extends BaseController {
     }
 
     @GetMapping("/")
+    @PageTitle("Shop | Home")
     public ModelAndView getShopIndex(ModelAndView modelAndView) {
+        modelAndView.addObject("newestProducts",this.productService.listNewestProducts());
         modelAndView.setViewName("shop/index");
         return modelAndView;
     }
 
     @GetMapping("/products")
+    @PageTitle("Shop | Products")
     public ModelAndView getProducts(ModelAndView modelAndView) {
-        modelAndView.addObject("products",productService.listNewestProducts());
+        modelAndView.addObject("products", productService.listNewestProducts());
         modelAndView.setViewName("shop/products");
         return modelAndView;
     }
@@ -49,20 +51,16 @@ public class ShopController extends BaseController {
     }
 
     @GetMapping("/about")
+    @PageTitle("Shop | About")
     public ModelAndView getAbout(ModelAndView modelAndView) {
         modelAndView.setViewName("shop/contact");
 
         return modelAndView;
     }
 
-    @GetMapping("/product")
-    public ModelAndView getProduct(ModelAndView modelAndView) {
-        modelAndView.setViewName("shop/product");
-        return modelAndView;
-    }
-
 
     @GetMapping("/product/create")
+    @PageTitle("Shop | Product | Create")
     public ModelAndView getProductCreate(ModelAndView modelAndView, Model model) {
         if (!model.containsAttribute("product")) {
             model.addAttribute("product", new ProductCreateModel());
@@ -91,4 +89,12 @@ public class ShopController extends BaseController {
         return modelAndView;
     }
 
+    @GetMapping("/product")
+    @PageTitle("Shop | Product")
+    public ModelAndView getSingleProduct(@RequestParam String id, ModelAndView modelAndView) {
+        modelAndView.addObject("product",this.productService.findProduct(id));
+        modelAndView.addObject("relatedProducts", this.productService.findRelatedProducts(id));
+        modelAndView.setViewName("shop/product");
+        return modelAndView;
+    }
 }

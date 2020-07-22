@@ -11,6 +11,7 @@ public class Product extends BaseEntity {
     private String title;
     private String description;
     private String preview;
+    private Integer views;
     private BigDecimal price;
     private User seller;
     private User buyer;
@@ -32,7 +33,8 @@ public class Product extends BaseEntity {
     public void setTitle(String title) {
         this.title = title;
     }
-@Lob
+
+    @Lob
     @Column(name = "description")
     public String getDescription() {
         return description;
@@ -40,6 +42,15 @@ public class Product extends BaseEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Column(name = "views")
+    public Integer getViews() {
+        return views;
+    }
+
+    public void setViews(Integer views) {
+        this.views = views;
     }
 
     @Column(name = "price", nullable = false)

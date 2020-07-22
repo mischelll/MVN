@@ -1,6 +1,6 @@
 <th:block xmlns="http://tapestry.apache.org/schema/tapestry_5_3.xsd">
     <head>
-        <title>MVN | Shop</title>
+        <title th:text="${title}">MVN | Blog</title>
 
 
     <meta charset="utf-8">
@@ -8,6 +8,7 @@
     <meta name="description" content="Sublime project">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <base href="/">
+        <link rel="icon" th:href="${favicon}" type="image/x-icon">
     <link rel="shortcut icon" href="img/icons/mvn/favicon.ico" type="image/x-icon">
     <link rel="icon" href="img/icons/mvn/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="shop/styles/bootstrap4/bootstrap.min.css">

@@ -108,7 +108,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserIdUsernameViewModel getUserHome(String username) {
-
         return this.mapper
                 .map(this.userRepository
                                 .findByUsername(username),

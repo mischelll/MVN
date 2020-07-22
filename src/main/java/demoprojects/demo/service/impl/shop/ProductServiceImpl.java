@@ -8,6 +8,7 @@ import demoprojects.demo.service.interfaces.shop.ProductService;
 import demoprojects.demo.service.interfaces.user.UserService;
 import demoprojects.demo.service.models.bind.ProductCreateServiceModel;
 import demoprojects.demo.service.models.view.ProductNewResponseModel;
+import demoprojects.demo.service.models.view.ProductViewServiceModel;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -57,7 +58,7 @@ public class ProductServiceImpl implements ProductService {
                 .findAll()
                 .stream()
                 .sorted((a, b) -> b.getCreated().compareTo(a.getCreated()))
-                .limit(12)
+                .limit(16)
                 .map(product -> {
                     ProductNewResponseModel map = this.mappper.map(product, ProductNewResponseModel.class);
                     map.setFullName(product.getSeller().getFirstName() + " " + product.getSeller().getLastName());
@@ -67,5 +68,51 @@ public class ProductServiceImpl implements ProductService {
                     return map;
                 })
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public ProductViewServiceModel findProduct(String id) {
+        Product product = this.productRepository.findById(id).orElse(null);
+        assert product != null;
+
+        ProductViewServiceModel map = this.mappper.map(product, ProductViewServiceModel.class);
+        map.setCreated(product.getCreated().format(DateTimeFormatter.ofPattern("dd/MMM/yyyy HH:mm")));
+        map.setFullName(product.getSeller().getFirstName() + " " + product.getSeller().getLastName());
+        map.setEmail(product.getSeller().getEmail());
+        map.setUsername(product.getSeller().getUsername());
+
+        return map;
+    }
+
+    @Override
+    public void incrementViews(String username, String productId) {
+        Product product =
+                this.productRepository.findById(productId).orElse(null);
+
+        assert product != null;
+        if (!product.getSeller().getUsername().equals(username)) {
+            product.setViews(product.getViews() + 1);
+            this.productRepository.saveAndFlush(product);
+        }
+    }
+
+    @Override
+    public List<ProductViewServiceModel> findRelatedProducts(String id) {
+        Product product1 = this.productRepository.findById(id).orElse(null);
+        ProductCategory category = product1.getCategories().iterator().next();
+
+        return category
+                .getProducts()
+                .stream()
+                .filter(product -> !product.getId().equals(product1.getId()))
+                .map(product -> {
+                    ProductViewServiceModel map = this.mappper.map(product, ProductViewServiceModel.class);
+                    map.setCreated(product.getCreated().format(DateTimeFormatter.ofPattern("dd/MMM/yyyy HH:mm")));
+                    map.setFullName(product.getSeller().getFirstName() + " " + product.getSeller().getLastName());
+                    map.setEmail(product.getSeller().getEmail());
+                    map.setUsername(product.getSeller().getUsername());
+
+                    return map;
+                }).collect(Collectors.toList());
     }
 }
