@@ -51,7 +51,7 @@
                     <div id="products_grid" class="product_grid">
 
                         <div class="product" th:each="newProduct : ${newestProducts}">
-                            <div class="product_image"><img src="shop/images/shoes-books.jpg" alt=""></div>
+                            <div class="product_image"><img src="shop/images/books.jpg" alt=""></div>
                             <div class="product_extra product_new"><a href="categories.html">New</a></div>
                             <div class="product_content">
                                 <div class="product_title"><a th:href="@{/mvn/shop/product(id=${newProduct.id})}" style="font-size: 22px" th:text=" ${newProduct.title}">Smart Phone</a></div>

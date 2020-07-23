@@ -23,6 +23,7 @@ public class Product extends BaseEntity {
 
 
     public Product() {
+        this.views = 0;
     }
 
     @Column(name = "title", nullable = false)

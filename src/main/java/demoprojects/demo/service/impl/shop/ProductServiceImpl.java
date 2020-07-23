@@ -115,4 +115,23 @@ public class ProductServiceImpl implements ProductService {
                     return map;
                 }).collect(Collectors.toList());
     }
+
+    @Override
+    public List<ProductViewServiceModel> findProductsByCategory(String category) {
+        ProductCategory byName = this.productCategoryService.findByName(category);
+        return byName
+                .getProducts()
+                .stream()
+                .sorted((a, b) -> b.getPrice().compareTo(a.getPrice()))
+                .map(product -> {
+                    ProductViewServiceModel productViewServiceModel = this.mappper.map(product, ProductViewServiceModel.class);
+                    productViewServiceModel.setCreated(product.getCreated().format(DateTimeFormatter.ofPattern("dd/MMM/yyyy HH:mm")));
+                    productViewServiceModel.setFullName(product.getSeller().getFirstName() + " " + product.getSeller().getLastName());
+                    productViewServiceModel.setEmail(product.getSeller().getEmail());
+                    productViewServiceModel.setUsername(product.getSeller().getUsername());
+
+                    return productViewServiceModel;
+                })
+                .collect(Collectors.toList());
+    }
 }

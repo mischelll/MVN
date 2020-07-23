@@ -46,7 +46,7 @@
 						<div class="details_image_thumbnails d-flex flex-row align-items-start justify-content-between">
 							<div class="details_image_thumbnail active" data-image="images/details_1.jpg"><img src="shop/images/details_1.jpg" alt=""></div>
 							<div class="details_image_thumbnail" data-image="images/details_2.jpg"><img src="shop/images/details_2.jpg" alt=""></div>
-							<div class="details_image_thumbnail" data-image="images/details_3.jpg"><img src="shop/images/details_3.jpg" alt=""></div>
+							<div class="details_image_thumbnail" data-image="images/details_3.jpg"><img src="../../static/shop/images/categories/smartphones.jpg" alt=""></div>
 							<div class="details_image_thumbnail" data-image="images/details_4.jpg"><img src="shop/images/details_4.jpg" alt=""></div>
 						</div>
 					</div>
@@ -68,7 +68,9 @@
 							<div class="availability">Username:</div>
 							<span th:text="*{username}">pesh</span><br>
 							<div class="availability">Contact number:</div>
-							<span th:text="*{telephone}">pesh</span>
+							<span th:text="*{telephone}">pesh</span><br><br>
+							<div class="availability">Views:</div>
+							<span th:text="*{views}"></span>
 						</div>
 						<div class="details_text">
 							<p th:text="*{preview}">Готин телефон</p>

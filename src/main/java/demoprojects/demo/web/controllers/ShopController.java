@@ -91,7 +91,8 @@ public class ShopController extends BaseController {
 
     @GetMapping("/product")
     @PageTitle("Shop | Product")
-    public ModelAndView getSingleProduct(@RequestParam String id, ModelAndView modelAndView) {
+    public ModelAndView getSingleProduct(@RequestParam String id, ModelAndView modelAndView,Principal principal) {
+        this.productService.incrementViews(principal.getName(),id);
         modelAndView.addObject("product",this.productService.findProduct(id));
         modelAndView.addObject("relatedProducts", this.productService.findRelatedProducts(id));
         modelAndView.setViewName("shop/product");

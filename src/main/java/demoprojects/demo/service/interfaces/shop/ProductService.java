@@ -17,4 +17,6 @@ public interface ProductService {
     void incrementViews(String username, String productId);
 
     List<ProductViewServiceModel> findRelatedProducts(String id);
+
+    List<ProductViewServiceModel> findProductsByCategory(String category);
 }
