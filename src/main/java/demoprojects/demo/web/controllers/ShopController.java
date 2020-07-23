@@ -98,4 +98,11 @@ public class ShopController extends BaseController {
         modelAndView.setViewName("shop/product");
         return modelAndView;
     }
+
+    @GetMapping("/my-products/{username}")
+    public ModelAndView getUserProducts(ModelAndView modelAndView,@PathVariable String username){
+        modelAndView.addObject("userProducts", this.productService.findProductsByUsername(username));
+        modelAndView.setViewName("shop/user-products");
+        return modelAndView;
+    }
 }

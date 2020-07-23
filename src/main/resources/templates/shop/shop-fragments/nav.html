@@ -41,7 +41,7 @@
                                     </li>
                                     <li><a href="/mvn/shop/about">About</a></li>
                                     <li class="hassubs">
-                                        <a href="/mvn/shop/about">My Products</a>
+                                        <a th:href="@{'/mvn/shop/my-products/' + ${#authentication.getPrincipal().getUsername()}}">My Products</a>
                                         <ul>
                                             <li><a th:href="@{/mvn/shop/product/create}">Bought</a></li>
                                             <li><a th:href="@{/mvn/shop/product/create}">Sold</a></li>

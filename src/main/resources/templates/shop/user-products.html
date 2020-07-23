@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <th:block th:include="~{shop/shop-fragments/head}"/>
+    <link rel="stylesheet" type="text/css" href="shop/styles/categories.css">
+    <link rel="stylesheet" type="text/css" href="shop/styles/categories_responsive.css">
+    <style>
+        .my-custom-scrollbar {
+            position: relative;
+            height: 200px;
+            overflow: auto;
+        }
+        .table-wrapper-scroll-y {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+<div class="super_container">
+    <!-- Header -->
+    <th:block th:include="~{shop/shop-fragments/nav}"/>
+
+    <!-- Home -->
+
+    <div class="home">
+        <div class="home_container">
+            <div class="home_background" style="background-image:url(shop/images/categories.jpg)"></div>
+            <div class="home_content_container">
+                <div class="container">
+                    <div class="row">
+                        <div class="col">
+                            <div class="home_content">
+                                <div class="home_title">My Products<span>.</span></div>
+                                <div class="home_text"><p>Below are listed the products you bought from the MVN |
+                                    Shop.</p></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Products -->
+
+    <div class="home">
+        <div class="home_container">
+<h2 style="color: black; text-align: center">Your products listed:</h2>
+
+                    <table  class="table table-dark table-hover table-responsive-xl able-wrapper-scroll-y my-custom-scrollbar">
+                        <thead>
+                        <tr>
+                            <th style="text-align: center;" scope="col">#</th>
+                            <th style="text-align: center;" scope="col">Title</th>
+                            <th style="text-align: center;" scope="col">Price</th>
+                            <th style="text-align: center;" scope="col">Created On</th>
+                            <th style="text-align: center;" scope="col">Views</th>
+                        </tr>
+                        </thead>
+                        <tbody th:each="product,counter : ${userProducts}">
+                        <tr>
+                            <th style="text-align: center;" scope="row" th:text="${counter.count}">1</th>
+                            <td style="text-align: center;" th:text="${product.title}">Mark</td>
+                            <td style="text-align: center;" th:text="${product.price}">Otto</td>
+                            <td style="text-align: center;" th:text="${product.created}">@mdo</td>
+                            <td style="text-align: center;" th:text="${product.views}">@mdo</td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+        </div>
+    </div>
+
+
+
+                    <!--    <div class="products">-->
+                    <!--        <div class="container">-->
+                    <!--            <div class="row">-->
+                    <!--                <div class="col">-->
+
+                    <!--                    &lt;!&ndash; Product Sorting &ndash;&gt;-->
+                    <!--                    <div class="sorting_bar d-flex flex-md-row flex-column align-items-md-center justify-content-md-start">-->
+                    <!--                        <div class="results">Showing <span>12</span> results</div>-->
+                    <!--                        <div class="sorting_container ml-md-auto">-->
+                    <!--                            <div class="sorting">-->
+                    <!--                                <ul class="item_sorting">-->
+                    <!--                                    <li>-->
+                    <!--                                        <span class="sorting_text">Sort by</span>-->
+                    <!--                                        <i class="fa fa-chevron-down" aria-hidden="true"></i>-->
+                    <!--                                        <ul>-->
+                    <!--                                            <li class="product_sorting_btn"-->
+                    <!--                                                data-isotope-option='{ "sortBy": "original-order" }'>-->
+                    <!--                                                <span>Default</span></li>-->
+                    <!--                                            <li class="product_sorting_btn" data-isotope-option='{ "sortBy": "price" }'>-->
+                    <!--                                                <span>Price</span></li>-->
+                    <!--                                            <li class="product_sorting_btn" data-isotope-option='{ "sortBy": "stars" }'>-->
+                    <!--                                                <span>Name</span></li>-->
+                    <!--                                        </ul>-->
+                    <!--                                    </li>-->
+                    <!--                                </ul>-->
+                    <!--                            </div>-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
+                    <!--                </div>-->
+                    <!--            </div>-->
+                    <!--            <div class="row">-->
+                    <!--                <div class="col"  >-->
+                    <!--                    <div  class="product_grid" >-->
+                    <!--                        <div class="product" th:each="product : ${products}">-->
+                    <!--                            <div class="product_image"><img src="img/merc.jpg" alt=""></div>-->
+
+                    <!--                            <div class="product_content">-->
+                    <!--                                <div class="product_title"><a style="font-size: 22px" th:href="@{/mvn/shop/product(id=${product.id})}" th:text="${product.title}">${title}</a></div>-->
+                    <!--                                <div class="product_title"><a style="font-size: 13px" th:text="|Seller: ${product.fullName}|">${fullName}</a></div>-->
+                    <!--                                <div class="product_title"><a style="font-size: 13px" href="product.html" th:text="|Username: ${product.username}|">${username}</a></div>-->
+                    <!--                                <div class="product_title"><a style="font-size: 13px"  th:text="|Created On: ${product.created}|">${created}</a></div>-->
+                    <!--                                <div class="product_price" th:text="|Price: ${product.price} lv|">Price: ${price}</div>-->
+                    <!--                            </div>-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
+                    <!--                    <div class="product_pagination">-->
+                    <!--                        <ul>-->
+                    <!--                            <li class="active"><a href="#">01.</a></li>-->
+                    <!--                            <li><a href="#">02.</a></li>-->
+                    <!--                            <li><a href="#">03.</a></li>-->
+                    <!--                        </ul>-->
+                    <!--                    </div>-->
+
+                    <!--                </div>-->
+                    <!--            </div>-->
+                    <!--        </div>-->
+                    <!--    </div>-->
+
+                    <!-- Icon Boxes -->
+
+                    <th:block th:include="~{shop/shop-fragments/icons-newsletter}"/>
+                    <!-- Footer -->
+                    <th:block th:include="~{shop/shop-fragments/footer}"/>
+                </div>
+
+                <th:block th:include="~{shop/shop-fragments/footer-scripts}"/>
+                <script src="shop/js/categories.js"></script>
+
+</body>
+</html>

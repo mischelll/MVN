@@ -99,30 +99,35 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductViewServiceModel> findRelatedProducts(String id) {
         Product product1 = this.productRepository.findById(id).orElse(null);
+        assert product1 != null;
         ProductCategory category = product1.getCategories().iterator().next();
 
-        return category
-                .getProducts()
-                .stream()
-                .filter(product -> !product.getId().equals(product1.getId()))
-                .map(product -> {
-                    ProductViewServiceModel map = this.mappper.map(product, ProductViewServiceModel.class);
-                    map.setCreated(product.getCreated().format(DateTimeFormatter.ofPattern("dd/MMM/yyyy HH:mm")));
-                    map.setFullName(product.getSeller().getFirstName() + " " + product.getSeller().getLastName());
-                    map.setEmail(product.getSeller().getEmail());
-                    map.setUsername(product.getSeller().getUsername());
-
-                    return map;
-                }).collect(Collectors.toList());
+        return generateProducts(category.getProducts());
     }
 
     @Override
     public List<ProductViewServiceModel> findProductsByCategory(String category) {
         ProductCategory byName = this.productCategoryService.findByName(category);
-        return byName
-                .getProducts()
+        return generateProducts(byName.getProducts());
+    }
+
+    @Override
+    public List<ProductViewServiceModel> findProductsByUsername(String username) {
+        Set<Product> allBySellerUsername = this.productRepository
+                .findAllBySellerUsername(username);
+        return generateProducts(allBySellerUsername);
+    }
+
+    private List<ProductViewServiceModel> generateProducts(Set<Product> products) {
+        return products
                 .stream()
-                .sorted((a, b) -> b.getPrice().compareTo(a.getPrice()))
+                .sorted((a, b) -> {
+                    int sort = b.getCreated().compareTo(a.getCreated());
+                    if (sort == 0) {
+                        sort = b.getPrice().compareTo(a.getPrice());
+                    }
+                    return sort;
+                })
                 .map(product -> {
                     ProductViewServiceModel productViewServiceModel = this.mappper.map(product, ProductViewServiceModel.class);
                     productViewServiceModel.setCreated(product.getCreated().format(DateTimeFormatter.ofPattern("dd/MMM/yyyy HH:mm")));
