@@ -5,6 +5,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -21,6 +22,7 @@ public class User extends BaseEntity implements UserDetails {
     private LocalDateTime registeredOn = LocalDateTime.now();
     private Set<Role> authorities;
     private Set<Post> posts;
+    private List<Product> offers;
     private List<Product> soldProducts;
     private List<Product> boughtProducts;
     private boolean isAccountNonExpired;
@@ -30,6 +32,18 @@ public class User extends BaseEntity implements UserDetails {
 
 
     public User() {
+        this.soldProducts = new ArrayList<>();
+        this.boughtProducts = new ArrayList<>();
+    }
+
+    @OneToMany(mappedBy = "seller", targetEntity = Product.class,
+            fetch = FetchType.EAGER)
+    public List<Product> getSoldProducts() {
+        return soldProducts;
+    }
+
+    public void setSoldProducts(List<Product> soldProducts) {
+        this.soldProducts = soldProducts;
     }
 
     @Column(name = "gender")
@@ -92,13 +106,13 @@ public class User extends BaseEntity implements UserDetails {
     }
 
     @OneToMany(mappedBy = "seller", targetEntity = Product.class,
-            fetch = FetchType.LAZY)
-    public List<Product> getSoldProducts() {
-        return soldProducts;
+            fetch = FetchType.EAGER)
+    public List<Product> getOffers() {
+        return offers;
     }
 
-    public void setSoldProducts(List<Product> soldProducts) {
-        this.soldProducts = soldProducts;
+    public void setOffers(List<Product> soldProducts) {
+        this.offers = soldProducts;
     }
     @OneToMany(mappedBy = "buyer", targetEntity = Product.class,
             fetch = FetchType.LAZY)

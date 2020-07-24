@@ -2,11 +2,17 @@ package demoprojects.demo.web.rest;
 
 import demoprojects.demo.service.interfaces.shop.ProductService;
 import demoprojects.demo.service.models.view.ProductNewResponseModel;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import demoprojects.demo.service.models.view.ProductViewServiceModel;
+import demoprojects.demo.service.models.view.ProductsUserResponseModel;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -21,7 +27,37 @@ public class ShopApiController {
 
     @GetMapping("/products")
     @ResponseBody
-    public List<ProductNewResponseModel> listNewestProducts(){
+    public List<ProductNewResponseModel> listNewestProducts() throws InterruptedException {
         return this.productService.listNewestProducts();
+    }
+
+    @GetMapping("/my-products/{username}")
+    @ResponseBody
+    public List<ProductsUserResponseModel> listUserProducts(@PathVariable String username) throws InterruptedException {
+
+        return this.productService.listProductsByUser(username);
+    }
+
+    @PostMapping("/my-products/sell/{productId}")
+    public ResponseEntity<Void> addProductToSold(@PathVariable String productId, Principal principal, HttpServletResponse response) throws IOException {
+        this.productService.addProductToSold(productId);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", "/mvn/shop/my-products/" + principal.getName());
+        return new ResponseEntity<>(headers, HttpStatus.FOUND);
+    }
+
+    @GetMapping("/my-sold-products/{username}")
+    @ResponseBody
+    public List<ProductViewServiceModel> listUserSoldProducts(@PathVariable String username) throws InterruptedException {
+
+        return this.productService.findSoldProductsByUsername(username);
+    }
+
+    @PostMapping("/my-sold-products/backToMarket/{productId}")
+    public ResponseEntity<Void> removeProductToSold(@PathVariable String productId, Principal principal)  {
+        this.productService.removeProductFromSold(productId);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", "/mvn/shop/my-products/" + principal.getName());
+        return new ResponseEntity<>(headers, HttpStatus.FOUND);
     }
 }

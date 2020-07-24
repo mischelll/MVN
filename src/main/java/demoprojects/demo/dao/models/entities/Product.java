@@ -20,11 +20,13 @@ public class Product extends BaseEntity {
     private Set<ProductComment> comments;
     private LocalDateTime created;
     private LocalDateTime sold;
-
+    private Boolean isSold;
 
     public Product() {
         this.views = 0;
+        this.isSold = false;
     }
+
 
     @Column(name = "title", nullable = false)
     public String getTitle() {
@@ -73,6 +75,24 @@ public class Product extends BaseEntity {
         this.seller = seller;
     }
 
+    @Column(name = "sold_on")
+    public LocalDateTime getSold() {
+        return sold;
+    }
+
+    public void setSold(LocalDateTime sold) {
+        this.sold = sold;
+    }
+
+    @Column(name = "is_sold")
+    public Boolean getIsSold(){
+        return this.isSold;
+    }
+
+    public void setIsSold(Boolean isSold){
+        this.isSold = isSold;
+    }
+
     @ManyToOne
     @JoinColumn(name = "buyer_id", referencedColumnName = "id")
     public User getBuyer() {
@@ -92,14 +112,7 @@ public class Product extends BaseEntity {
         this.created = created;
     }
 
-    @Column(name = "sold_on")
-    public LocalDateTime getSold() {
-        return sold;
-    }
 
-    public void setSold(LocalDateTime sold) {
-        this.sold = sold;
-    }
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "products_categories",

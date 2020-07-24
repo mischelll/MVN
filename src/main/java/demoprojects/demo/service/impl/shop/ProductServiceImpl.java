@@ -2,6 +2,7 @@ package demoprojects.demo.service.impl.shop;
 
 import demoprojects.demo.dao.models.entities.Product;
 import demoprojects.demo.dao.models.entities.ProductCategory;
+import demoprojects.demo.dao.models.entities.User;
 import demoprojects.demo.dao.repositories.shop.ProductRepository;
 import demoprojects.demo.service.interfaces.shop.ProductCategoryService;
 import demoprojects.demo.service.interfaces.shop.ProductService;
@@ -9,11 +10,13 @@ import demoprojects.demo.service.interfaces.user.UserService;
 import demoprojects.demo.service.models.bind.ProductCreateServiceModel;
 import demoprojects.demo.service.models.view.ProductNewResponseModel;
 import demoprojects.demo.service.models.view.ProductViewServiceModel;
+import demoprojects.demo.service.models.view.ProductsUserResponseModel;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -44,7 +47,6 @@ public class ProductServiceImpl implements ProductService {
             categories.add(this.productCategoryService.findByName(productCategoryName.name()));
         });
         product1.setCategories(categories);
-
         return this
                 .mappper
                 .map(this.productRepository
@@ -57,8 +59,28 @@ public class ProductServiceImpl implements ProductService {
         return this.productRepository
                 .findAll()
                 .stream()
+                .filter(product -> !product.getIsSold())
                 .sorted((a, b) -> b.getCreated().compareTo(a.getCreated()))
                 .limit(16)
+                .map(product -> {
+                    ProductNewResponseModel map = this.mappper.map(product, ProductNewResponseModel.class);
+                    map.setFullName(product.getSeller().getFirstName() + " " + product.getSeller().getLastName());
+                    map.setUsername(product.getSeller().getUsername());
+                    map.setCreated(product.getCreated().format(DateTimeFormatter.ofPattern("dd/MMM/yyyy")));
+
+                    return map;
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ProductNewResponseModel> listAllProducts() {
+        return this.productRepository
+                .findAll()
+                .stream()
+                .filter(product -> !product.getIsSold())
+                .sorted(Comparator.comparing(Product::getPrice))
+                .limit(20)
                 .map(product -> {
                     ProductNewResponseModel map = this.mappper.map(product, ProductNewResponseModel.class);
                     map.setFullName(product.getSeller().getFirstName() + " " + product.getSeller().getLastName());
@@ -75,13 +97,7 @@ public class ProductServiceImpl implements ProductService {
         Product product = this.productRepository.findById(id).orElse(null);
         assert product != null;
 
-        ProductViewServiceModel map = this.mappper.map(product, ProductViewServiceModel.class);
-        map.setCreated(product.getCreated().format(DateTimeFormatter.ofPattern("dd/MMM/yyyy HH:mm")));
-        map.setFullName(product.getSeller().getFirstName() + " " + product.getSeller().getLastName());
-        map.setEmail(product.getSeller().getEmail());
-        map.setUsername(product.getSeller().getUsername());
-
-        return map;
+        return mapEntity(product);
     }
 
     @Override
@@ -101,8 +117,20 @@ public class ProductServiceImpl implements ProductService {
         Product product1 = this.productRepository.findById(id).orElse(null);
         assert product1 != null;
         ProductCategory category = product1.getCategories().iterator().next();
+        return category
+                .getProducts()
+                .stream()
+                .filter(product -> !product.getIsSold() && !product.getId().equals(id))
+                .sorted((a, b) -> {
+                    int sort = b.getCreated().compareTo(a.getCreated());
+                    if (sort == 0) {
+                        sort = b.getPrice().compareTo(a.getPrice());
+                    }
+                    return sort;
+                })
+                .map(this::mapEntity)
+                .collect(Collectors.toList());
 
-        return generateProducts(category.getProducts());
     }
 
     @Override
@@ -118,9 +146,59 @@ public class ProductServiceImpl implements ProductService {
         return generateProducts(allBySellerUsername);
     }
 
+    @Override
+    public List<ProductViewServiceModel> findSoldProductsByUsername(String username) {
+        Set<Product> allBySellerUsername = this.productRepository
+                .findAllBySellerUsername(username);
+
+        return allBySellerUsername
+                .stream()
+                .filter(Product::getIsSold)
+                .map(this::mapEntity)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void addProductToSold(String productId) {
+        Product product = this.productRepository.findById(productId).orElse(null);
+        assert product != null;
+        product.setIsSold(true);
+
+        User byUsername = this.userService.findByUsername(product.getSeller().getUsername());
+        byUsername.getSoldProducts().add(product);
+
+        this.productRepository.saveAndFlush(product);
+    }
+
+    @Override
+    public List<ProductsUserResponseModel> listProductsByUser(String username) {
+        return this.productRepository
+                .findAllBySellerUsername(username)
+                .stream()
+                .filter(product -> !product.getIsSold())
+                .map(product -> {
+                    ProductsUserResponseModel map = this.mappper.map(product, ProductsUserResponseModel.class);
+                    map.setCreatedOn(product.getCreated().format(DateTimeFormatter.ofPattern("dd/MMM/yyyy HH:mm")));
+                    return map;
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void removeProductFromSold(String productId) {
+        Product product = this.productRepository.findById(productId).orElse(null);
+        product.setIsSold(false);
+
+        User byUsername = this.userService.findByUsername(product.getSeller().getUsername());
+        byUsername.getSoldProducts().remove(product);
+
+        this.productRepository.saveAndFlush(product);
+    }
+
     private List<ProductViewServiceModel> generateProducts(Set<Product> products) {
         return products
                 .stream()
+                .filter(product -> !product.getIsSold())
                 .sorted((a, b) -> {
                     int sort = b.getCreated().compareTo(a.getCreated());
                     if (sort == 0) {
@@ -128,15 +206,16 @@ public class ProductServiceImpl implements ProductService {
                     }
                     return sort;
                 })
-                .map(product -> {
-                    ProductViewServiceModel productViewServiceModel = this.mappper.map(product, ProductViewServiceModel.class);
-                    productViewServiceModel.setCreated(product.getCreated().format(DateTimeFormatter.ofPattern("dd/MMM/yyyy HH:mm")));
-                    productViewServiceModel.setFullName(product.getSeller().getFirstName() + " " + product.getSeller().getLastName());
-                    productViewServiceModel.setEmail(product.getSeller().getEmail());
-                    productViewServiceModel.setUsername(product.getSeller().getUsername());
-
-                    return productViewServiceModel;
-                })
+                .map(this::mapEntity)
                 .collect(Collectors.toList());
+    }
+
+    private ProductViewServiceModel mapEntity(Product product) {
+        ProductViewServiceModel productViewServiceModel = this.mappper.map(product, ProductViewServiceModel.class);
+        productViewServiceModel.setCreated(product.getCreated().format(DateTimeFormatter.ofPattern("dd/MMM/yyyy HH:mm")));
+        productViewServiceModel.setFullName(product.getSeller().getFirstName() + " " + product.getSeller().getLastName());
+        productViewServiceModel.setEmail(product.getSeller().getEmail());
+        productViewServiceModel.setUsername(product.getSeller().getUsername());
+        return productViewServiceModel;
     }
 }

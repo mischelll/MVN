@@ -44,7 +44,7 @@
                                         <a th:href="@{'/mvn/shop/my-products/' + ${#authentication.getPrincipal().getUsername()}}">My Products</a>
                                         <ul>
                                             <li><a th:href="@{/mvn/shop/product/create}">Bought</a></li>
-                                            <li><a th:href="@{/mvn/shop/product/create}">Sold</a></li>
+                                            <li><a th:href="@{'/mvn/shop/my-sold-products/'+ ${#authentication.getPrincipal().getUsername()}}">Sold</a></li>
                                         </ul>
                                     </li>
                                 </ul>

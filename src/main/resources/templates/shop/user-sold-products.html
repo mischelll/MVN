@@ -11,6 +11,7 @@
             height: 470px;
             overflow: auto;
         }
+
         .table-wrapper-scroll-y {
             display: block;
         }
@@ -42,23 +43,22 @@
     <!-- Products -->
     <div class="home">
         <div class="home_container">
-            <h2 style="color: black; text-align: center">Your active products listed:</h2>
+            <h2 style="color: black; text-align: center">Your sold products listed:</h2>
             <div class="table-wrapper-scroll-y my-custom-scrollbar">
-                <div class="table-wrapper-scroll-y my-custom-scrollbar">
-                    <table class="table table-dark table-hover table-responsive-xl ">
-                        <thead>
-                        <tr>
-                            <th style="text-align: center;" scope="col">Title</th>
-                            <th style="text-align: center;" scope="col">Price</th>
-                            <th style="text-align: center;" scope="col">Created On</th>
-                            <th style="text-align: center;" scope="col">Views</th>
-                            <th style="text-align: center;" scope="col">Action</th>
-                        </tr>
-                        </thead>
-                        <tbody id="user-products">
-                        </tbody>
-                    </table>
-                </div>
+            <table class="table table-dark table-hover table-responsive-md ">
+                <thead>
+                <tr>
+                    <th style="text-align: center;" scope="col">Title</th>
+                    <th style="text-align: center;" scope="col">Price</th>
+                    <th style="text-align: center;" scope="col">Created On</th>
+                    <th style="text-align: center;" scope="col">Views</th>
+                    <th style="text-align: center;" scope="col">Action</th>
+                </tr>
+                </thead>
+                <tbody id="user-products">
+                </tbody>
+            </table>
+                <h3 id="revenue"></h3>
             </div>
         </div>
     </div>
@@ -75,17 +75,10 @@
 </div>
 <script src="shop/js/categories.js"></script>
 <script th:inline="javascript">
-    // const loader = {
-    //     show: () => {
-    //         $('#page-loader').show();
-    //     },
-    //     hide: () => {
-    //         $('#page-loader').hide();
-    //     },
-    // };
+
     let username = [[${user}]];
     const URLS = {
-        products: '/mvn/shop/api/my-products/' + username,
+        products: '/mvn/shop/api/my-sold-products/' + username,
     };
     const toString = ({id, title, price, createdOn, views, isSold}) => {
         let columns = `
@@ -97,8 +90,9 @@
         columns += isSold
             ? '<td></td>'
             : `<td>
-            <form style="text-align: center;" class="sell-product-form" data-id=${id} action="/mvn/shop/api/my-products/sell/${id}" method="post">
-                <button style="text-align: center;" class="btn btn-success">Sell</button>
+            <form style="text-align: center;" class="sell-product-form" data-id=${id} action="/mvn/shop/api/my-sold-products/backToMarket/${id}" method="post">
+                <small>Current status: Sold</small><br>
+                <button style="text-align: center;" class="btn btn-outline-warning">Back to Market</button>
             </form>
            </td>
 `;
@@ -108,6 +102,7 @@
     fetch(URLS.products)
         .then(response => response.json())
         .then(products => {
+
             let result = '';
             products.forEach(product => {
                 const productString = toString(product);
@@ -134,6 +129,5 @@
     });
 
 </script>
-
 </body>
 </html>

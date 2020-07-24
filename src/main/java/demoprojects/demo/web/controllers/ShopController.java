@@ -38,7 +38,7 @@ public class ShopController extends BaseController {
     @GetMapping("/products")
     @PageTitle("Shop | Products")
     public ModelAndView getProducts(ModelAndView modelAndView) {
-        modelAndView.addObject("products", productService.listNewestProducts());
+        modelAndView.addObject("products", this.productService.listAllProducts());
         modelAndView.setViewName("shop/products");
         return modelAndView;
     }
@@ -100,9 +100,19 @@ public class ShopController extends BaseController {
     }
 
     @GetMapping("/my-products/{username}")
+    @PageTitle("User Products")
     public ModelAndView getUserProducts(ModelAndView modelAndView,@PathVariable String username){
-        modelAndView.addObject("userProducts", this.productService.findProductsByUsername(username));
+        modelAndView.addObject("user",username);
         modelAndView.setViewName("shop/user-products");
+        return modelAndView;
+    }
+
+    @GetMapping("/my-sold-products/{username}")
+    @PageTitle("User Sold Products")
+    public ModelAndView getUserSoldProducts(ModelAndView modelAndView,@PathVariable String username){
+
+        modelAndView.addObject("user",username);
+        modelAndView.setViewName("shop/user-sold-products");
         return modelAndView;
     }
 }
