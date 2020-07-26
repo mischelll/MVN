@@ -66,4 +66,18 @@ public class UserController extends BaseController {
         return modelAndView;
     }
 
+    @GetMapping("/profile-view/{username}")
+    public ModelAndView getProfileView(@PathVariable String username, ModelAndView modelAndView) {
+        modelAndView.addObject("user", this.userService.getUserVIewProfile(username));
+        modelAndView.setViewName("user/profile-view");
+
+        return modelAndView;
+    }
+
+    @GetMapping("/edit-role/{username}")
+    public ModelAndView getEditRole(@PathVariable String username, ModelAndView modelAndView){
+        modelAndView.setViewName("user/edit-role");
+        return modelAndView;
+    }
+
 }

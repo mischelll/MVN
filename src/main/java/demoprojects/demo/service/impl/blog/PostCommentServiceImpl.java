@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,6 +23,7 @@ public class PostCommentServiceImpl implements PostCommentService {
     private final PostService postService;
     private final UserService userService;
     private final ModelMapper mapper;
+
 
     public PostCommentServiceImpl(PostCommentRepository commentRepository, PostService postService, UserService userService, ModelMapper mapper) {
         this.commentRepository = commentRepository;
@@ -35,7 +37,7 @@ public class PostCommentServiceImpl implements PostCommentService {
         Post byId = this.postService.findByIdentificationNumber(comment.getPostID());
         User byUsername = this.userService.findByUsername(comment.getAuthor());
         PostComment comment1 = new PostComment();
-        comment1.setAuthor(byUsername);
+        comment1.setUsername(byUsername.getUsername());
         comment1.setDate(comment.getDate());
         comment1.setPost(byId);
         comment1.setText(comment.getText());
@@ -65,7 +67,7 @@ public class PostCommentServiceImpl implements PostCommentService {
                     CommentViewServiceModel map = this.mapper.map(comment,
                             CommentViewServiceModel.class);
 
-                    map.setAuthor(comment.getAuthor().getUsername());
+                    map.setAuthor(comment.getUsername());
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm");
                     map.setDate(comment.getDate().format(formatter));
                     map.setPostID(postId);
@@ -77,8 +79,12 @@ public class PostCommentServiceImpl implements PostCommentService {
 
     @Override
     public void delete(String commentId, String postId) {
+        PostComment postComment =
+                this.commentRepository.findById(commentId).orElse(null);
+        assert postComment != null;
 
-        this.commentRepository.deleteById(commentId);
+
+        this.commentRepository.delete(postComment);
     }
 
     @Override
@@ -98,4 +104,6 @@ public class PostCommentServiceImpl implements PostCommentService {
 
         this.commentRepository.saveAndFlush(comment);
     }
+
+
 }

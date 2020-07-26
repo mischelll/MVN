@@ -66,7 +66,6 @@ public class Product extends BaseEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "seller_id", referencedColumnName = "id")
     public User getSeller() {
         return seller;
     }
@@ -94,7 +93,6 @@ public class Product extends BaseEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "buyer_id", referencedColumnName = "id")
     public User getBuyer() {
         return buyer;
     }

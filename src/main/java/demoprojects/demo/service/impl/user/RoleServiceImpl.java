@@ -1,12 +1,14 @@
 package demoprojects.demo.service.impl.user;
 
 import demoprojects.demo.dao.models.entities.Role;
+import demoprojects.demo.dao.models.entities.User;
 import demoprojects.demo.dao.repositories.user.RoleRepository;
 import demoprojects.demo.service.interfaces.user.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -44,4 +46,6 @@ public class RoleServiceImpl implements RoleService {
         this.roleRepository.saveAndFlush(new Role("ROLE_MICHAEL-SCOTT"));
         this.roleRepository.saveAndFlush(new Role("ROLE_SALESMAN"));
     }
+
+
 }

@@ -2,6 +2,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org" lang="en">
 <th:block th:include="~{admin/admin-fragments/head}"/>
+<style>
+    .my-custom-scrollbar {
+        position: relative;
+        height: 700px;
+        overflow: auto;
+    }
+
+    .table-wrapper-scroll-y {
+        display: block;
+    }
+</style>
 <body>
 
 <div class="wrapper d-flex align-items-stretch">
@@ -21,8 +32,8 @@
         <br>
         <p>In the table below are listed all of the posts.</p>
         <br>
-
-        <table style="width:100%;text-align: center">
+        <div class="table-wrapper-scroll-y my-custom-scrollbar">
+        <table style="width:100%;text-align: center" class=" table table-dark table-hover table-responsive-md">
             <thead>
             <tr>
                 <th>Title</th>
@@ -35,6 +46,7 @@
             <tbody id="posts-table">
             </tbody>
         </table>
+        </div>
     </div>
 </div>
 

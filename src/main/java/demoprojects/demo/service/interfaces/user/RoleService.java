@@ -9,4 +9,5 @@ public interface RoleService {
     Set<Role> findAll();
     Role findByAuthority(String auth);
     void addNewRole();
+
 }

@@ -1,6 +1,5 @@
 package demoprojects.demo.dao.models.entities;
 
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -8,7 +7,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "comments")
 public class PostComment extends BaseEntity {
-    private User author;
+    private String username;
     private Post post;
     private LocalDateTime date;
     private String text;
@@ -38,18 +37,8 @@ public class PostComment extends BaseEntity {
         this.dislikes = dislikes;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    public User getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(User author) {
-        this.author = author;
-    }
 
     @ManyToOne
-    @JoinColumn(name = "post_id", referencedColumnName = "id")
     public Post getPost() {
         return post;
     }
@@ -74,5 +63,14 @@ public class PostComment extends BaseEntity {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    @Column(name = "author_username",nullable = false)
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String userID) {
+        this.username = userID;
     }
 }

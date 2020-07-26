@@ -4,6 +4,7 @@ import demoprojects.demo.dao.models.entities.Gender;
 import demoprojects.demo.dao.models.entities.Role;
 import demoprojects.demo.dao.models.entities.User;
 import demoprojects.demo.dao.repositories.user.UserRepository;
+import demoprojects.demo.service.interfaces.blog.PostCommentService;
 import demoprojects.demo.service.interfaces.user.AuthServiceValidation;
 import demoprojects.demo.service.interfaces.blog.PostService;
 import demoprojects.demo.service.interfaces.user.UserService;
@@ -15,16 +16,16 @@ import demoprojects.demo.service.models.view.UserProfileViewServiceModel;
 import demoprojects.demo.service.models.view.UserResponseModel;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,18 +34,16 @@ public class UserServiceImpl implements UserService {
     private final RoleService roleService;
     private final PostService postService;
     private final ModelMapper mapper;
-    private final AuthServiceValidation authServiceValidation;
     private final PasswordEncoder passwordEncoder;
-    private boolean isVerificationReady = false;
 
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, RoleService roleService, PostService postService, ModelMapper mapper, AuthServiceValidation authServiceValidation, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, RoleService roleService, PostService postService, ModelMapper mapper,
+                           PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleService = roleService;
         this.postService = postService;
         this.mapper = mapper;
-        this.authServiceValidation = authServiceValidation;
         this.passwordEncoder = passwordEncoder;
 
     }
@@ -85,6 +84,7 @@ public class UserServiceImpl implements UserService {
             return false;
         }
 
+
         this.userRepository.delete(byUsername);
         return true;
     }
@@ -99,6 +99,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserProfileViewServiceModel getUserProfile(String id) {
         User user = this.userRepository.findById(id).orElse(null);
+        UserProfileViewServiceModel map = this.mapper.map(user, UserProfileViewServiceModel.class);
+        map.setFullName(user.getFirstName() + " " + user.getLastName());
+        map.setRegisteredOn(user.getRegisteredOn().format(DateTimeFormatter.ofPattern("dd/MMM/yyyy")));
+
+        return map;
+    }
+
+    @Override
+    public UserProfileViewServiceModel getUserVIewProfile(String username) {
+        User user = this.userRepository.findByUsername(username);
         UserProfileViewServiceModel map = this.mapper.map(user, UserProfileViewServiceModel.class);
         map.setFullName(user.getFirstName() + " " + user.getLastName());
         map.setRegisteredOn(user.getRegisteredOn().format(DateTimeFormatter.ofPattern("dd/MMM/yyyy")));

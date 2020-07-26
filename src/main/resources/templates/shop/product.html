@@ -77,7 +77,10 @@
 						</div>
 						<!-- Product Quantity -->
 						<div class="product_quantity_container">
-							<div class="button cart_button"><a href="mailto:pesh@abv.bg?subject=Interest in Product: Iphone 7 Black&body=Dear Pesho Peshev, ">Contact Seller</a></div>
+							<div class="button cart_button"><a th:href="|mailto:*{email}?subject=Interest in Product: *{title}&body=Dear *{fullName}(*{username}), |">Contact Seller</a></div><br>
+							<small>*If you do not have a default mail program installed on your machine, the "Contact Seller" button won't be of help.</small><br>
+							<small>You will have to write an email from your browser mail provider.</small><br>
+							<small>In future versions, this issue will be resolved..</small><br>
 						</div>
 
 						<!-- Share -->

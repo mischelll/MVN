@@ -20,6 +20,7 @@ public interface UserService extends UserDetailsService {
     User findByUsername(String name);
 
     UserProfileViewServiceModel getUserProfile(String id);
+    UserProfileViewServiceModel getUserVIewProfile(String username);
 
     UserIdUsernameViewModel getUserHome(String username);
 
@@ -28,5 +29,10 @@ public interface UserService extends UserDetailsService {
     List<UserResponseModel> listAll();
 
     boolean isEmailAvailable(String email);
+
     boolean isUsernameAvailable(String username);
+
+
+
+
 }

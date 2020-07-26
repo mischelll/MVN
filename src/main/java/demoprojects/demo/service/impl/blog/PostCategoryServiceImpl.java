@@ -38,4 +38,6 @@ public class PostCategoryServiceImpl implements PostCategoryService {
     public PostCategory findByName(String name) {
         return this.categoryRepository.findByName(PostCategoryName.valueOf(name));
     }
+
+
 }

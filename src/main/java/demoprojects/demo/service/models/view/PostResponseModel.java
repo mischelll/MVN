@@ -10,6 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PostResponseModel {
+    private String id;
     private String title;
     private String author;
     private String categories;

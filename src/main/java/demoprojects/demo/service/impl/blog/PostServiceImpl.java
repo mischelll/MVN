@@ -6,6 +6,7 @@ import demoprojects.demo.dao.models.entities.Post;
 import demoprojects.demo.dao.repositories.blog.PostRepository;
 import demoprojects.demo.dao.repositories.user.UserRepository;
 import demoprojects.demo.service.interfaces.blog.PostCategoryService;
+import demoprojects.demo.service.interfaces.blog.PostCommentService;
 import demoprojects.demo.service.interfaces.blog.PostService;
 import demoprojects.demo.service.models.view.PostCategoryCountModel;
 import demoprojects.demo.service.models.bind.PostCreateServiceModel;
@@ -27,11 +28,15 @@ public class PostServiceImpl implements PostService {
     private final UserRepository userRepository;
     private final PostCategoryService categoryService;
 
-    public PostServiceImpl(PostRepository postRepository, ModelMapper modelMapper, UserRepository userRepository, PostCategoryService categoryService) {
+
+    public PostServiceImpl(PostRepository postRepository, ModelMapper modelMapper,
+                           UserRepository userRepository, PostCategoryService categoryService) {
         this.postRepository = postRepository;
         this.modelMapper = modelMapper;
         this.userRepository = userRepository;
         this.categoryService = categoryService;
+
+
     }
 
     @Override
@@ -103,6 +108,20 @@ public class PostServiceImpl implements PostService {
     @Override
     public void deleteById(String id) {
         this.postRepository.deleteById(id);
+    }
+
+    @Override
+    public void deleteByUser(String username) {
+        this.postRepository.deleteByAuthorUsername(username);
+
+    }
+
+    @Override
+    public void deleteByTitle(String title) {
+        Post byTitle = this.postRepository.findByTitle(title);
+
+        byTitle.getCategories().clear();
+        this.postRepository.deleteByTitle(title);
     }
 
     @Override

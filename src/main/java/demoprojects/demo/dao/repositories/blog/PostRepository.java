@@ -15,4 +15,8 @@ public interface PostRepository extends JpaRepository<Post, String> {
 
     List<Post> findAllByTitleContains(String text);
 
+    void deleteByAuthorUsername(String username);
+
+    void deleteByTitle(String title);
+
 }

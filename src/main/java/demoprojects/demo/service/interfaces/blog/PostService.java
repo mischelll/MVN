@@ -22,6 +22,10 @@ public interface PostService {
 
     void deleteById(String id);
 
+    void deleteByUser(String username);
+
+    void deleteByTitle(String title);
+
     PostCategoryCountModel findPostsByCategory(String category);
 
     List<PostPopularViewModel> getTopThreePosts();

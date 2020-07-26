@@ -8,7 +8,7 @@ import java.util.Set;
 public class PostCategory extends BaseEntity {
     private PostCategoryName name;
     private String description;
-    private Set<Post> posts;
+
 
     public PostCategory() {
     }
@@ -17,14 +17,7 @@ public class PostCategory extends BaseEntity {
         this.description = description;
     }
 
-    @ManyToMany(mappedBy = "categories",targetEntity = Post.class)
-    public Set<Post> getPosts() {
-        return posts;
-    }
 
-    public void setPosts(Set<Post> posts) {
-        this.posts = posts;
-    }
 
     @Column(name = "category", unique = true, nullable = false)
     @Enumerated(EnumType.STRING)

@@ -182,4 +182,11 @@ public class PostController {
 
         return modelAndView;
     }
+
+    @GetMapping("/delete/{title}")
+    public ModelAndView deletePost(@PathVariable String title, ModelAndView modelAndView){
+        this.postService.deleteByTitle(title);
+        modelAndView.setViewName("blog/index");
+        return modelAndView;
+    }
 }

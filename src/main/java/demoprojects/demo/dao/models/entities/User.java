@@ -36,8 +36,10 @@ public class User extends BaseEntity implements UserDetails {
         this.boughtProducts = new ArrayList<>();
     }
 
+
+
     @OneToMany(mappedBy = "seller", targetEntity = Product.class,
-            fetch = FetchType.EAGER)
+            fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     public List<Product> getSoldProducts() {
         return soldProducts;
     }
@@ -65,7 +67,7 @@ public class User extends BaseEntity implements UserDetails {
         this.registeredOn = registeredOn;
     }
 
-    @OneToMany(mappedBy = "author", targetEntity = Post.class)
+    @OneToMany(mappedBy = "author", targetEntity = Post.class, cascade = CascadeType.ALL)
     public Set<Post> getPosts() {
         return posts;
     }
@@ -89,7 +91,7 @@ public class User extends BaseEntity implements UserDetails {
         this.authorities = authorities;
     }
 
-    @ManyToMany(targetEntity = Role.class, fetch = FetchType.EAGER)
+    @ManyToMany(targetEntity = Role.class,fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_roles",
             joinColumns = @JoinColumn(
@@ -106,7 +108,7 @@ public class User extends BaseEntity implements UserDetails {
     }
 
     @OneToMany(mappedBy = "seller", targetEntity = Product.class,
-            fetch = FetchType.EAGER)
+            fetch = FetchType.EAGER,cascade = CascadeType.ALL,orphanRemoval = true)
     public List<Product> getOffers() {
         return offers;
     }
@@ -114,8 +116,9 @@ public class User extends BaseEntity implements UserDetails {
     public void setOffers(List<Product> soldProducts) {
         this.offers = soldProducts;
     }
+
     @OneToMany(mappedBy = "buyer", targetEntity = Product.class,
-            fetch = FetchType.LAZY)
+            fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
     public List<Product> getBoughtProducts() {
         return boughtProducts;
     }
@@ -205,6 +208,8 @@ public class User extends BaseEntity implements UserDetails {
     }
 
     public void setCredentialsNonExpired(boolean credentialsNonExpired) {
-        isCredentialsNonExpired = credentialsNonExpired;
+        this.isCredentialsNonExpired = credentialsNonExpired;
     }
+
+
 }
