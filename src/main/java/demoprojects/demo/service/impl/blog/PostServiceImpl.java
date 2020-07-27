@@ -99,6 +99,24 @@ public class PostServiceImpl implements PostService {
                 .map(this.postRepository.saveAndFlush(map),
                         PostCreateServiceModel.class);
     }
+    @Override
+    public PostCreateServiceModel edit(PostCreateServiceModel post,String postId) {
+        Post post1 = this.postRepository.findById(postId).orElse(null);
+        Post editPost = this.modelMapper.map(post, Post.class);
+        post1.setContent(editPost.getContent());
+        post1.setTitle(editPost.getTitle());
+        post1.setImgUrl(editPost.getImgUrl());
+        post1.setPreview(editPost.getPreview());
+
+        Set<PostCategory> categories = new HashSet<>();
+        post.getCategory().forEach(categoryName -> {
+            categories.add(this.categoryService.findByName(categoryName.name()));
+        });
+        post1.setCategories(categories);
+        return this.modelMapper
+                .map(this.postRepository.saveAndFlush(post1),
+                        PostCreateServiceModel.class);
+    }
 
     @Override
     public Post edit(Post post) {

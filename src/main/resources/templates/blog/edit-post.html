@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" lang="en">
+<th:block th:include="~{blog/blog-fragments/head}"/>
+
+<body>
+<!-- PRE LOADER -->
+<div class="preloader">
+    <div class="spinner">
+        <span class="sk-inner-circle"></span>
+    </div>
+</div>
+<!-- START COLORLIB-ASIDE -->
+<th:block th:include="~{blog/blog-fragments/nav}"/>
+<!-- END COLORLIB-ASIDE -->
+<div id="colorlib-main">
+    <section class="ftco-section ftco-no-pt ftco-no-pb">
+        <div class="container px-0">
+            <div class="row no-gutters block-9">
+                <div class="col-lg-6 order-md-last" >
+                    <form th:action="@{/posts/edit(id=${editPost.id})}" th:object="${editPost}"  th:method="POST"
+                          class="bg-primary p-5 contact-form">
+                        <div class="form-group">
+                            <input th:value="*{title}"   th:errorclass="bg-danger" type="text" id="title" name="title"
+                                   class="form-control" placeholder="Title" required>
+                        </div>
+                        <th:block th:each="e : ${#fields.errors('title')}">
+                            <small th:text="${e}" class="text-danger">Username error message</small>
+                        </th:block>
+
+                        <div class="form-group">
+                            <input th:value="*{preview}"  th:errorclass="bg-danger" type="text" id="preview"
+                                   name="preview" class="form-control" placeholder="Preview" required>
+                        </div>
+                        <th:block th:each="e : ${#fields.errors('preview')}">
+                            <small th:text="${e}" class="text-danger"></small>
+                        </th:block>
+
+                        <div class="form-group">
+                            <input type="text" id="imgUrl" th:value="*{imgUrl}" name="imgUrl" class="form-control" placeholder="Image Url" required>
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <select id="category" name="category" class="form-control" multiple required>
+                                <option th:each="cat : ${T(demoprojects.demo.dao.models.entities.PostCategoryName).values()}"
+                                        th:value="${cat}"
+                                        th:text="${cat}" th:selected="${editPost.category == cat}" >Vehicle Category
+                                </option>
+                            </select>
+                        </div>
+                        <th:block th:each="e : ${#fields.errors('category')}">
+                            <small th:text="${e}" class="text-danger">Username error message</small>
+                        </th:block>
+                        <br>
+                        <div class="form-group">
+                                <textarea th:text="*{content}"   th:errorclass="bg-danger" name="content" id="content"
+                                          cols="30" rows="7" class="form-control"
+                                          placeholder="Content..." required></textarea>
+                        </div>
+                        <th:block th:each="e : ${#fields.errors('content')}">
+                            <small th:text="${e}" class="text-danger">Username error message</small>
+                        </th:block>
+
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <div class="form-group">
+                            <input  type="submit" value="Create Post" class="btn btn-white py-3 px-5">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div><!-- END COLORLIB-MAIN -->
+<!-- END COLORLIB-PAGE -->
+<th:block th:include="~{blog/blog-fragments/footer-scripts}"/>
+<script src="blog/ionize/js/helper.js"></script>
+<script src="blog/ionize/js/multiselect.core.js"></script>
+<script src="blog/ionize/js/multiselect.js"></script>
+
+<script src='blog/ionize/chosen/chosen.jquery.min.js' type='text/javascript'></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('select').select2({
+            placeholder: "Select categories...",
+            allowClear: true
+        });
+    });
+</script>
+</body>
+</html>

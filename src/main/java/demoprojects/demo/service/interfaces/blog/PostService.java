@@ -18,6 +18,8 @@ public interface PostService {
 
     PostCreateServiceModel create(PostCreateServiceModel post);
 
+    PostCreateServiceModel edit(PostCreateServiceModel post, String postId);
+
     Post edit(Post post);
 
     void deleteById(String id);

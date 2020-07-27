@@ -8,6 +8,7 @@ import demoprojects.demo.service.models.bind.CommentCreateServiceModel;
 import demoprojects.demo.service.models.view.PostCategoryCountModel;
 import demoprojects.demo.service.models.bind.PostCreateServiceModel;
 import demoprojects.demo.web.models.CommentCreateModel;
+import demoprojects.demo.web.models.EditPostModel;
 import demoprojects.demo.web.models.PostCreateModel;
 import demoprojects.demo.web.models.PostSearchModel;
 import org.modelmapper.ModelMapper;
@@ -187,6 +188,39 @@ public class PostController {
     public ModelAndView deletePost(@PathVariable String title, ModelAndView modelAndView){
         this.postService.deleteByTitle(title);
         modelAndView.setViewName("blog/index");
+        return modelAndView;
+    }
+
+    @GetMapping("/edit")
+    public ModelAndView editPost(@RequestParam String id,Model model, ModelAndView modelAndView){
+        if (!model.containsAttribute("editPost")){
+            model.addAttribute("editPost",this.mapper.map(this.postService.findById(id),EditPostModel.class));
+        }
+        if (!model.containsAttribute("postSearch")) {
+            model.addAttribute("postSearch", new PostSearchModel());
+        }
+        modelAndView.setViewName("blog/edit-post");
+        return modelAndView;
+    }
+
+    @PostMapping("/edit")
+    public ModelAndView editPostConfirm(@Valid @ModelAttribute("editPost") EditPostModel editPost,
+                                        BindingResult bindingResult,
+                                        RedirectAttributes redirectAttributes,
+                                        ModelAndView modelAndView,
+                                        @RequestParam String id){
+
+        if (bindingResult.hasErrors()){
+            redirectAttributes.addFlashAttribute("editPost",editPost);
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.editPost",bindingResult);
+            modelAndView.setViewName("redirect:/posts/edit?id=" + id);
+        }else {
+            PostCreateServiceModel map = this.mapper.map(editPost, PostCreateServiceModel.class);
+
+            this.postService.edit(map,id);
+            modelAndView.setViewName("redirect:/posts/all");
+        }
+
         return modelAndView;
     }
 }

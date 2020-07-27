@@ -10,6 +10,7 @@ const loader = {
     },
 };
 const toString = ({
+                      id,
                       title,
                       postedOn,
                       author,
@@ -23,12 +24,16 @@ const toString = ({
     <td>${categories} </td>
     <td>${commentsCount} </td>
     <td>
-    <form action = "#">
-        <button class = "btn btn-success"> View </button>
-        <button class = "btn btn-warning">Edit</button>
-        <button class= "btn btn-danger"> Delete </button>
-    </form>
-        </td>
+             <button class = "btn btn-success" onclick="window.location.href='/posts/article?id=${id}'"> View </button>
+    </td>
+     <td>
+               <button class = "btn btn-warning" onclick="window.location.href='/posts/edit?id=${id}'">Edit</button>
+      </td>
+       <td>
+            <form action = "#">
+                <button class= "btn btn-danger"> Delete </button>
+            </form>
+       </td>
 </tr><br>
 `;
 
