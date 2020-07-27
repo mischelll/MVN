@@ -1,5 +1,7 @@
 package demoprojects.demo.dao.models.entities;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
@@ -38,8 +40,9 @@ public class User extends BaseEntity implements UserDetails {
 
 
 
-    @OneToMany(mappedBy = "seller", targetEntity = Product.class,
-            fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "seller", targetEntity = Product.class,fetch = FetchType.EAGER,
+             cascade = CascadeType.ALL)
+    @Fetch(value = FetchMode.SUBSELECT)
     public List<Product> getSoldProducts() {
         return soldProducts;
     }
@@ -109,6 +112,7 @@ public class User extends BaseEntity implements UserDetails {
 
     @OneToMany(mappedBy = "seller", targetEntity = Product.class,
             fetch = FetchType.EAGER,cascade = CascadeType.ALL,orphanRemoval = true)
+    @Fetch(value = FetchMode.SUBSELECT)
     public List<Product> getOffers() {
         return offers;
     }
@@ -117,8 +121,8 @@ public class User extends BaseEntity implements UserDetails {
         this.offers = soldProducts;
     }
 
-    @OneToMany(mappedBy = "buyer", targetEntity = Product.class,
-            fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "buyer", targetEntity = Product.class,fetch = FetchType.EAGER,cascade = CascadeType.ALL,orphanRemoval = true)
+    @Fetch(value = FetchMode.SUBSELECT)
     public List<Product> getBoughtProducts() {
         return boughtProducts;
     }

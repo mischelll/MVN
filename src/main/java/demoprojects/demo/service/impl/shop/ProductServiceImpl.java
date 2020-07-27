@@ -11,15 +11,13 @@ import demoprojects.demo.service.models.bind.ProductCreateServiceModel;
 import demoprojects.demo.service.models.view.ProductNewResponseModel;
 import demoprojects.demo.service.models.view.ProductViewServiceModel;
 import demoprojects.demo.service.models.view.ProductsUserResponseModel;
+import demoprojects.demo.service.models.view.UserResponseModel;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -147,25 +145,40 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductViewServiceModel> findSoldProductsByUsername(String username) {
+    public List<ProductsUserResponseModel> findSoldProductsByUsername(String username) {
         Set<Product> allBySellerUsername = this.productRepository
                 .findAllBySellerUsername(username);
-
         return allBySellerUsername
                 .stream()
                 .filter(Product::getIsSold)
-                .map(this::mapEntity)
+                .sorted((a, b) -> b.getSold().compareTo(a.getSold()))
+                .map(product -> {
+                    ProductsUserResponseModel map = this.mappper.map(product,
+                            ProductsUserResponseModel.class);
+
+                    map.setBuyerUsername(product.getBuyer().getUsername());
+                    map.setSoldOnDate(product.getSold().format(
+                            DateTimeFormatter.ofPattern("dd/MMM/yyyy HH:mm")));
+
+                    return map;
+                })
                 .collect(Collectors.toList());
     }
 
+
     @Override
-    public void addProductToSold(String productId) {
+    public void addProductToSold(String productId, String username) {
         Product product = this.productRepository.findById(productId).orElse(null);
         assert product != null;
-        product.setIsSold(true);
 
-        User byUsername = this.userService.findByUsername(product.getSeller().getUsername());
-        byUsername.getSoldProducts().add(product);
+        User buyer = this.userService.findByUsername(username);
+        product.setIsSold(true);
+        product.setBuyer(buyer);
+        product.setSold(LocalDateTime.now().withNano(0));
+        buyer.getBoughtProducts().add(product);
+
+        User seller = this.userService.findByUsername(product.getSeller().getUsername());
+        seller.getSoldProducts().add(product);
 
         this.productRepository.saveAndFlush(product);
     }
@@ -178,7 +191,10 @@ public class ProductServiceImpl implements ProductService {
                 .filter(product -> !product.getIsSold())
                 .map(product -> {
                     ProductsUserResponseModel map = this.mappper.map(product, ProductsUserResponseModel.class);
-                    map.setCreatedOn(product.getCreated().format(DateTimeFormatter.ofPattern("dd/MMM/yyyy HH:mm")));
+                    map.setCreatedOnDate(product.getCreated().format(DateTimeFormatter.ofPattern("dd/MMM/yyyy HH:mm")));
+                    List<UserResponseModel> userResponseModels = this.userService.listAll();
+
+
                     return map;
                 })
                 .collect(Collectors.toList());
@@ -188,6 +204,9 @@ public class ProductServiceImpl implements ProductService {
     public void removeProductFromSold(String productId) {
         Product product = this.productRepository.findById(productId).orElse(null);
         product.setIsSold(false);
+        product.getBuyer().getBoughtProducts().remove(product);
+        product.setBuyer(null);
+        product.setSold(null);
 
         User byUsername = this.userService.findByUsername(product.getSeller().getUsername());
         byUsername.getSoldProducts().remove(product);

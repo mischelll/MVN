@@ -9,8 +9,10 @@ import demoprojects.demo.service.interfaces.user.AuthServiceValidation;
 import demoprojects.demo.service.interfaces.blog.PostService;
 import demoprojects.demo.service.interfaces.user.UserService;
 import demoprojects.demo.service.interfaces.user.RoleService;
+import demoprojects.demo.service.models.bind.RoleChangeServiceModel;
 import demoprojects.demo.service.models.bind.UserLoginServiceModel;
 import demoprojects.demo.service.models.bind.UserRegisterServiceModel;
+import demoprojects.demo.service.models.view.RoleViewServiceModel;
 import demoprojects.demo.service.models.view.UserIdUsernameViewModel;
 import demoprojects.demo.service.models.view.UserProfileViewServiceModel;
 import demoprojects.demo.service.models.view.UserResponseModel;
@@ -22,10 +24,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.format.DateTimeFormatter;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -177,6 +176,29 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void changeRoles(RoleChangeServiceModel roles, String username) {
+        User byUsername = this.userRepository.findByUsername(username);
+        Set<Role> newRoles = new HashSet<>();
+        roles.getRoles().forEach(el ->{
+            Role byAuthority = this.roleService.findByAuthority(el);
+            newRoles.add(byAuthority);
+        });
+        byUsername.setAuthorities(newRoles);
+
+        this.userRepository.saveAndFlush(byUsername);
+    }
+
+    @Override
+    public List<String> listAllUsernames() {
+        List<String> names = new ArrayList<>();
+       this.userRepository.findAll().forEach(user -> {
+           names.add(user.getUsername());
+       });
+
+       return names;
+    }
+
+    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User byUsername = this.userRepository.findByUsername(username);
         if (byUsername == null) {
@@ -185,5 +207,20 @@ public class UserServiceImpl implements UserService {
         return this.userRepository.findByUsername(username);
 
 
+    }
+
+    @Override
+    public List<RoleViewServiceModel> listRolesByUser(String username) {
+        User byUsername = this.userRepository.findByUsername(username);
+        return byUsername
+                .getAuthorities()
+                .stream()
+                .map(role -> {
+                    RoleViewServiceModel map = this.mapper.map(role, RoleViewServiceModel.class);
+                    map.setAuthority(role.getAuthority());
+
+                    return map;
+                })
+                .collect(Collectors.toList());
     }
 }

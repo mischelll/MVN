@@ -6,6 +6,7 @@ import demoprojects.demo.service.models.view.PostResponseModel;
 import demoprojects.demo.service.models.view.UserResponseModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -23,12 +24,14 @@ public class AdminApiController {
     }
 
     @GetMapping("/users")
+    @PreAuthorize("hasRole('ROLE_ROOT') or hasRole('ROLE_ADMIN')")
     @ResponseBody
     public List<UserResponseModel> listAllUsers(HttpSession session) {
         return this.userService.listAll();
     }
 
     @GetMapping("/posts")
+    @PreAuthorize("hasRole('ROLE_ROOT') or hasRole('ROLE_ADMIN')")
     public List<PostResponseModel> listAllPosts(HttpSession session) {
         List<PostResponseModel> postResponseModels = this.postService.listAll();
         int a = 4;
@@ -36,6 +39,7 @@ public class AdminApiController {
     }
 
     @PostMapping("/users/delete/{username}")
+    @PreAuthorize("hasRole('ROLE_ROOT') or hasRole('ROLE_ADMIN')")
     public ResponseEntity<Void> deleteUser(@PathVariable String username)  {
 
         this.userService.deleteByUsername(username);

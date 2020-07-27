@@ -48,9 +48,7 @@ const toString = ({
     <button class = "btn btn-success" onclick="window.location.href='/mvn/users/api/profile-view/${username}'"  > View </button>
     </td>
     <td>
-     <form action = "#" >
-    <button class = "btn btn-warning" > Edit Role </button>
-    </form>
+    <button class = "btn btn-warning" onclick="window.location.href='/mvn/admin/edit-role/${username}'" > Edit Role </button>
     </td>
     <td>
     <form class="delete-user" data-id=${username} action="/mvn/admin/api/users/delete/${username}" method="post">

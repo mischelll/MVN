@@ -7,6 +7,7 @@ import demoprojects.demo.service.models.view.ProductsUserResponseModel;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -38,9 +39,9 @@ public class ShopApiController {
         return this.productService.listProductsByUser(username);
     }
 
-    @PostMapping("/my-products/sell/{productId}")
-    public ResponseEntity<Void> addProductToSold(@PathVariable String productId, Principal principal, HttpServletResponse response) throws IOException {
-        this.productService.addProductToSold(productId);
+    @PostMapping("/my-products/sell/{productId}/{username}")
+    public ResponseEntity<Void> addProductToSold(@PathVariable String productId,@PathVariable String username, Principal principal, HttpServletResponse response) throws IOException {
+        this.productService.addProductToSold(productId,username);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", "/mvn/shop/my-products/" + principal.getName());
         return new ResponseEntity<>(headers, HttpStatus.FOUND);
@@ -48,7 +49,7 @@ public class ShopApiController {
 
     @GetMapping("/my-sold-products/{username}")
     @ResponseBody
-    public List<ProductViewServiceModel> listUserSoldProducts(@PathVariable String username) throws InterruptedException {
+    public List<ProductsUserResponseModel> listUserSoldProducts(@PathVariable String username) throws InterruptedException {
 
         return this.productService.findSoldProductsByUsername(username);
     }

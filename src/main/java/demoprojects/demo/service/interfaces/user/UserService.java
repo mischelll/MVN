@@ -1,8 +1,10 @@
 package demoprojects.demo.service.interfaces.user;
 
 import demoprojects.demo.dao.models.entities.User;
+import demoprojects.demo.service.models.bind.RoleChangeServiceModel;
 import demoprojects.demo.service.models.bind.UserLoginServiceModel;
 import demoprojects.demo.service.models.bind.UserRegisterServiceModel;
+import demoprojects.demo.service.models.view.RoleViewServiceModel;
 import demoprojects.demo.service.models.view.UserIdUsernameViewModel;
 import demoprojects.demo.service.models.view.UserProfileViewServiceModel;
 import demoprojects.demo.service.models.view.UserResponseModel;
@@ -20,6 +22,7 @@ public interface UserService extends UserDetailsService {
     User findByUsername(String name);
 
     UserProfileViewServiceModel getUserProfile(String id);
+
     UserProfileViewServiceModel getUserVIewProfile(String username);
 
     UserIdUsernameViewModel getUserHome(String username);
@@ -28,11 +31,13 @@ public interface UserService extends UserDetailsService {
 
     List<UserResponseModel> listAll();
 
+    List<RoleViewServiceModel> listRolesByUser(String username);
+
     boolean isEmailAvailable(String email);
 
     boolean isUsernameAvailable(String username);
 
+    void changeRoles(RoleChangeServiceModel roles, String username);
 
-
-
+    List<String> listAllUsernames();
 }

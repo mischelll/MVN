@@ -2,20 +2,43 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org" lang="en">
 <th:block th:include="~{admin/admin-fragments/head}"/>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet"/>
 <body>
 
 <div class="wrapper d-flex align-items-stretch">
     <th:block th:include="~{admin/admin-fragments/nav}"/>
     <!-- Page Content  -->
     <div id="content" class="p-4 p-md-5 pt-5">
-      <p>Edit User Role</p>
-        <form>
+        <h4>Edit User Role</h4>
+        <h6 th:text="|User: ${user.username}|">User: </h6>
+        <h4>Current user roles: </h4>
+        <th:block th:each="roleUser : ${roles}">
+            <p th:text="${roleUser.authority}"></p><br>
+        </th:block>
+<br>
+<br>
+        <form th:object="${roleChange}" th:action="@{'/mvn/admin/edit-role/' + ${user.username}}" th:method="POST">
+            <select multiple required name="roles">
+                <th:block th:each="role : ${rolesAll}">
+                    <option th:value="${role.authority}"
+                            th:text="${role.authority}"  th:selected="${roleChange.roles == role }" >1</option>
+                </th:block>
 
+            </select><br><br>
+            <button class="btn btn-outline-info" type="submit">Update</button>
         </form>
+
     </div>
 </div>
-
 <th:block th:include="~{admin/admin-fragments/footer}"/>
-
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('select').select2({
+            placeholder: "Select new roles...",
+            allowClear: true
+        });
+    });
+</script>
 </body>
 </html>

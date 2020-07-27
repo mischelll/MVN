@@ -50,8 +50,9 @@
                 <tr>
                     <th style="text-align: center;" scope="col">Title</th>
                     <th style="text-align: center;" scope="col">Price</th>
-                    <th style="text-align: center;" scope="col">Created On</th>
+                    <th style="text-align: center;" scope="col">Sold On</th>
                     <th style="text-align: center;" scope="col">Views</th>
+                    <th style="text-align: center;" scope="col">Buyer</th>
                     <th style="text-align: center;" scope="col">Action</th>
                 </tr>
                 </thead>
@@ -80,22 +81,24 @@
     const URLS = {
         products: '/mvn/shop/api/my-sold-products/' + username,
     };
-    const toString = ({id, title, price, createdOn, views, isSold}) => {
+    const toString = ({id, title, price, soldOnDate, views,buyerUsername, isSold}) => {
         let columns = `
     <td style="text-align: center;">${title}</td>
     <td style="text-align: center;">${price}</td>
-    <td style="text-align: center;">${createdOn}</td>
+    <td style="text-align: center;">${soldOnDate}</td>
     <td style="text-align: center;">${views}</td>
+    <td style="text-align: center;"  ><a href="'/mvn/users/api/profile-view/' + ${buyerUsername}">${buyerUsername}</a></td>
 `;
         columns += isSold
-            ? '<td></td>'
-            : `<td>
+            ? `<td>
             <form style="text-align: center;" class="sell-product-form" data-id=${id} action="/mvn/shop/api/my-sold-products/backToMarket/${id}" method="post">
                 <small>Current status: Sold</small><br>
                 <button style="text-align: center;" class="btn btn-outline-warning">Back to Market</button>
             </form>
            </td>
-`;
+`
+            :
+        '<td></td>';
         return `<tr id="${id}" >${columns}</tr>`
     };
     // loader.show();

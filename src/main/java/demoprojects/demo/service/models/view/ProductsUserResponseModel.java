@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -14,7 +16,10 @@ public class ProductsUserResponseModel {
     private String id;
     private String title;
     private BigDecimal price;
-    private String createdOn;
+    private String createdOnDate;
+    private String buyerUsername;
+    private String soldOnDate;
     private Integer views;
     private Boolean isSold;
+
 }

@@ -25,9 +25,9 @@ public interface ProductService {
 
     List<ProductViewServiceModel> findProductsByUsername(String username);
 
-    List<ProductViewServiceModel> findSoldProductsByUsername(String username);
+    List<ProductsUserResponseModel> findSoldProductsByUsername(String username);
 
-    void addProductToSold(String productId);
+    void addProductToSold(String productId, String username);
 
     List<ProductsUserResponseModel> listProductsByUser(String username);
 

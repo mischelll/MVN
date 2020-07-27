@@ -2,11 +2,15 @@ package demoprojects.demo.web.controllers;
 
 import demoprojects.demo.annottation.PageTitle;
 import demoprojects.demo.service.interfaces.blog.PostService;
+import demoprojects.demo.service.interfaces.user.RoleService;
 import demoprojects.demo.service.interfaces.user.UserService;
+import demoprojects.demo.service.models.bind.RoleChangeServiceModel;
+import demoprojects.demo.web.models.RoleChangeModel;
+import org.modelmapper.ModelMapper;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -14,10 +18,14 @@ import org.springframework.web.servlet.ModelAndView;
 public class AdminController {
     private final UserService userService;
     private final PostService postService;
+    private final RoleService roleService;
+    private final ModelMapper mapper;
 
-    public AdminController(UserService userService, PostService postService) {
+    public AdminController(UserService userService, PostService postService, RoleService roleService, ModelMapper mapper) {
         this.userService = userService;
         this.postService = postService;
+        this.roleService = roleService;
+        this.mapper = mapper;
     }
 
     @GetMapping("/")
@@ -46,6 +54,28 @@ public class AdminController {
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_ROOT')")
     public ModelAndView getShoSettings(ModelAndView modelAndView) {
         modelAndView.setViewName("admin/index");
+        return modelAndView;
+    }
+
+
+    @GetMapping("/edit-role/{username}")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_ROOT')")
+    public ModelAndView getEditRole(@PathVariable String username, ModelAndView modelAndView, Model model){
+        if (!model.containsAttribute("roleChange")){
+            model.addAttribute("roleChange",new RoleChangeModel());
+        }
+        modelAndView.addObject("roles",this.userService.listRolesByUser(username));
+        modelAndView.addObject("rolesAll",this.roleService.listAllRoles());
+        modelAndView.addObject("user",this.userService.getUserVIewProfile(username));
+        modelAndView.setViewName("user/edit-role");
+        return modelAndView;
+    }
+
+    @PostMapping("/edit-role/{username}")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_ROOT')")
+    public ModelAndView getEditRoleConfirm(@ModelAttribute("roleChange") RoleChangeModel roleChange,@PathVariable String username, ModelAndView modelAndView){
+       this.userService.changeRoles(this.mapper.map(roleChange, RoleChangeServiceModel.class),username);
+        modelAndView.setViewName("redirect:/mvn/admin/users");
         return modelAndView;
     }
 }

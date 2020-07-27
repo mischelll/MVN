@@ -2,8 +2,8 @@ package demoprojects.demo.web.controllers;
 
 import demoprojects.demo.annottation.PageTitle;
 import demoprojects.demo.service.interfaces.shop.ProductService;
+import demoprojects.demo.service.interfaces.user.UserService;
 import demoprojects.demo.service.models.bind.ProductCreateServiceModel;
-import demoprojects.demo.service.models.view.ProductViewServiceModel;
 import demoprojects.demo.web.models.ProductCreateModel;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
@@ -21,10 +21,12 @@ import java.security.Principal;
 public class ShopController extends BaseController {
     private final ProductService productService;
     private final ModelMapper mapper;
+    private final UserService userService;
 
-    public ShopController(ProductService productService, ModelMapper mapper) {
+    public ShopController(ProductService productService, ModelMapper mapper, UserService userService) {
         this.productService = productService;
         this.mapper = mapper;
+        this.userService = userService;
     }
 
     @GetMapping("/")
@@ -103,6 +105,7 @@ public class ShopController extends BaseController {
     @PageTitle("User Products")
     public ModelAndView getUserProducts(ModelAndView modelAndView,@PathVariable String username){
         modelAndView.addObject("user",username);
+        modelAndView.addObject("usersList",this.userService.listAllUsernames());
         modelAndView.setViewName("shop/user-products");
         return modelAndView;
     }

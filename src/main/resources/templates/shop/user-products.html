@@ -5,12 +5,14 @@
     <th:block th:include="~{shop/shop-fragments/head}"/>
     <link rel="stylesheet" type="text/css" href="shop/styles/categories.css">
     <link rel="stylesheet" type="text/css" href="shop/styles/categories_responsive.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet"/>
     <style>
         .my-custom-scrollbar {
             position: relative;
             height: 470px;
             overflow: auto;
         }
+
         .table-wrapper-scroll-y {
             display: block;
         }
@@ -52,7 +54,7 @@
                             <th style="text-align: center;" scope="col">Price</th>
                             <th style="text-align: center;" scope="col">Created On</th>
                             <th style="text-align: center;" scope="col">Views</th>
-                            <th style="text-align: center;" scope="col">Action</th>
+                            <th style="text-align: center;" scope="col">Sell To</th>
                         </tr>
                         </thead>
                         <tbody id="user-products">
@@ -67,11 +69,9 @@
     <!-- Footer -->
     <th:block th:include="~{shop/shop-fragments/footer}"/>
 </div>
-
-
 <th:block th:include="~{shop/shop-fragments/footer-scripts}"/>
-
 <script src="shop/js/categories.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 <script th:inline="javascript">
     // const loader = {
     //     show: () => {
@@ -82,21 +82,28 @@
     //     },
     // };
     let username = [[${user}]];
+    let usersList = [[${usersList}]];
+
     const URLS = {
         products: '/mvn/shop/api/my-products/' + username,
     };
-    const toString = ({id, title, price, createdOn, views, isSold}) => {
+    const toString = ({id, title, price, createdOnDate, views, isSold }) => {
         let columns = `
     <td style="text-align: center;">${title}</td>
     <td style="text-align: center;">${price}</td>
-    <td style="text-align: center;">${createdOn}</td>
+    <td style="text-align: center;">${createdOnDate}</td>
     <td style="text-align: center;">${views}</td>
 `;
         columns += isSold
             ? '<td></td>'
-            : `<td>
+            : `
+<td>
             <form style="text-align: center;" class="sell-product-form" data-id=${id} action="/mvn/shop/api/my-products/sell/${id}" method="post">
-                <button style="text-align: center;" class="btn btn-success">Sell</button>
+                <select  class="user-list" style="text-align: center;" required>
+                <option value="" selected>Select user</option>
+
+                </select>
+                <button style="text-align: center;" class="btn btn-success" >Sell</button>
             </form>
            </td>
 `;
@@ -110,6 +117,22 @@
             products.forEach(product => {
                 const productString = toString(product);
                 result += productString;
+
+            });
+$(document).ready(function () {
+    for (let i = 0; i < usersList.length ; i++) {
+        let name = usersList[i].toString();
+        $(".user-list").append($("<option></option>")
+            .attr("value", name)
+            .text(name));
+    }
+
+});
+            $(document).ready(function () {
+                $('.user-list').select2({
+                    placeholder: "Select user",
+                    allowClear: true
+                });
             });
 
             $('#user-products').html(result);
@@ -117,7 +140,9 @@
         });
 
     $('#user-products').on('submit', '.sell-product-form', function (ev) {
-        const url = $(this).attr('action');
+
+        let url = $(this).attr('action');
+        url +='/' + $('.user-list').children("option:selected").val();
         // loader.show();
         fetch(url, {method: 'post'})
             .then(data => {
@@ -130,8 +155,6 @@
         ev.preventDefault();
         return false;
     });
-
 </script>
-
 </body>
 </html>

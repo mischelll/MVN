@@ -9,4 +9,5 @@ import java.util.Set;
 
 public interface ProductRepository extends JpaRepository<Product, String> {
     Set<Product> findAllBySellerUsername(String username);
+
 }
