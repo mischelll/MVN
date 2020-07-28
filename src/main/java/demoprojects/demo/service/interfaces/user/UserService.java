@@ -42,4 +42,8 @@ public interface UserService extends UserDetailsService {
     List<String> listAllUsernames();
 
     String resetPassword(String email);
+
+    boolean isOldPasswordMatching(String userId, String oldPassword);
+
+    void changePassword(String userId, String newPassword);
 }

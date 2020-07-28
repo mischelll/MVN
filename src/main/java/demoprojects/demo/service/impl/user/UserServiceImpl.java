@@ -71,10 +71,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean login(UserLoginServiceModel user) {
         User byUsername = this.userRepository.findByUsername(user.getUsername());
-        if (byUsername == null || !this.passwordEncoder.matches(user.getPassword(), byUsername.getPassword())) {
-            return false;
-        }
-        return true;
+        return byUsername != null && this.passwordEncoder.matches(user.getPassword(),
+                byUsername.getPassword());
     }
 
     @Override
@@ -99,6 +97,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserProfileViewServiceModel getUserProfile(String id) {
         User user = this.userRepository.findById(id).orElse(null);
+        assert user != null;
         UserProfileViewServiceModel map = this.mapper.map(user, UserProfileViewServiceModel.class);
         map.setFullName(user.getFirstName() + " " + user.getLastName());
         map.setRegisteredOn(user.getRegisteredOn().format(DateTimeFormatter.ofPattern("dd/MMM/yyyy")));
@@ -192,9 +191,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<String> listAllUsernames() {
         List<String> names = new ArrayList<>();
-        this.userRepository.findAll().forEach(user -> {
-            names.add(user.getUsername());
-        });
+        this.userRepository.findAll().forEach(user -> names.add(user.getUsername()));
 
         return names;
     }
@@ -206,6 +203,23 @@ public class UserServiceImpl implements UserService {
         byEmail.setPassword(this.passwordEncoder.encode(newPassword));
         this.userRepository.saveAndFlush(byEmail);
         return newPassword;
+    }
+
+    @Override
+    public boolean isOldPasswordMatching(String userId, String oldPassword) {
+        User user = this.userRepository.findById(userId).orElse(null);
+        assert user != null;
+        return this.passwordEncoder.matches(oldPassword, user.getPassword());
+
+    }
+
+    @Override
+    public void changePassword(String userId, String newPassword) {
+        User user = this.userRepository.findById(userId).orElse(null);
+        assert user != null;
+        user.setPassword(this.passwordEncoder.encode(newPassword));
+
+        this.userRepository.saveAndFlush(user);
     }
 
     private String generateNewPassword() {
