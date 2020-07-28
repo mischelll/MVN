@@ -5,16 +5,18 @@
     <th:block th:include="~{shop/shop-fragments/head}"/>
     <link rel="stylesheet" type="text/css" href="shop/styles/categories.css">
     <link rel="stylesheet" type="text/css" href="shop/styles/categories_responsive.css">
+
     <style>
         .my-custom-scrollbar {
             position: relative;
-            height: 470px;
+            height: 200px;
             overflow: auto;
         }
 
         .table-wrapper-scroll-y {
             display: block;
         }
+
     </style>
 </head>
 <body>
@@ -45,9 +47,9 @@
         <div class="home_container">
             <h2 style="color: black; text-align: center">Your sold products listed:</h2>
             <div class="table-wrapper-scroll-y my-custom-scrollbar">
-            <table class="table table-dark table-hover table-responsive-md ">
-                <thead>
-                <tr>
+            <table class="table table-dark table-hover  table-responsive-md ">
+                <thead >
+                <tr >
                     <th style="text-align: center;" scope="col">Title</th>
                     <th style="text-align: center;" scope="col">Price</th>
                     <th style="text-align: center;" scope="col">Sold On</th>
@@ -87,7 +89,7 @@
     <td style="text-align: center;">${price}</td>
     <td style="text-align: center;">${soldOnDate}</td>
     <td style="text-align: center;">${views}</td>
-    <td style="text-align: center;"  ><a href="'/mvn/users/api/profile-view/' + ${buyerUsername}">${buyerUsername}</a></td>
+    <td style="text-align: center;"  ><a href="/mvn/users/api/profile-view/${buyerUsername}">${buyerUsername}</a></td>
 `;
         columns += isSold
             ? `<td>

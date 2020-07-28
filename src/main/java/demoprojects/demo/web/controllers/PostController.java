@@ -192,6 +192,7 @@ public class PostController {
     }
 
     @GetMapping("/edit")
+    @PreAuthorize("hasAnyRole('ROLE_ROOT','ROLE_ADMIN','ROLE_BLOG-KING')")
     public ModelAndView editPost(@RequestParam String id,Model model, ModelAndView modelAndView){
         if (!model.containsAttribute("editPost")){
             model.addAttribute("editPost",this.mapper.map(this.postService.findById(id),EditPostModel.class));
@@ -204,6 +205,7 @@ public class PostController {
     }
 
     @PostMapping("/edit")
+    @PreAuthorize("hasAnyRole('ROLE_ROOT','ROLE_ADMIN','ROLE_BLOG-KING')")
     public ModelAndView editPostConfirm(@Valid @ModelAttribute("editPost") EditPostModel editPost,
                                         BindingResult bindingResult,
                                         RedirectAttributes redirectAttributes,
@@ -216,7 +218,6 @@ public class PostController {
             modelAndView.setViewName("redirect:/posts/edit?id=" + id);
         }else {
             PostCreateServiceModel map = this.mapper.map(editPost, PostCreateServiceModel.class);
-
             this.postService.edit(map,id);
             modelAndView.setViewName("redirect:/posts/all");
         }

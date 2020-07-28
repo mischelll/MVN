@@ -8,6 +8,7 @@ import demoprojects.demo.service.interfaces.shop.ProductCategoryService;
 import demoprojects.demo.service.interfaces.shop.ProductService;
 import demoprojects.demo.service.interfaces.user.UserService;
 import demoprojects.demo.service.models.bind.ProductCreateServiceModel;
+import demoprojects.demo.service.models.bind.ProductEditServiceModel;
 import demoprojects.demo.service.models.view.ProductNewResponseModel;
 import demoprojects.demo.service.models.view.ProductViewServiceModel;
 import demoprojects.demo.service.models.view.ProductsUserResponseModel;
@@ -78,12 +79,16 @@ public class ProductServiceImpl implements ProductService {
                 .stream()
                 .filter(product -> !product.getIsSold())
                 .sorted(Comparator.comparing(Product::getPrice))
-                .limit(20)
                 .map(product -> {
                     ProductNewResponseModel map = this.mappper.map(product, ProductNewResponseModel.class);
                     map.setFullName(product.getSeller().getFirstName() + " " + product.getSeller().getLastName());
                     map.setUsername(product.getSeller().getUsername());
-                    map.setCreated(product.getCreated().format(DateTimeFormatter.ofPattern("dd/MMM/yyyy")));
+                    map.setCreated(product.getCreated().format(DateTimeFormatter.ofPattern("dd/MMM/yyyy HH:mm")));
+                    map.setEmail(product.getSeller().getEmail());
+                    map.setContactNumber(product.getTelephoneNumber());
+                    List<String> cat = new ArrayList<>();
+                    product.getCategories().forEach(category -> cat.add(category.getName().name()));
+                    map.setCategories(String.join(", ", cat));
 
                     return map;
                 })
@@ -198,6 +203,33 @@ public class ProductServiceImpl implements ProductService {
                     return map;
                 })
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public ProductEditServiceModel editProduct(ProductEditServiceModel editServiceModel, String id) {
+        Product product = this.productRepository.findById(id).orElse(null);
+
+        Set<ProductCategory> categories = new HashSet<>();
+        editServiceModel.getCategory().forEach(productCategoryName -> {
+            ProductCategory byName = this.productCategoryService.findByName(productCategoryName.name());
+            categories.add(byName);
+        });
+        product.setCategories(categories);
+        product.setPreview(editServiceModel.getPreview());
+        product.setPrice(editServiceModel.getPrice());
+        product.setTitle(editServiceModel.getTitle());
+        product.setTelephoneNumber(editServiceModel.getTelephoneNumber());
+        product.setDescription(editServiceModel.getDescription());
+
+        this.productRepository.saveAndFlush(product);
+        return editServiceModel;
+    }
+
+    @Override
+    public ProductEditServiceModel findProductToEdit(String id) {
+        Product product = this.productRepository.findById(id).orElse(null);
+        assert product != null;
+        return this.mappper.map(product,ProductEditServiceModel.class);
     }
 
     @Override

@@ -40,4 +40,6 @@ public interface UserService extends UserDetailsService {
     void changeRoles(RoleChangeServiceModel roles, String username);
 
     List<String> listAllUsernames();
+
+    String resetPassword(String email);
 }

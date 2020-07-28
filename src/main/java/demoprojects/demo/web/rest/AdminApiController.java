@@ -1,8 +1,10 @@
 package demoprojects.demo.web.rest;
 
 import demoprojects.demo.service.interfaces.blog.PostService;
+import demoprojects.demo.service.interfaces.shop.ProductService;
 import demoprojects.demo.service.interfaces.user.UserService;
 import demoprojects.demo.service.models.view.PostResponseModel;
+import demoprojects.demo.service.models.view.ProductNewResponseModel;
 import demoprojects.demo.service.models.view.UserResponseModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +19,12 @@ import java.util.List;
 public class AdminApiController {
     private final UserService userService;
     private final PostService postService;
+    private final ProductService productService;
 
-    public AdminApiController(UserService userService, PostService postService) {
+    public AdminApiController(UserService userService, PostService postService, ProductService productService) {
         this.userService = userService;
         this.postService = postService;
+        this.productService = productService;
     }
 
     @GetMapping("/users")
@@ -36,6 +40,14 @@ public class AdminApiController {
         List<PostResponseModel> postResponseModels = this.postService.listAll();
         int a = 4;
         return this.postService.listAll();
+    }
+
+    @GetMapping("/products")
+    @PreAuthorize("hasRole('ROLE_ROOT') or hasRole('ROLE_ADMIN')")
+    public List<ProductNewResponseModel> listAllProducts(HttpSession session) {
+        List<ProductNewResponseModel> productNewResponseModels = this.productService.listAllProducts();
+        int a = 4;
+        return this.productService.listAllProducts();
     }
 
     @PostMapping("/users/delete/{username}")

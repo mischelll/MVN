@@ -1,6 +1,7 @@
 package demoprojects.demo.service.interfaces.shop;
 
 import demoprojects.demo.service.models.bind.ProductCreateServiceModel;
+import demoprojects.demo.service.models.bind.ProductEditServiceModel;
 import demoprojects.demo.service.models.view.ProductNewResponseModel;
 import demoprojects.demo.service.models.view.ProductViewServiceModel;
 import demoprojects.demo.service.models.view.ProductsUserResponseModel;
@@ -30,6 +31,9 @@ public interface ProductService {
     void addProductToSold(String productId, String username);
 
     List<ProductsUserResponseModel> listProductsByUser(String username);
+
+    ProductEditServiceModel editProduct(ProductEditServiceModel editServiceModel,String id);
+    ProductEditServiceModel findProductToEdit(String id);
 
     void removeProductFromSold(String productId);
 }

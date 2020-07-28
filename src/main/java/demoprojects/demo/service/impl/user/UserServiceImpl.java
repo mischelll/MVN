@@ -16,6 +16,7 @@ import demoprojects.demo.service.models.view.RoleViewServiceModel;
 import demoprojects.demo.service.models.view.UserIdUsernameViewModel;
 import demoprojects.demo.service.models.view.UserProfileViewServiceModel;
 import demoprojects.demo.service.models.view.UserResponseModel;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -179,7 +180,7 @@ public class UserServiceImpl implements UserService {
     public void changeRoles(RoleChangeServiceModel roles, String username) {
         User byUsername = this.userRepository.findByUsername(username);
         Set<Role> newRoles = new HashSet<>();
-        roles.getRoles().forEach(el ->{
+        roles.getRoles().forEach(el -> {
             Role byAuthority = this.roleService.findByAuthority(el);
             newRoles.add(byAuthority);
         });
@@ -191,11 +192,32 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<String> listAllUsernames() {
         List<String> names = new ArrayList<>();
-       this.userRepository.findAll().forEach(user -> {
-           names.add(user.getUsername());
-       });
+        this.userRepository.findAll().forEach(user -> {
+            names.add(user.getUsername());
+        });
 
-       return names;
+        return names;
+    }
+
+    @Override
+    public String resetPassword(String email) {
+        User byEmail = this.userRepository.findByEmail(email);
+        String newPassword = generateNewPassword();
+        byEmail.setPassword(this.passwordEncoder.encode(newPassword));
+        this.userRepository.saveAndFlush(byEmail);
+        return newPassword;
+    }
+
+    private String generateNewPassword() {
+        Random random = new Random();
+        List<String> special = List.of("!", "@", "#", "$", "%", "^", "&", "*");
+        String thirdPart = special.get(random.nextInt(special.size()));
+        String randomChars = RandomStringUtils.randomAlphabetic(2).toUpperCase();
+        String firstPart = randomChars.substring(0, 1).toUpperCase() + randomChars.substring(1);
+        String secondPart = RandomStringUtils.randomAlphabetic(5).toLowerCase();
+        String numeric = RandomStringUtils.randomNumeric(3);
+
+        return firstPart + secondPart + numeric + thirdPart;
     }
 
     @Override

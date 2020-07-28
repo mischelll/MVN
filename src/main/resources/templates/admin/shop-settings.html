@@ -1,0 +1,64 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" lang="en">
+<th:block th:include="~{admin/admin-fragments/head}"/>
+<style>
+    .my-custom-scrollbar {
+        position: relative;
+        height: 700px;
+        overflow: auto;
+    }
+
+    .table-wrapper-scroll-y {
+        display: block;
+    }
+</style>
+<body>
+
+<div class="wrapper d-flex align-items-stretch">
+    <th:block th:include="~{admin/admin-fragments/nav}"/>
+
+    <!-- Page Content  -->
+    <div id="content" class="p-4 p-md-5 pt-5">
+        <h2 class="mb-4">MVN | User Management</h2>
+        <p>This is the User Management Station.</p>
+        <p>This is the place where you decide what happens to all user accounts.</p>
+        <p>Some of the things you have control of are as follows:</p>
+        <p>     - Manage Users -> CRUD Operations</p>
+        <p>         ->"View" button - See information about the user.</p>
+        <p>         ->"Edit Role" button - Promote/Demote user.</p>
+        <p>         ->"Delete" button - Deletes user and everything connected with him.</p>
+        <br>
+        <p>In the table below are listed all of the users.</p>
+        <br>
+
+        <div class="table-wrapper-scroll-y my-custom-scrollbar">
+            <table style="width:100%;text-align: center" class=" table table-dark table-hover table-responsive-md" >
+                <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Price(lv.)</th>
+                    <th>Created On</th>
+                    <th>Seller</th>
+                    <th>Contact Number</th>
+                    <th>Email</th>
+                    <th>Categories</th>
+                    <th>Views</th>
+                </tr>
+                </thead>
+                <tbody id="products-table" >
+
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+<th:block th:include="~{admin/admin-fragments/footer}"/>
+<div id="page-loader">
+    <div class="loader-text"></div>
+</div>
+<script src="/admin/js/products.js"></script>
+</body>
+</html>

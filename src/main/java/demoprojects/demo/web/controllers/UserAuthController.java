@@ -4,6 +4,7 @@ import demoprojects.demo.service.interfaces.user.EmailService;
 import demoprojects.demo.service.interfaces.user.UserService;
 import demoprojects.demo.service.models.bind.UserRegisterServiceModel;
 import demoprojects.demo.util.Messages;
+import demoprojects.demo.web.models.ResetPasswordModel;
 import demoprojects.demo.web.models.UserRegisterModel;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,7 +116,6 @@ public class UserAuthController extends BaseController {
         this.username = null;
         email = null;
         path = 0;
-
         return super.redirect("/mvn/users/login");
     }
 
@@ -131,6 +131,47 @@ public class UserAuthController extends BaseController {
     @GetMapping("/auth/email-verification")
     public ModelAndView emailVerification(ModelAndView modelAndView) {
         modelAndView.setViewName("auth/email-verification");
+
+        return modelAndView;
+    }
+
+    @GetMapping("/forgot-password")
+    public ModelAndView getResetPassword(ModelAndView modelAndView, Model model) {
+        if (!model.containsAttribute("resetPassword")) {
+            model.addAttribute("resetPassword", new ResetPasswordModel());
+        }
+        modelAndView.setViewName("auth/forgot-password");
+        return modelAndView;
+    }
+
+    @PostMapping("/forgot-password")
+    public ModelAndView getResetPasswordConfirm(@Valid @ModelAttribute("resetPassword")
+                                                        ResetPasswordModel resetPassword,
+                                                BindingResult bindingResult,
+                                                RedirectAttributes redirectAttributes,
+                                                ModelAndView modelAndView) {
+        boolean emailAvailable = this.userService.isEmailAvailable(resetPassword.getEmail());
+        if (bindingResult.hasErrors() || emailAvailable){
+            redirectAttributes.addFlashAttribute("resetPassword",resetPassword);
+            redirectAttributes.addFlashAttribute("invalid",emailAvailable);
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.resetPassword", bindingResult);
+            modelAndView.setViewName("redirect:/mvn/users/forgot-password");
+        }else {
+
+            String resetPasswprd = this.userService.resetPassword(resetPassword.getEmail());
+            this.emailService.sendEmail(resetPassword.getEmail(),"Password Reset",
+                    String.format("Dear user,%nThis is your new password: %s %n" +
+                            "!!PLEASE CHANGE THIS TEMPORARY PASSWORD AFTER LOGGING IN AND DELETE THIS EMAIL!!%n%n" +
+                            "The MVN Team. All rights reserved.",resetPasswprd));
+            modelAndView.setViewName("redirect:/mvn/users/successful-reset");
+        }
+
+        return modelAndView;
+    }
+
+    @GetMapping("/successful-reset")
+    public ModelAndView successfulReset(ModelAndView modelAndView){
+        modelAndView.setViewName("auth/successful-reset");
 
         return modelAndView;
     }

@@ -38,7 +38,8 @@ public AuthenticationManager authenticationManagerBean() throws Exception {
                 .authorizeRequests()
                 .antMatchers("video/mp4","/vendor/**","/js/**", "/img/**","/css/**").permitAll()
                 .antMatchers("/","/mvn/users/register","/about","/about/goal",
-                        "/mvn/users/registration/{code}/{username}","/mvn/users/auth/email-verification").permitAll()
+                        "/mvn/users/registration/{code}/{username}","/mvn/users/auth/email-verification",
+                        "/mvn/users/forgot-password","/mvn/users/successful-reset").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()

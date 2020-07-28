@@ -53,7 +53,7 @@ public class AdminController {
     @PageTitle("Shop Settings")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_ROOT')")
     public ModelAndView getShoSettings(ModelAndView modelAndView) {
-        modelAndView.setViewName("admin/index");
+        modelAndView.setViewName("admin/shop-settings");
         return modelAndView;
     }
 
