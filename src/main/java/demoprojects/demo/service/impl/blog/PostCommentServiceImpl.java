@@ -82,7 +82,8 @@ public class PostCommentServiceImpl implements PostCommentService {
         PostComment postComment =
                 this.commentRepository.findById(commentId).orElse(null);
         assert postComment != null;
-
+        postComment.setPost(null);
+        this.commentRepository.saveAndFlush(postComment);
 
         this.commentRepository.delete(postComment);
     }

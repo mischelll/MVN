@@ -107,7 +107,7 @@
                                 <label>Blog Posts</label>
                             </div>
                             <div class="col-md-6">
-                                <p>99</p>
+                                <p th:text="*{postsSize}">99</p>
                             </div>
                         </div>
                         <div class="row">
@@ -123,15 +123,15 @@
                             <label>Shop Products</label>
                         </div>
                         <div class="col-md-6">
-                            <p>99</p>
+                            <p th:text="*{productsSize}">99</p>
                         </div>
                     </div>
                         <div class="row">
                             <div class="col-md-6">
-                                <label>Shop Comments Likes</label>
+                                <label>Shop Successful Sold Products</label>
                             </div>
                             <div class="col-md-6">
-                                <p>99</p>
+                                <p th:text="*{productsSoldSize}">99</p>
                             </div>
                         </div>
                     </div>

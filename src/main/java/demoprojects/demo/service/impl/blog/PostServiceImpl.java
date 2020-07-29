@@ -62,6 +62,7 @@ public class PostServiceImpl implements PostService {
         return this.postRepository
                 .findAll()
                 .stream()
+                .filter(post -> post.getAuthor().isEnabled())
                 .sorted(Comparator.comparing(Post::getPostedOn).reversed())
                 .limit(9)
                 .map(post -> {
@@ -125,6 +126,11 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void deleteById(String id) {
+        Post post = this.postRepository.findById(id).orElse(null);
+        post.setCategories(null);
+        post.setComments(null);
+        post.setAuthor(null);
+        this.postRepository.saveAndFlush(post);
         this.postRepository.deleteById(id);
     }
 

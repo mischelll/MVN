@@ -76,14 +76,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean deleteByUsername(String username) {
+    public boolean deactivateByUsername(String username) {
         User byUsername = this.userRepository.findByUsername(username);
         if (byUsername == null) {
             return false;
         }
+        byUsername.setEnabled(false);
 
-
-        this.userRepository.delete(byUsername);
+        this.userRepository.saveAndFlush(byUsername);
         return true;
     }
 
@@ -101,7 +101,12 @@ public class UserServiceImpl implements UserService {
         UserProfileViewServiceModel map = this.mapper.map(user, UserProfileViewServiceModel.class);
         map.setFullName(user.getFirstName() + " " + user.getLastName());
         map.setRegisteredOn(user.getRegisteredOn().format(DateTimeFormatter.ofPattern("dd/MMM/yyyy")));
-
+        map.setBio(user.getBio() == null ? "No bio" : user.getBio());
+        map.setGender(user.getGender().name());
+        map.setPostsSize(user.getPosts().size());
+        map.setProductsSize(user.getOffers().size());
+        ;
+        map.setProductsSoldSize(user.getSoldProducts().size());
         return map;
     }
 
@@ -191,7 +196,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<String> listAllUsernames() {
         List<String> names = new ArrayList<>();
-        this.userRepository.findAll().forEach(user -> names.add(user.getUsername()));
+        this.userRepository
+                .findAll()
+                .stream()
+                .filter(User::isEnabled)
+                .forEach(user -> names
+                        .add(user.getUsername()));
 
         return names;
     }
@@ -220,6 +230,14 @@ public class UserServiceImpl implements UserService {
         user.setPassword(this.passwordEncoder.encode(newPassword));
 
         this.userRepository.saveAndFlush(user);
+    }
+
+    @Override
+    public void activateByUsername(String username) {
+        User byUsername = this.userRepository.findByUsername(username);
+        byUsername.setEnabled(true);
+
+        this.userRepository.saveAndFlush(byUsername);
     }
 
     private String generateNewPassword() {

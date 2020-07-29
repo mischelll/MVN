@@ -17,7 +17,7 @@ public interface UserService extends UserDetailsService {
 
     boolean login(UserLoginServiceModel user);
 
-    boolean deleteByUsername(String username);
+    boolean deactivateByUsername(String username);
 
     User findByUsername(String name);
 
@@ -46,4 +46,6 @@ public interface UserService extends UserDetailsService {
     boolean isOldPasswordMatching(String userId, String oldPassword);
 
     void changePassword(String userId, String newPassword);
+
+    void activateByUsername(String username);
 }

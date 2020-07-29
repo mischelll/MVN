@@ -31,8 +31,9 @@ const toString = ({
                       gender,
                       postsCount,
                       active
-                  }) =>
-    `<tr id="${username}" >
+                  }) => {
+    let columns =
+        `
     <td>${firstName} </td>
     <td>${lastName} </td>
     <td>${username} </td>
@@ -45,18 +46,29 @@ const toString = ({
     <td> 50 </td>
     <td> ${active}</td>
     <td >
-    <button class = "btn btn-success" onclick="window.location.href='/mvn/users/api/profile-view/${username}'"  > View </button>
+    <button class = "btn btn-info" onclick="window.location.href='/mvn/users/api/profile-view/${username}'"  > View </button>
     </td>
     <td>
     <button class = "btn btn-warning" onclick="window.location.href='/mvn/admin/edit-role/${username}'" > Edit Role </button>
-    </td>
-    <td>
-    <form class="delete-user" data-id=${username} action="/mvn/admin/api/users/delete/${username}" method="post">
-        <button class= "btn btn-danger"  > Delete </button>
-    </form>
-        </td>
-</tr><br>
-`;
+    </td>`;
+
+active === "Yes" ?
+    columns +=  ` <td>
+        <form class= "delete-user" data-id =${username} action = "/mvn/admin/api/users/deactivate/${username}" method = "post" >
+        <button class= "btn btn-danger" > Deactivate </button>
+        </form>
+        </td>`
+    :
+    columns +=   ` <td>
+        <form class= "activate-user" data-id =${username} action = "/mvn/admin/api/users/activate/${username}" method = "post" >
+        <button class= "btn btn-success" > Activate </button>
+        </form>
+        </td>`;
+
+
+    return `<tr id="${username}" >${columns}</tr>`;
+};
+
 
 const loader = {
     show: () => {
@@ -81,24 +93,41 @@ fetch(URLS.users)
     });
 
 $('#users-table').on('submit', '.delete-user', function (ev) {
-    if (confirm('Are you sure you want to save this thing into the database?')) {
-        // Save it!
-        console.log('Thing was saved to the database.');
+    if (confirm('Are you sure you want to deactivate this User?')) {
+
 
         const url = $(this).attr('action');
         loader.show();
         fetch(url, {method: 'post'})
             .then(data => {
                 const id = $(this).attr('data-id');
-                // console.log(id);
+                window.location.reload();
                 loader.hide();
 
-                $('#' + id).hide();
 
 
-            })
+            });
         ev.preventDefault();
         return false;
     }
 });
+
+$('#users-table').on('submit', '.activate-user', function (ev) {
+    if (confirm('Are you sure you want to activate this User?')) {
+
+        const url = $(this).attr('action');
+        loader.show();
+        fetch(url, {method: 'post'})
+            .then(data => {
+                const id = $(this).attr('data-id');
+                window.location.reload();
+                loader.hide();
+
+            });
+        ev.preventDefault();
+        return false;
+    }
+});
+
+
 

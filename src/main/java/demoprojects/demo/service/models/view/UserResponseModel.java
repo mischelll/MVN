@@ -22,4 +22,5 @@ public class UserResponseModel {
     private String gender;
     private Integer postsCount;
     private String active;
+
 }

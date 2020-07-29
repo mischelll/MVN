@@ -38,7 +38,7 @@ public class PostComment extends BaseEntity {
     }
 
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.REMOVE},fetch = FetchType.EAGER)
     public Post getPost() {
         return post;
     }

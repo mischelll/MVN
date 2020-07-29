@@ -35,7 +35,7 @@ public class UserController extends BaseController {
     @GetMapping("/delete/{username}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView deleteByUsername(@PathVariable("username") String username) {
-        if (!this.userService.deleteByUsername(username)) {
+        if (!this.userService.deactivateByUsername(username)) {
             super.redirect("/logout");//change it
         }
 

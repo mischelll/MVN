@@ -70,7 +70,9 @@ public class User extends BaseEntity implements UserDetails {
         this.registeredOn = registeredOn;
     }
 
-    @OneToMany(mappedBy = "author", targetEntity = Post.class, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "author", targetEntity = Post.class,
+            fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @Fetch(value = FetchMode.SUBSELECT)
     public Set<Post> getPosts() {
         return posts;
     }
@@ -111,7 +113,7 @@ public class User extends BaseEntity implements UserDetails {
     }
 
     @OneToMany(mappedBy = "seller", targetEntity = Product.class,
-            fetch = FetchType.EAGER,cascade = CascadeType.ALL,orphanRemoval = true)
+            fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @Fetch(value = FetchMode.SUBSELECT)
     public List<Product> getOffers() {
         return offers;
@@ -121,7 +123,7 @@ public class User extends BaseEntity implements UserDetails {
         this.offers = soldProducts;
     }
 
-    @OneToMany(mappedBy = "buyer", targetEntity = Product.class,fetch = FetchType.EAGER,cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "buyer", targetEntity = Product.class,fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @Fetch(value = FetchMode.SUBSELECT)
     public List<Product> getBoughtProducts() {
         return boughtProducts;

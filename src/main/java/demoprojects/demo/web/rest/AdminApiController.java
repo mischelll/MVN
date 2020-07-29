@@ -30,8 +30,9 @@ public class AdminApiController {
     @GetMapping("/users")
     @PreAuthorize("hasRole('ROLE_ROOT') or hasRole('ROLE_ADMIN')")
     @ResponseBody
-    public List<UserResponseModel> listAllUsers(HttpSession session) {
-        return this.userService.listAll();
+    public ResponseEntity<List<UserResponseModel>> listAllUsers(HttpSession session) {
+        List<UserResponseModel> userResponseModels = this.userService.listAll();
+        return new ResponseEntity<>(userResponseModels,HttpStatus.OK);
     }
 
     @GetMapping("/posts")
@@ -42,6 +43,13 @@ public class AdminApiController {
         return this.postService.listAll();
     }
 
+    @PostMapping("/posts/delete")
+    @PreAuthorize("hasRole('ROLE_ROOT') or hasRole('ROLE_ADMIN') or hasRole('ROLE_BLOG-KING')")
+    public ResponseEntity<Void> deletePost(@RequestParam String id){
+        this.postService.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @GetMapping("/products")
     @PreAuthorize("hasRole('ROLE_ROOT') or hasRole('ROLE_ADMIN')")
     public List<ProductNewResponseModel> listAllProducts(HttpSession session) {
@@ -50,11 +58,17 @@ public class AdminApiController {
         return this.productService.listAllProducts();
     }
 
-    @PostMapping("/users/delete/{username}")
+    @PostMapping("/users/deactivate/{username}")
     @PreAuthorize("hasRole('ROLE_ROOT') or hasRole('ROLE_ADMIN')")
-    public ResponseEntity<Void> deleteUser(@PathVariable String username)  {
+    public ResponseEntity<Void> deactivateUser(@PathVariable String username)  {
+        this.userService.deactivateByUsername(username);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
-        this.userService.deleteByUsername(username);
+    @PostMapping("/users/activate/{username}")
+    @PreAuthorize("hasRole('ROLE_ROOT') or hasRole('ROLE_ADMIN')")
+    public ResponseEntity<Void> activateUser(@PathVariable String username)  {
+        this.userService.activateByUsername(username);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

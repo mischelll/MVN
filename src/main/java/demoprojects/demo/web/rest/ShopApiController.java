@@ -34,26 +34,35 @@ public class ShopApiController {
 
     @GetMapping("/my-products/{username}")
     @ResponseBody
-    public List<ProductsUserResponseModel> listUserProducts(@PathVariable String username) throws InterruptedException {
+    public ResponseEntity<List<ProductsUserResponseModel>> listUserProducts(@PathVariable String username,Principal principal) throws InterruptedException {
+        if (principal.getName().equals(username)){
+            List<ProductsUserResponseModel> productsUserResponseModels = this.productService.listProductsByUser(username);
+            return new ResponseEntity<>(productsUserResponseModels,HttpStatus.OK);
 
-        return this.productService.listProductsByUser(username);
+        }
+        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
 
     @PostMapping("/my-products/sell/{productId}/{username}")
     public ResponseEntity<Void> addProductToSold(@PathVariable String productId,@PathVariable String username, Principal principal, HttpServletResponse response) throws IOException {
+        if (principal.getName().equals(username)){
         this.productService.addProductToSold(productId,username);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", "/mvn/shop/my-products/" + principal.getName());
         return new ResponseEntity<>(headers, HttpStatus.FOUND);
+        }
+        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
 
     @GetMapping("/my-sold-products/{username}")
     @ResponseBody
-    public List<ProductsUserResponseModel> listUserSoldProducts(@PathVariable String username) throws InterruptedException {
-
-        return this.productService.findSoldProductsByUsername(username);
+    public ResponseEntity<List<ProductsUserResponseModel>> listUserSoldProducts(@PathVariable String username,Principal principal) throws InterruptedException {
+        if (principal.getName().equals(username)) {
+            List<ProductsUserResponseModel> soldProductsByUsername = this.productService.findSoldProductsByUsername(username);
+            return new ResponseEntity<>(soldProductsByUsername, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
-
     @PostMapping("/my-sold-products/backToMarket/{productId}")
     public ResponseEntity<Void> removeProductToSold(@PathVariable String productId, Principal principal)  {
         this.productService.removeProductFromSold(productId);

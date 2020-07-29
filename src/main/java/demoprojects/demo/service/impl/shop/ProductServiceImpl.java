@@ -77,7 +77,7 @@ public class ProductServiceImpl implements ProductService {
         return this.productRepository
                 .findAll()
                 .stream()
-                .filter(product -> !product.getIsSold())
+                .filter(product -> !product.getIsSold() && product.getSeller().isEnabled())
                 .sorted(Comparator.comparing(Product::getPrice))
                 .map(product -> {
                     ProductNewResponseModel map = this.mappper.map(product, ProductNewResponseModel.class);
@@ -193,7 +193,7 @@ public class ProductServiceImpl implements ProductService {
         return this.productRepository
                 .findAllBySellerUsername(username)
                 .stream()
-                .filter(product -> !product.getIsSold())
+                .filter(product -> !product.getIsSold() && product.getSeller().isEnabled())
                 .map(product -> {
                     ProductsUserResponseModel map = this.mappper.map(product, ProductsUserResponseModel.class);
                     map.setCreatedOnDate(product.getCreated().format(DateTimeFormatter.ofPattern("dd/MMM/yyyy HH:mm")));
@@ -241,7 +241,9 @@ public class ProductServiceImpl implements ProductService {
         product.setSold(null);
 
         User byUsername = this.userService.findByUsername(product.getSeller().getUsername());
-        byUsername.getSoldProducts().remove(product);
+        List<Product> soldProducts = byUsername.getSoldProducts();
+        soldProducts.removeIf(product1 -> product.getId().equals(product1.getId()));
+        byUsername.setSoldProducts(soldProducts);
 
         this.productRepository.saveAndFlush(product);
     }
