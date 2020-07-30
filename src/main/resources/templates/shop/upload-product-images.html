@@ -1,0 +1,43 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" lang="en">
+<th:block th:include="~{shop/shop-fragments/head}"/>
+<body>
+<!-- Header -->
+<th:block th:include="~{shop/shop-fragments/nav}"/>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<div class="container">
+    <form th:action="@{/mvn/shop/product/images/upload(id=${image.productId})}" enctype="multipart/form-data"  th:method="POST">
+        <div class="form-group">
+            <label for="images">Photos</label>
+            <input type="file" class="form-control"  id="images" placeholder="Select photos" name="images" multiple  style="color: grey">
+        </div>
+
+
+        <button type="submit" class="btn btn-success">Create</button>
+    </form>
+    <br>
+    <br>
+
+
+</div>
+<th:block th:include="~{shop/shop-fragments/footer}"/>
+<th:block th:include="~{shop/shop-fragments/footer-scripts}"/>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('select').select2({
+            placeholder: "Select categories...",
+            allowClear: true
+        });
+    });
+</script>
+</body>
+</html>

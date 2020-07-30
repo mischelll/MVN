@@ -11,6 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductCreateServiceModel {
+    private String id;
     @NotEmpty(message = "Product must have a title!")
     @NotBlank(message = "Title cannot be empty!")
     @Size(min = 2, message = "Title must be minimum 3 characters!")

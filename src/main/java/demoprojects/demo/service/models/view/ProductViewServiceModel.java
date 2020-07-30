@@ -24,4 +24,5 @@ public class ProductViewServiceModel {
     private BigDecimal price;
     private String username;
     private String telephone;
+    private List<String> imgUrls;
 }

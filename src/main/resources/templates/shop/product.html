@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-	  xmlns:th="http://www.thymeleaf.org" lang="en">
+	  xmlns:th="http://www.thymeleaf.org" lang="en"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 	<th:block th:include="~{shop/shop-fragments/head}"/>
 <link rel="stylesheet" type="text/css" href="shop/styles/product.css">
@@ -41,13 +42,13 @@
 
 				<!-- Product Image -->
 				<div class="col-lg-6">
-					<div class="details_image">
-						<div class="details_image_large"><img src="shop/images/details_1.jpg" alt=""></div>
+					<div class="details_image" th:each="image : ${product.imgUrls}">
+						<div class="details_image_large"><img  th:src="${image}" alt=""></div>
 						<div class="details_image_thumbnails d-flex flex-row align-items-start justify-content-between">
-							<div class="details_image_thumbnail active" data-image="images/details_1.jpg"><img src="shop/images/details_1.jpg" alt=""></div>
-							<div class="details_image_thumbnail" data-image="images/details_2.jpg"><img src="shop/images/details_2.jpg" alt=""></div>
-							<div class="details_image_thumbnail" data-image="images/details_3.jpg"><img src="shop/images/categories/smartphones.jpg" alt=""></div>
-							<div class="details_image_thumbnail" data-image="images/details_4.jpg"><img src="shop/images/details_4.jpg" alt=""></div>
+							<div class="details_image_thumbnail active" th:data-image="${image}"><img th:src="${image}" alt=""></div>
+							<div class="details_image_thumbnail" th:data-image="${image}"><img th:src="${image}" alt=""></div>
+							<div class="details_image_thumbnail" th:data-image="${image}"><img th:src="${image}" alt=""></div>
+							<div class="details_image_thumbnail" th:data-image="${image}"><img th:src="${image}" alt=""></div>
 						</div>
 					</div>
 				</div>
@@ -82,8 +83,14 @@
 							<small>You will have to write an email from your browser mail provider.</small><br>
 							<small>In future versions, this issue will be resolved..</small><br>
 						</div><br>
-							<a href=""><button class="btn btn-outline-danger">Delete</button></a><br>
-						<!-- Share -->
+<th:block sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_MICHAEL-SCOTT','ROLE_ROOT')">
+							<a  href="">
+								<button class="btn btn-outline-danger">Delete</button>
+							</a>
+						<br>
+</th:block>
+
+							<!-- Share -->
 						<div class="details_share">
 							<span>Share:</span>
 							<ul>

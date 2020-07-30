@@ -1,5 +1,6 @@
 package demoprojects.demo.web.models;
 
+import demoprojects.demo.dao.models.entities.Image;
 import demoprojects.demo.dao.models.entities.PostCategoryName;
 import demoprojects.demo.dao.models.entities.ProductCategoryName;
 import lombok.AllArgsConstructor;
@@ -43,4 +44,6 @@ public class ProductCreateModel {
 
     @NotNull(message = "Please select a category!")
     private List<ProductCategoryName> category;
+
+
 }

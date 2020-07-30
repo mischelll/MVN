@@ -1,5 +1,6 @@
 package demoprojects.demo.service.impl.shop;
 
+import demoprojects.demo.dao.models.entities.Image;
 import demoprojects.demo.dao.models.entities.Product;
 import demoprojects.demo.dao.models.entities.ProductCategory;
 import demoprojects.demo.dao.models.entities.User;
@@ -99,8 +100,14 @@ public class ProductServiceImpl implements ProductService {
     public ProductViewServiceModel findProduct(String id) {
         Product product = this.productRepository.findById(id).orElse(null);
         assert product != null;
+        ProductViewServiceModel productViewServiceModel = mapEntity(product);
 
-        return mapEntity(product);
+        productViewServiceModel.setImgUrls(product
+                .getProductImages()
+                .stream()
+                .map(Image::getImgUrl)
+                .collect(Collectors.toList()));
+        return productViewServiceModel;
     }
 
     @Override
@@ -229,7 +236,7 @@ public class ProductServiceImpl implements ProductService {
     public ProductEditServiceModel findProductToEdit(String id) {
         Product product = this.productRepository.findById(id).orElse(null);
         assert product != null;
-        return this.mappper.map(product,ProductEditServiceModel.class);
+        return this.mappper.map(product, ProductEditServiceModel.class);
     }
 
     @Override

@@ -1,8 +1,12 @@
 package demoprojects.demo.dao.models.entities;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -18,6 +22,7 @@ public class Product extends BaseEntity {
     private String telephoneNumber;
     private Set<ProductCategory> categories;
     private Set<ProductComment> comments;
+    private List<Image> productImages;
     private LocalDateTime created;
     private LocalDateTime sold;
     private Boolean isSold;
@@ -35,6 +40,17 @@ public class Product extends BaseEntity {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+
+    @OneToMany(targetEntity = Image.class, cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
+    public List<Image> getProductImages() {
+        return productImages;
+    }
+
+    public void setProductImages(List<Image> productImages) {
+        this.productImages = productImages;
     }
 
     @Lob
@@ -84,11 +100,11 @@ public class Product extends BaseEntity {
     }
 
     @Column(name = "is_sold")
-    public Boolean getIsSold(){
+    public Boolean getIsSold() {
         return this.isSold;
     }
 
-    public void setIsSold(Boolean isSold){
+    public void setIsSold(Boolean isSold) {
         this.isSold = isSold;
     }
 
@@ -111,8 +127,7 @@ public class Product extends BaseEntity {
     }
 
 
-
-    @ManyToMany(fetch = FetchType.EAGER,cascade = {CascadeType.MERGE,CascadeType.PERSIST})
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinTable(name = "products_categories",
             joinColumns = @JoinColumn(name = "product_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "category_id", referencedColumnName = "id"))

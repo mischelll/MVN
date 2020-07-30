@@ -21,6 +21,7 @@ public class User extends BaseEntity implements UserDetails {
     private String firstName;
     private String lastName;
     private String bio;
+    private Image avatar;
     private LocalDateTime registeredOn = LocalDateTime.now();
     private Set<Role> authorities;
     private Set<Post> posts;
@@ -38,7 +39,14 @@ public class User extends BaseEntity implements UserDetails {
         this.boughtProducts = new ArrayList<>();
     }
 
+    @OneToOne(targetEntity = Image.class,fetch = FetchType.LAZY)
+    public Image getAvatar() {
+        return avatar;
+    }
 
+    public void setAvatar(Image avatar) {
+        this.avatar = avatar;
+    }
 
     @OneToMany(mappedBy = "seller", targetEntity = Product.class,fetch = FetchType.EAGER,
              cascade = CascadeType.ALL)

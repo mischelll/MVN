@@ -1,10 +1,14 @@
 package demoprojects.demo.web.controllers;
 
 import demoprojects.demo.annottation.PageTitle;
+import demoprojects.demo.service.interfaces.CloudinaryService;
+import demoprojects.demo.service.interfaces.shop.ImageService;
 import demoprojects.demo.service.interfaces.shop.ProductService;
 import demoprojects.demo.service.interfaces.user.UserService;
 import demoprojects.demo.service.models.bind.ProductCreateServiceModel;
 import demoprojects.demo.service.models.bind.ProductEditServiceModel;
+import demoprojects.demo.service.models.bind.ProductImageCreateServiceModel;
+import demoprojects.demo.web.models.ProductImageCreateModel;
 import demoprojects.demo.web.models.ProductCreateModel;
 import demoprojects.demo.web.models.ProductEditModel;
 import org.modelmapper.ModelMapper;
@@ -16,7 +20,10 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping("/mvn/shop")
@@ -24,11 +31,15 @@ public class ShopController extends BaseController {
     private final ProductService productService;
     private final ModelMapper mapper;
     private final UserService userService;
+    private final CloudinaryService cloudinaryService;
+    private final ImageService imageService;
 
-    public ShopController(ProductService productService, ModelMapper mapper, UserService userService) {
+    public ShopController(ProductService productService, ModelMapper mapper, UserService userService, CloudinaryService cloudinaryService, ImageService imageService) {
         this.productService = productService;
         this.mapper = mapper;
         this.userService = userService;
+        this.cloudinaryService = cloudinaryService;
+        this.imageService = imageService;
     }
 
     @GetMapping("/")
@@ -87,7 +98,7 @@ public class ShopController extends BaseController {
             ProductCreateServiceModel productCreateServiceModel = this.mapper.map(product, ProductCreateServiceModel.class);
             productCreateServiceModel.setAuthor(principal.getName());
             ProductCreateServiceModel productCreate = this.productService.createProduct(productCreateServiceModel);
-            modelAndView.setViewName("redirect:/mvn/shop/products");
+            modelAndView.setViewName("redirect:/mvn/shop/product/images/upload?id=" + productCreate.getId());
         }
 
         return modelAndView;
@@ -133,8 +144,8 @@ public class ShopController extends BaseController {
 
     @GetMapping("/my-products/{username}")
     @PageTitle("User Products")
-    public ModelAndView getUserProducts(ModelAndView modelAndView, @PathVariable String username,Principal principal) {
-        if (!principal.getName().equals(username)){
+    public ModelAndView getUserProducts(ModelAndView modelAndView, @PathVariable String username, Principal principal) {
+        if (!principal.getName().equals(username)) {
             modelAndView.setViewName("redirect:/mvn/shop/my-products/" + principal.getName());
             return modelAndView;
         }
@@ -146,13 +157,61 @@ public class ShopController extends BaseController {
 
     @GetMapping("/my-sold-products/{username}")
     @PageTitle("User Sold Products")
-    public ModelAndView getUserSoldProducts(ModelAndView modelAndView, @PathVariable String username,Principal principal) {
-        if (!principal.getName().equals(username)){
+    public ModelAndView getUserSoldProducts(ModelAndView modelAndView, @PathVariable String username, Principal principal) {
+        if (!principal.getName().equals(username)) {
             modelAndView.setViewName("redirect:/mvn/shop/my-sold-products/" + principal.getName());
             return modelAndView;
         }
         modelAndView.addObject("user", username);
         modelAndView.setViewName("shop/user-sold-products");
+        return modelAndView;
+    }
+
+    @GetMapping("/product/images/upload")
+    public ModelAndView uploadProductImages(@RequestParam String id, ModelAndView modelAndView, Model model) {
+        if (!model.containsAttribute("image")) {
+            ProductImageCreateModel productImageCreateModel = new ProductImageCreateModel();
+            productImageCreateModel.setProductId(id);
+            model.addAttribute("image", productImageCreateModel);
+        }
+
+        modelAndView.setViewName("shop/upload-product-images");
+        return modelAndView;
+    }
+
+    @PostMapping("/product/images/upload")
+    public ModelAndView uploadProductImagesConfirm(@Valid @ModelAttribute("image") ProductImageCreateModel image,
+                                                   BindingResult bindingResult,
+                                                   @RequestParam String id,
+                                                   RedirectAttributes redirectAttributes,
+                                                   ModelAndView modelAndView) {
+        boolean maxFilesCheck = image.getImages().size() > 5;
+
+        boolean filesSizeCheck;
+        if (bindingResult.hasErrors() || maxFilesCheck) {
+            redirectAttributes.addFlashAttribute("image", image);
+            redirectAttributes.addFlashAttribute("maxFilesError", maxFilesCheck);
+
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.image", bindingResult);
+            modelAndView.setViewName("redirect:/mvn/shop/product/images/upload?id=" + id);
+        } else {
+
+            image.getImages().forEach(imageCreate -> {
+                ProductImageCreateServiceModel serviceModel = new ProductImageCreateServiceModel();
+                serviceModel.setFormat(imageCreate.getContentType());
+                serviceModel.setName(imageCreate.getOriginalFilename());
+                try {
+                    serviceModel.setImgUrl(this.cloudinaryService.upload(imageCreate));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                this.imageService.uploadProductsPicture(serviceModel, id);
+            });
+
+            modelAndView.setViewName("redirect:/mvn/shop/products");
+        }
+
         return modelAndView;
     }
 }
