@@ -48,4 +48,6 @@ public interface UserService extends UserDetailsService {
     void changePassword(String userId, String newPassword);
 
     void activateByUsername(String username);
+
+    List<UserResponseModel> listAllAdmins();
 }

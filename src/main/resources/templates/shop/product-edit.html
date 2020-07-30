@@ -14,10 +14,11 @@
 <br>
 <div class="container">
     <form th:action="@{/mvn/shop/product/edit(id=${productEdit.id})}" th:object="${productEdit}" th:method="POST">
-        <h2>Create Product</h2><br>
+        <h2>Edit Product</h2><br>
         <div class="form-group">
             <label for="title">Product title:</label>
-            <input type="text" th:value="*{title}" th:errorclass="bg-danger" id="title" class="form-control"  placeholder="Enter title" name="title" style="color: grey" required>
+            <input type="text" th:value="*{title}" th:errorclass="bg-danger" id="title" class="form-control"
+                   placeholder="Enter title" name="title" style="color: grey" required>
         </div>
         <th:block th:each="e : ${#fields.errors('title')}">
             <small th:text="${e}" class="text-danger"></small>
@@ -25,7 +26,8 @@
 
         <div class="form-group">
             <label for="preview">Preview:</label>
-            <input type="text" th:value="*{preview}" th:errorclass="bg-danger" id="preview" class="form-control"  placeholder="Enter preview" style="color: grey" name="preview" required>
+            <input type="text" th:value="*{preview}" th:errorclass="bg-danger" id="preview" class="form-control"
+                   placeholder="Enter preview" style="color: grey" name="preview" required>
         </div>
         <th:block th:each="e : ${#fields.errors('preview')}">
             <small th:text="${e}" class="text-danger">Username error message</small>
@@ -33,7 +35,8 @@
 
         <div class="form-group">
             <label for="desc">Description:</label>
-            <textarea type="text" th:text="*{description}" th:errorclass="bg-danger" id="desc" class="form-control" placeholder="Enter description" style="color: grey" name="description" required></textarea>
+            <textarea type="text" th:text="*{description}" th:errorclass="bg-danger" id="desc" class="form-control"
+                      placeholder="Enter description" style="color: grey" name="description" required></textarea>
         </div>
         <th:block th:each="e : ${#fields.errors('description')}">
             <small th:text="${e}" class="text-danger">Username error message</small>
@@ -41,7 +44,8 @@
 
         <div class="form-group">
             <label for="price">Price:</label>
-            <input type="number" th:value="*{price}" th:errorclass="bg-danger" id="price" required name="price" min="0" value="0" step=".01" class="form-control" style="color: grey"  placeholder="Enter price" >
+            <input type="number" th:value="*{price}" th:errorclass="bg-danger" id="price" required name="price" min="0"
+                   value="0" step=".01" class="form-control" style="color: grey" placeholder="Enter price">
         </div>
         <th:block th:each="e : ${#fields.errors('price')}">
             <small th:text="${e}" class="text-danger">Username error message</small>
@@ -49,10 +53,11 @@
 
         <div class="form-group">
             <label for="categories">Choose categories:</label>
-            <select  id="categories" th:errorclass="bg-danger" name="category" class="form-control" multiple style="color: grey" required>
+            <select id="categories" th:errorclass="bg-danger" name="category" class="form-control" multiple
+                    style="color: grey" required>
                 <option th:each="cat : ${T(demoprojects.demo.dao.models.entities.ProductCategoryName).values()}"
                         th:value="${cat}"
-                        th:text="${cat}" th:selected="${productEdit.category == cat}" >Vehicle Category
+                        th:text="${cat}" th:selected="${productEdit.category == cat}">Vehicle Category
                 </option>
             </select>
         </div>
@@ -62,18 +67,15 @@
 
         <div class="form-group">
             <label for="telephoneNumber">Contact telephone number:</label>
-            <input type="text" th:value="*{telephoneNumber}" th:errorclass="bg-danger" class="form-control" id="telephoneNumber" pattern="^\+359[0-9 ]{9}$"  placeholder="Enter telephone number" style="color: grey" name="telephoneNumber" required>e.g. +359881122334
+            <input type="text" th:value="*{telephoneNumber}" th:errorclass="bg-danger" class="form-control"
+                   id="telephoneNumber" pattern="^\+359[0-9 ]{9}$" placeholder="Enter telephone number"
+                   style="color: grey" name="telephoneNumber" required>e.g. +359881122334
         </div>
         <th:block th:each="e : ${#fields.errors('telephoneNumber')}">
             <small th:text="${e}" class="text-danger">Username error message</small>
         </th:block>
 
-        <div class="form-group">
-            <label for="photos">Photos</label>
-            <input type="file" class="form-control" id="photos" placeholder="Select photos" name="pwd" multiple style="color: grey">
-        </div>
-
-        <button type="submit" class="btn btn-outline-warning">Edit</button>
+         <button type="submit" class="btn btn-outline-warning">Edit</button>
     </form>
     <br>
     <br>
@@ -84,7 +86,7 @@
 <th:block th:include="~{shop/shop-fragments/footer-scripts}"/>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 <script type="text/javascript">
-    $(document).ready(function() {
+    $(document).ready(function () {
         $('select').select2({
             placeholder: "Select categories...",
             allowClear: true

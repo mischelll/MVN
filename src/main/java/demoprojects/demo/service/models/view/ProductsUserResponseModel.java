@@ -18,8 +18,10 @@ public class ProductsUserResponseModel {
     private BigDecimal price;
     private String createdOnDate;
     private String buyerUsername;
+    private String sellerUsername;
     private String soldOnDate;
+    private String boughtOnDate;
     private Integer views;
     private Boolean isSold;
-
+    private BigDecimal revenue;
 }

@@ -4,8 +4,6 @@ import demoprojects.demo.dao.models.entities.Gender;
 import demoprojects.demo.dao.models.entities.Role;
 import demoprojects.demo.dao.models.entities.User;
 import demoprojects.demo.dao.repositories.user.UserRepository;
-import demoprojects.demo.service.interfaces.blog.PostCommentService;
-import demoprojects.demo.service.interfaces.user.AuthServiceValidation;
 import demoprojects.demo.service.interfaces.blog.PostService;
 import demoprojects.demo.service.interfaces.user.UserService;
 import demoprojects.demo.service.interfaces.user.RoleService;
@@ -26,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 @Service
@@ -240,6 +239,29 @@ public class UserServiceImpl implements UserService {
         this.userRepository.saveAndFlush(byUsername);
     }
 
+    @Override
+    public List<UserResponseModel> listAllAdmins() {
+        return this.userRepository
+                .findAll()
+                .stream()
+                .filter(user -> {
+
+                    for (Role authority : user.getAuthorities()) {
+                        if (authority.getAuthority().equals("ROLE_ADMIN")) {
+                            return true;
+                        }
+                    }
+                    return false;
+                })
+                .map(user -> {
+                    UserResponseModel mapUser = this.mapper.map(user, UserResponseModel.class);
+                    mapUser.setRegisteredOn(user.getRegisteredOn().format(DateTimeFormatter.ofPattern("dd MMM yyyy")));
+                    mapUser.setActive(user.isEnabled() ? "Yes" : "No");
+                    return mapUser;
+                })
+                .collect(Collectors.toList());
+    }
+
     private String generateNewPassword() {
         Random random = new Random();
         List<String> special = List.of("!", "@", "#", "$", "%", "^", "&", "*");
@@ -259,7 +281,6 @@ public class UserServiceImpl implements UserService {
             throw new UsernameNotFoundException("User not found!");
         }
         return this.userRepository.findByUsername(username);
-
 
     }
 

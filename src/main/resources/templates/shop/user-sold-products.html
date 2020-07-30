@@ -5,7 +5,6 @@
     <th:block th:include="~{shop/shop-fragments/head}"/>
     <link rel="stylesheet" type="text/css" href="shop/styles/categories.css">
     <link rel="stylesheet" type="text/css" href="shop/styles/categories_responsive.css">
-
     <style>
         .my-custom-scrollbar {
             position: relative;
@@ -19,7 +18,9 @@
 
     </style>
 </head>
+
 <body>
+
 <div class="super_container">
     <!-- Header -->
     <th:block th:include="~{shop/shop-fragments/nav}"/>
@@ -33,7 +34,7 @@
                         <div class="col">
                             <div class="home_content">
                                 <div class="home_title">My Products<span>.</span></div>
-                                <div class="home_text"><p>Below are listed the products you bought from the MVN |
+                                <div class="home_text"><p>Below are listed the products you sold in the MVN |
                                     Shop.</p></div>
                             </div>
                         </div>
@@ -46,6 +47,7 @@
     <div class="home">
         <div class="home_container">
             <h2 style="color: black; text-align: center">Your sold products listed:</h2>
+            <h3 id="revenue">Total revenue from sold products:</h3>
             <div class="table-wrapper-scroll-y my-custom-scrollbar">
             <table class="table table-dark table-hover  table-responsive-md ">
                 <thead >
@@ -61,7 +63,7 @@
                 <tbody id="user-products">
                 </tbody>
             </table>
-                <h3 id="revenue"></h3>
+
             </div>
         </div>
     </div>
@@ -73,13 +75,12 @@
 
 
 <th:block th:include="~{shop/shop-fragments/footer-scripts}"/>
-<div id="page-loader">
-    <div class="loader-text"></div>
-</div>
+
 <script src="shop/js/categories.js"></script>
 <script th:inline="javascript">
 
     let username = [[${user}]];
+    let revenue = 0;
     const URLS = {
         products: '/mvn/shop/api/my-sold-products/' + username,
     };
@@ -92,6 +93,7 @@
     <td style="text-align: center;"  ><a href="/mvn/users/api/profile-view/${buyerUsername}">${buyerUsername}</a>
     </td>
 `;
+        revenue += Number(price);
         columns += isSold
             ? `<td>
             <form style="text-align: center;" class="sell-product-form" data-id=${id} action="/mvn/shop/api/my-sold-products/backToMarket/${id}" method="post">
@@ -104,20 +106,25 @@
         '<td></td>';
         return `<tr id="${id}" >${columns}</tr>`
     };
-    // loader.show();
+
+
+
     fetch(URLS.products)
         .then(response => response.json())
         .then(products => {
 
             let result = '';
+
             products.forEach(product => {
                 const productString = toString(product);
                 result += productString;
             });
 
             $('#user-products').html(result);
-            // loader.hide();
+            $('#revenue').html("Total revenue from sold products: " + revenue + " lv.");
+
         });
+
 
     $('#user-products').on('submit', '.sell-product-form', function (ev) {
         const url = $(this).attr('action');
@@ -125,10 +132,8 @@
         fetch(url, {method: 'post'})
             .then(data => {
                 const id = $(this).attr('data-id');
-                console.log(id);
-                // loader.hide();
                 $('#' + id).hide();
-
+                $('#revenue').load(document.URL +  ' #revenue');
             });
         ev.preventDefault();
         return false;

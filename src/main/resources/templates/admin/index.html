@@ -2,6 +2,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org" lang="en">
 <th:block th:include="~{admin/admin-fragments/head}"/>
+<style>
+    .my-custom-scrollbar {
+        position: relative;
+        height: 700px;
+        width: 100%;
+        overflow: auto;
+    }
+    .table-wrapper-scroll-y {
+        display: block;
+    }
+</style>
 <body>
 
 <div class="wrapper d-flex align-items-stretch">
@@ -14,52 +25,40 @@
         <h5 style="text-align: center"><i><b>--<q>With great power comes great responsibility</q>--</b></i></h5>
         <br>
         <p>Some of the things you have control of are as follows:</p>
-        <p>     - Manage Users -> CRUD Operations</p>
-        <p>     - Manage the Blog Society -> CRUD Operations</p>
-        <p>     - Manage the Shop Society -> CRUD Operations. </p>
-        <p>     - Manage the Gallery Society -> CRUD Operations</p>
-<br>
+        <p> - Manage Users -> CRUD Operations</p>
+        <p> - Manage the Blog Society -> CRUD Operations</p>
+        <p> - Manage the Shop Society -> CRUD Operations. </p>
+        <p> - Manage the Gallery Society -> CRUD Operations</p>
+        <br>
         <p>In the table below you can see the current Admins.</p>
-        <h6><i>* Remember: The other Admins are your friends. You cannot touch their status in this world and vice-versa</i></h6>
+        <h6><i>* Remember: The other Admins are your friends. You cannot touch their status in this world and
+            vice-versa</i></h6>
 
+        <div class="table-wrapper-scroll-y my-custom-scrollbar">
 
-
-        <table style="width:100%">
-            <tr>
-                <th>Firstname</th>
-                <th>Lastname</th>
-                <th>Username</th>
-                <th>Email</th>
-                <th>Member since</th>
-                <th>Gender</th>
-                <th>Posts</th>
-                <th>Products</th>
-                <th>Gellery</th>
-
-            </tr>
-            <tr>
-                <td>Jill</td>
-                <td>Smith</td>
-                <td>50</td>
-                <td>50</td>
-                <td>50</td>
-                <td>50</td>
-                <td>50</td>
-                <td>50</td>
-                <td>50</td>
-                <td><a>delete </a><a>edit </a><a>change role</a></td>
-
-            </tr>
-            <tr>
-                <td>Eve</td>
-                <td>Jackson</td>
-                <td>94</td>
-            </tr>
-        </table>
+            <table style="width:100%;text-align: center" class=" table table-dark table-hover table-responsive-md">
+                <thead>
+                <tr>
+                    <th>First name</th>
+                    <th>Last name</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Member since</th>
+                    <th>Active</th>
+                </tr>
+                </thead>
+                <tbody id="admins-table">
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
 <th:block th:include="~{admin/admin-fragments/footer}"/>
-
+<div id="page-loader">
+    <div class="loader-text"></div>
+</div>
+<script src="/admin/js/admins.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </body>
 </html>

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-	  xmlns:th="http://www.thymeleaf.org" lang="en"
-	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+      xmlns:th="http://www.thymeleaf.org" lang="en"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
-	<th:block th:include="~{shop/shop-fragments/head}"/>
+<th:block th:include="~{shop/shop-fragments/head}"/>
 <link rel="stylesheet" type="text/css" href="shop/styles/product.css">
 <link rel="stylesheet" type="text/css" href="shop/styles/product_responsive.css">
 
@@ -11,159 +11,176 @@
 
 <div class="super_container">
 
-	<!-- Header -->
-	<th:block th:include="~{shop/shop-fragments/nav}"/>
-	
-	<!-- Home -->
+    <!-- Header -->
+    <th:block th:include="~{shop/shop-fragments/nav}"/>
 
-	<div class="home">
-		<div class="home_container">
-			<div class="home_background" style="background-image:url(shop/images/categories.jpg)"></div>
-			<div class="home_content_container">
-				<div class="container">
-					<div class="row">
-						<div class="col">
-							<div class="home_content" th:object="${product}">
-								<div class="home_title" th:text="|*{title}.|">Product Page<span>.</span></div>
-								<div class="home_text" th:text="|The product is provided by the user *{fullName} (*{username}).|"><p></p></div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+    <!-- Home -->
 
-	<!-- Product Details -->
+    <div class="home">
+        <div class="home_container">
+            <div class="home_background" style="background-image:url(shop/images/categories.jpg)"></div>
+            <div class="home_content_container">
+                <div class="container">
+                    <div class="row">
+                        <div class="col">
+                            <div class="home_content" th:object="${product}">
+                                <div class="home_title" th:text="|*{title}.|">Product Page<span>.</span></div>
+                                <div class="home_text"
+                                     th:text="|The product is provided by the user *{fullName} (*{username}).|"><p></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-	<div class="product_details" th:object="${product}">
-		<div class="container">
-			<div class="row details_row">
+    <!-- Product Details -->
 
-				<!-- Product Image -->
-				<div class="col-lg-6">
-					<div class="details_image" th:each="image : ${product.imgUrls}">
-						<div class="details_image_large"><img  th:src="${image}" alt=""></div>
-						<div class="details_image_thumbnails d-flex flex-row align-items-start justify-content-between">
-							<div class="details_image_thumbnail active" th:data-image="${image}"><img th:src="${image}" alt=""></div>
-							<div class="details_image_thumbnail" th:data-image="${image}"><img th:src="${image}" alt=""></div>
-							<div class="details_image_thumbnail" th:data-image="${image}"><img th:src="${image}" alt=""></div>
-							<div class="details_image_thumbnail" th:data-image="${image}"><img th:src="${image}" alt=""></div>
-						</div>
-					</div>
-				</div>
+    <div class="product_details" th:object="${product}">
+        <div class="container">
+            <div class="row details_row">
 
-				<!-- Product Content -->
-				<div class="col-lg-6">
-					<div class="details_content">
-						<div class="details_name" th:text="*{title}">iPhone 7 Black</div>
-						<div class="details_price" th:text="|*{price} lv.|">670 lv.</div>
-						<!-- In Stock -->
-						<div class="in_stock_container">
-							<div class="availability">Seller:</div>
-							<span th:text="*{fullName}">Pesho Peshov</span><br>
-							<div class="availability">Created on:</div>
-							<span th:text="*{created}">01/01/2001</span><br>
-							<div class="availability">Email:</div>
-							<span th:text="*{email}">pesho@abv.bg</span><br>
-							<div class="availability">Username:</div>
-							<span th:text="*{username}">pesh</span><br>
-							<div class="availability">Contact number:</div>
-							<span th:text="*{telephone}">pesh</span><br><br>
-							<div class="availability">Views:</div>
-							<span th:text="*{views}"></span>
-						</div>
-						<div class="details_text">
-							<p th:text="*{preview}">Готин телефон</p>
-						</div>
-						<!-- Product Quantity -->
-						<div class="product_quantity_container">
-							<div class="button cart_button"><a th:href="|mailto:*{email}?subject=Interest in Product: *{title}&body=Dear *{fullName}(*{username}), |">Contact Seller</a></div><br>
-							<small>*If you do not have a default mail program installed on your machine, the "Contact Seller" button won't be of help.</small><br>
-							<small>You will have to write an email from your browser mail provider.</small><br>
-							<small>In future versions, this issue will be resolved..</small><br>
-						</div><br>
-<th:block sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_MICHAEL-SCOTT','ROLE_ROOT')">
-							<a  href="">
-								<button class="btn btn-outline-danger">Delete</button>
-							</a>
-						<br>
-</th:block>
+                <!-- Product Image -->
+                <div class="col-lg-6">
+                    <div class="details_image">
+                        <div class="details_image_large" th:each="image,counter : ${product.imgUrls}"><img
+                                th:if="${counter.first}" th:src="${image}" alt=""></div>
+                        <div class="details_image_thumbnails d-flex flex-row align-items-start justify-content-start">
+                            <div class="details_image_thumbnail active" th:each="image,counter : ${product.imgUrls}"
+                                 th:if="${counter.first}" th:data-image="${image}"><img th:src="${image}" alt=""></div>
+                            <div class="details_image_thumbnail" th:each="image,counter : ${product.imgUrls}"
+                                 th:unless="${counter.first}" th:data-image="${image}"><img th:src="${image}" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-							<!-- Share -->
-						<div class="details_share">
-							<span>Share:</span>
-							<ul>
-								<li><a ><i class="fa fa-pinterest" aria-hidden="true"></i></a></li>
-								<li><a ><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
-								<li><a ><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
-								<li><a ><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div>
+                <!-- Product Content -->
+                <div class="col-lg-6">
+                    <div class="details_content">
+                        <div class="details_name" th:text="*{title}">iPhone 7 Black</div>
+                        <div class="details_price" th:text="|*{price} lv.|">670 lv.</div>
+                        <!-- In Stock -->
+                        <div class="in_stock_container">
+                            <div class="availability">Seller:</div>
+                            <span th:text="*{fullName}">Pesho Peshov</span><br>
+                            <div class="availability">Created on:</div>
+                            <span th:text="*{created}">01/01/2001</span><br>
+                            <div class="availability">Email:</div>
+                            <span th:text="*{email}">pesho@abv.bg</span><br>
+                            <div class="availability">Username:</div>
+                            <span th:text="*{username}">pesh</span><br>
+                            <div class="availability">Contact number:</div>
+                            <span th:text="*{telephone}">pesh</span><br><br>
+                            <div class="availability">Views:</div>
+                            <span th:text="*{views}"></span>
+                        </div>
+                        <div class="details_text">
+                            <p th:text="*{preview}">Готин телефон</p>
+                        </div>
+                        <!-- Product Quantity -->
+                        <div class="product_quantity_container">
+                            <div class="button cart_button" ><a
+                                    th:href="|mailto:*{email}?subject=Interest in Product: *{title}&body=Dear *{fullName}(*{username}), |" >Contact
+                                Seller</a></div>
+                            <br>
+                            	<small>*If you do not have a default mail program installed on your machine, the "Contact
+                                	Seller" button won't be of help.</small><br>
+                            	<small>You will have to write an email from your browser mail provider.</small><br>
+                            	<small>In future versions, this issue will be resolved..</small><br>
+                        </div>
+                        <br>
+                        <th:block sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_MICHAEL-SCOTT','ROLE_ROOT')">
+                            <a href="">
+                                <button class="btn btn-outline-danger">Delete</button>
+                            </a>
+                            <br>
+                        </th:block>
 
-			<div class="map">
-				<div id="google_map" class="google_map">
-					<div class="map_container">
-						<div id="map"></div>
-					</div>
-				</div>
-			</div>
+                        <!-- Share -->
+                        <div class="details_share">
+                            <span>Share:</span>
+                            <ul>
+                                <li><a><i class="fa fa-pinterest" aria-hidden="true"></i></a></li>
+                                <li><a><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
+                                <li><a><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+                                <li><a><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-			<div class="row description_row">
-				<div class="col">
-					<div class="description_title_container">
-						<div class="description_title">Description</div>
-						<div class="reviews_title"><a>Reviews <span>(1)</span></a></div>
-					</div>
-					<div class="description_text">
-						<p th:text="*{description}">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. Phasellus id nisi quis justo tempus mollis sed et dui. In hac habitasse platea dictumst. Suspendisse ultrices mauris diam. Nullam sed aliquet elit. Mauris consequat nisi ut mauris efficitur lacinia.</p>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+            <div class="map">
+                <div id="google_map" class="google_map">
+                    <div class="map_container">
+                        <div id="map"></div>
+                    </div>
+                </div>
+            </div>
 
-	<!-- Products -->
+            <div class="row description_row">
+                <div class="col">
+                    <div class="description_title_container">
+                        <div class="description_title">Description</div>
+                        <div class="reviews_title"><a>Reviews <span>(0)<small>*Expect in future release</small></span></a></div>
+                    </div>
+                    <div class="description_text">
+                        <p th:text="*{description}"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-	<div class="products">
-		<div class="container">
-			<div class="row">
-				<div class="col text-center">
-					<div class="products_title">Related Products</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col">
-					<div class="product_grid">
-						<!-- Product -->
-						<div class="product" th:each="relatedProduct : ${relatedProducts}">
-							<div class="product_image"><img src="shop/images/product_1.jpg" alt=""></div>
-							<div class="product_content">
-								<div class="product_title"><a th:href="@{/mvn/shop/product(id=${relatedProduct.id})}" style="font-size: 22px" th:text=" ${relatedProduct.title}">Smart Phone</a></div>
-								<div class="product_title"><a href="product.html" style="font-size: 13px" th:text="|Seller: ${relatedProduct.fullName}|">Smart Phone</a></div>
-								<div class="product_title"><a href="product.html" style="font-size: 13px" th:text="|Username: ${relatedProduct.username}|">Smart Phone</a></div>
-								<div class="product_title"><a href="product.html" style="font-size: 13px" th:text="|Created on: ${relatedProduct.created}|">Smart Phone</a></div>
-								<div class="product_price" th:text="|Price: ${relatedProduct.price} lv.|">$670</div>
-							</div>
-						</div>
+    <!-- Products -->
+
+    <div class="products">
+        <div class="container">
+            <div class="row">
+                <div class="col text-center">
+                    <div class="products_title">Related Products</div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="product_grid">
+                        <!-- Product -->
+                        <div class="product" th:each="relatedProduct : ${relatedProducts}">
+                            <div class="product_image"><img src="shop/images/product_1.jpg" alt=""></div>
+                            <div class="product_content">
+                                <div class="product_title"><a th:href="@{/mvn/shop/product(id=${relatedProduct.id})}"
+                                                              style="font-size: 22px"
+                                                              th:text=" ${relatedProduct.title}">Smart Phone</a></div>
+                                <div class="product_title"><a href="product.html" style="font-size: 13px"
+                                                              th:text="|Seller: ${relatedProduct.fullName}|">Smart
+                                    Phone</a></div>
+                                <div class="product_title"><a href="product.html" style="font-size: 13px"
+                                                              th:text="|Username: ${relatedProduct.username}|">Smart
+                                    Phone</a></div>
+                                <div class="product_title"><a href="product.html" style="font-size: 13px"
+                                                              th:text="|Created on: ${relatedProduct.created}|">Smart
+                                    Phone</a></div>
+                                <div class="product_price" th:text="|Price: ${relatedProduct.price} lv.|">$670</div>
+                            </div>
+                        </div>
 
 
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-	<!-- Newsletter -->
+    <!-- Newsletter -->
 
-	<th:block th:include="~{shop/shop-fragments/icons-newsletter}"/>
+    <th:block th:include="~{shop/shop-fragments/icons-newsletter}"/>
 
-	<!-- Footer -->
+    <!-- Footer -->
 
-	<th:block th:include="~{shop/shop-fragments/footer}"/>
+    <th:block th:include="~{shop/shop-fragments/footer}"/>
 </div>
 
 <th:block th:include="~{shop/shop-fragments/footer-scripts}"/>

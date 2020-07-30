@@ -162,10 +162,24 @@ public class ShopController extends BaseController {
             modelAndView.setViewName("redirect:/mvn/shop/my-sold-products/" + principal.getName());
             return modelAndView;
         }
+        modelAndView.addObject("soldRevenue",this.productService.calculateSoldRevenue(username));
         modelAndView.addObject("user", username);
         modelAndView.setViewName("shop/user-sold-products");
         return modelAndView;
     }
+    @GetMapping("/my-bought-products/{username}")
+    @PageTitle("User Bought Products")
+    public ModelAndView getUserBoughtProducts(ModelAndView modelAndView, @PathVariable String username, Principal principal) {
+        if (!principal.getName().equals(username)) {
+            modelAndView.setViewName("redirect:/mvn/shop/my-bought-products/" + principal.getName());
+            return modelAndView;
+        }
+        modelAndView.addObject("boughtRevenue",this.productService.calculateBoughtRevenue(username));
+        modelAndView.addObject("user", username);
+        modelAndView.setViewName("shop/user-bought-products");
+        return modelAndView;
+    }
+
 
     @GetMapping("/product/images/upload")
     public ModelAndView uploadProductImages(@RequestParam String id, ModelAndView modelAndView, Model model) {

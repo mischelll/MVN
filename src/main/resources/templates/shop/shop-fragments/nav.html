@@ -43,7 +43,7 @@
                                     <li class="hassubs">
                                         <a th:href="@{'/mvn/shop/my-products/' + ${#authentication.getPrincipal().getUsername()}}">My Products</a>
                                         <ul>
-                                            <li><a th:href="@{/mvn/shop/product/create}">Bought</a></li>
+                                            <li><a th:href="@{'/mvn/shop/my-bought-products/'+ ${#authentication.getPrincipal().getUsername()}}">Bought</a></li>
                                             <li><a th:href="@{'/mvn/shop/my-sold-products/'+ ${#authentication.getPrincipal().getUsername()}}">Sold</a></li>
                                         </ul>
                                     </li>
@@ -152,6 +152,8 @@
                     <li class="page_menu_item has-children menu_mm">
                         <a>Categories<i class="fa fa-angle-down"></i></a>
                         <ul class="page_menu_selection menu_mm">
+                            <li class="page_menu_item menu_mm"><a href="/mvn/shop/categories/">All Categories<i
+                                    class="fa fa-angle-down"></i></a></li>
                             <li class="page_menu_item menu_mm"><a href="/mvn/shop/categories/Smartphones">Smartphones<i
                                     class="fa fa-angle-down"></i></a></li>
                             <li class="page_menu_item menu_mm"><a href="/mvn/shop/categories/Laptops">Laptops<i
@@ -185,12 +187,14 @@
                         </ul>
                     </li>
                     <li class="page_menu_item has-children menu_mm">
-                        <a href="contact.html">My Products<i
+                        <a th:href="@{'/mvn/shop/my-products/' + ${#authentication.getPrincipal().getUsername()}}">My Products<i
                             class="fa fa-angle-down"></i></a>
                         <ul class="page_menu_selection menu_mm">
-                            <li class="page_menu_item menu_mm"><a th:href="@{/mvn/shop/product/create}">Bought<i
+                            <li class="page_menu_item menu_mm"><a th:href="@{'/mvn/shop/my-products/' + ${#authentication.getPrincipal().getUsername()}}">My Products<i
                                     class="fa fa-angle-down"></i></a></li>
-                            <li class="page_menu_item menu_mm"><a th:href="@{/mvn/shop/product/create}">Sold<i
+                            <li class="page_menu_item menu_mm"><a th:href="@{'/mvn/shop/my-bought-products/'+ ${#authentication.getPrincipal().getUsername()}}">Bought<i
+                                    class="fa fa-angle-down"></i></a></li>
+                            <li class="page_menu_item menu_mm"><a th:href="@{'/mvn/shop/my-sold-products/'+ ${#authentication.getPrincipal().getUsername()}}">Sold<i
                                     class="fa fa-angle-down"></i></a></li>
                         </ul>
                     </li>

@@ -35,6 +35,14 @@ public class AdminApiController {
         return new ResponseEntity<>(userResponseModels,HttpStatus.OK);
     }
 
+    @GetMapping("/admins")
+    @PreAuthorize("hasRole('ROLE_ROOT') or hasRole('ROLE_ADMIN')")
+    @ResponseBody
+    public ResponseEntity<List<UserResponseModel>> listAllAdmins(HttpSession session) {
+        List<UserResponseModel> userResponseModels = this.userService.listAllAdmins();
+        return new ResponseEntity<>(userResponseModels,HttpStatus.OK);
+    }
+
     @GetMapping("/posts")
     @PreAuthorize("hasRole('ROLE_ROOT') or hasRole('ROLE_ADMIN')")
     public List<PostResponseModel> listAllPosts(HttpSession session) {

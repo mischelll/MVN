@@ -5,20 +5,22 @@
     <th:block th:include="~{shop/shop-fragments/head}"/>
     <link rel="stylesheet" type="text/css" href="shop/styles/categories.css">
     <link rel="stylesheet" type="text/css" href="shop/styles/categories_responsive.css">
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet"/>
     <style>
         .my-custom-scrollbar {
             position: relative;
-            height: 400px;
+            height: 200px;
             overflow: auto;
         }
 
         .table-wrapper-scroll-y {
             display: block;
         }
+
     </style>
 </head>
+
 <body>
+
 <div class="super_container">
     <!-- Header -->
     <th:block th:include="~{shop/shop-fragments/nav}"/>
@@ -32,7 +34,7 @@
                         <div class="col">
                             <div class="home_content">
                                 <div class="home_title">My Products<span>.</span></div>
-                                <div class="home_text"><p>Below are listed the products you offer in the MVN |
+                                <div class="home_text"><p>Below are listed the products you bought from the MVN |
                                     Shop.</p></div>
                             </div>
                         </div>
@@ -44,22 +46,23 @@
     <!-- Products -->
     <div class="home">
         <div class="home_container">
-            <h2 style="color: black; text-align: center">Your active products listed:</h2>
+            <h2 style="color: black; text-align: center">Your bought products listed:</h2>
             <h3 id="revenue"></h3>
             <div class="table-wrapper-scroll-y my-custom-scrollbar">
-                <table class="table table-dark table-hover table-responsive-xl ">
+                <table class="table table-dark table-hover  table-responsive-md ">
                     <thead>
                     <tr>
                         <th style="text-align: center;" scope="col">Title</th>
                         <th style="text-align: center;" scope="col">Price</th>
-                        <th style="text-align: center;" scope="col">Created On</th>
+                        <th style="text-align: center;" scope="col">Bought On</th>
                         <th style="text-align: center;" scope="col">Views</th>
-                        <th style="text-align: center;" scope="col">Sell To</th>
+                        <th style="text-align: center;" scope="col">Seller</th>
                     </tr>
                     </thead>
                     <tbody id="user-products">
                     </tbody>
                 </table>
+
             </div>
         </div>
     </div>
@@ -68,87 +71,45 @@
     <!-- Footer -->
     <th:block th:include="~{shop/shop-fragments/footer}"/>
 </div>
+
+
 <th:block th:include="~{shop/shop-fragments/footer-scripts}"/>
+
 <script src="shop/js/categories.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 <script th:inline="javascript">
 
     let username = [[${user}]];
-    let usersList = [[${usersList}]];
     let revenue = 0;
     const URLS = {
-        products: '/mvn/shop/api/my-products/' + username,
+        products: '/mvn/shop/api/my-bought-products/' + username,
     };
-    const toString = ({id, title, price, createdOnDate, views, isSold}) => {
-        let columns = `
+    const toString = ({id, title, price, soldOnDate, views, sellerUsername}) => {
+        `<tr id="${id}">
     <td style="text-align: center;">${title}</td>
     <td style="text-align: center;">${price}</td>
-    <td style="text-align: center;">${createdOnDate}</td>
+    <td style="text-align: center;">${soldOnDate}</td>
     <td style="text-align: center;">${views}</td>
+    <td style="text-align: center;"  ><a href="/mvn/users/api/profile-view/${sellerUsername}">${sellerUsername}</a>
+    </td>
+    </tr>
 `;
         revenue += Number(price);
-        columns += isSold
-            ? '<td></td>'
-            : `
-<td>
-            <form style="text-align: center;" class="sell-product-form" data-id=${id} action="/mvn/shop/api/my-products/sell/${id}/${username}" method="post">
-                <select  class="user-list" style="text-align: center;" required>
-                <option value="" selected>Select user</option>
+    }
 
-                </select>
-                <button style="text-align: center;" class="btn btn-success" >Sell</button>
-            </form>
-           </td>
-`;
-        return `<tr id="${id}" >${columns}</tr>`
-    };
-    // loader.show();
     fetch(URLS.products)
         .then(response => response.json())
         .then(products => {
+
             let result = '';
             products.forEach(product => {
                 const productString = toString(product);
                 result += productString;
-
-            });
-            $(document).ready(function () {
-                for (let i = 0; i < usersList.length; i++) {
-                    let name = usersList[i].toString();
-                    $(".user-list").append($("<option></option>")
-                        .attr("value", name)
-                        .text(name));
-                }
-
-            });
-            $(document).ready(function () {
-                $('.user-list').select2({
-                    placeholder: "Select user",
-                    allowClear: true
-                });
             });
 
             $('#user-products').html(result);
-            $('#revenue').html("Total price of active products: " + revenue + " lv.");
-            // loader.hide();
+            $('#revenue').html("Total price of bought products: " + revenue + " lv.");
         });
 
-    $('#user-products').on('submit', '.sell-product-form', function (ev) {
-
-        let url = $(this).attr('action');
-        url += '/' + $('.user-list').children("option:selected").val();
-
-        fetch(url, {method: 'post'})
-            .then(data => {
-                const id = $(this).attr('data-id');
-
-                $('#' + id).hide();
-                $('#revenue').load(document.URL +  " #revenue>*","");
-
-            });
-        ev.preventDefault();
-        return false;
-    });
 </script>
 </body>
 </html>

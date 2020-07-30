@@ -17,6 +17,7 @@ import demoprojects.demo.service.models.view.UserResponseModel;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -177,6 +178,27 @@ public class ProductServiceImpl implements ProductService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<ProductsUserResponseModel> findBoughtProductsByUsername(String username) {
+        Set<Product> allByBuyerUsername = this.productRepository
+                .findAllByBuyerUsername(username);
+        return allByBuyerUsername
+                .stream()
+                .filter(product -> product.getBuyer().getUsername().equals(username))
+                .sorted((a, b) -> b.getSold().compareTo(a.getSold()))
+                .map(product -> {
+                    ProductsUserResponseModel map = this.mappper.map(product,
+                            ProductsUserResponseModel.class);
+
+                    map.setBuyerUsername(product.getSeller().getUsername());
+                    map.setSoldOnDate(product.getSold().format(
+                            DateTimeFormatter.ofPattern("dd/MMM/yyyy HH:mm")));
+
+                    return map;
+                })
+                .collect(Collectors.toList());
+    }
+
 
     @Override
     public void addProductToSold(String productId, String username) {
@@ -253,6 +275,24 @@ public class ProductServiceImpl implements ProductService {
         byUsername.setSoldProducts(soldProducts);
 
         this.productRepository.saveAndFlush(product);
+    }
+
+    @Override
+    public BigDecimal calculateBoughtRevenue(String username) {
+        return this.productRepository
+                .findAllByBuyerUsername(username)
+                .stream()
+                .map(Product::getPrice)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    @Override
+    public BigDecimal calculateSoldRevenue(String username) {
+        return this.productRepository
+                .findAllBySellerUsername(username)
+                .stream()
+                .map(Product::getPrice)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     private List<ProductViewServiceModel> generateProducts(Set<Product> products) {

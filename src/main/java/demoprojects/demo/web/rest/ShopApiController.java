@@ -43,9 +43,9 @@ public class ShopApiController {
         return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
 
-    @PostMapping("/my-products/sell/{productId}/{username}")
-    public ResponseEntity<Void> addProductToSold(@PathVariable String productId,@PathVariable String username, Principal principal, HttpServletResponse response) throws IOException {
-        if (principal.getName().equals(username)){
+    @PostMapping("/my-products/sell/{productId}/{seller}/{username}")
+    public ResponseEntity<Void> addProductToSold(@PathVariable String productId,@PathVariable String seller,@PathVariable String username, Principal principal, HttpServletResponse response) throws IOException {
+        if (principal.getName().equals(seller)){
         this.productService.addProductToSold(productId,username);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", "/mvn/shop/my-products/" + principal.getName());
@@ -63,11 +63,24 @@ public class ShopApiController {
         }
         return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
+
+
     @PostMapping("/my-sold-products/backToMarket/{productId}")
     public ResponseEntity<Void> removeProductToSold(@PathVariable String productId, Principal principal)  {
         this.productService.removeProductFromSold(productId);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", "/mvn/shop/my-products/" + principal.getName());
         return new ResponseEntity<>(headers, HttpStatus.FOUND);
+    }
+
+    @GetMapping("/my-bought-products/{username}")
+    @ResponseBody
+    public ResponseEntity<List<ProductsUserResponseModel>> listUserBoughtProducts(@PathVariable String username,Principal principal) throws InterruptedException {
+        if (principal.getName().equals(username)) {
+            List<ProductsUserResponseModel> soldProductsByUsername =
+                    this.productService.findBoughtProductsByUsername(username);
+            return new ResponseEntity<>(soldProductsByUsername, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
 }
