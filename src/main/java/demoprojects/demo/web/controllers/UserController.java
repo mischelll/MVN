@@ -1,8 +1,12 @@
 package demoprojects.demo.web.controllers;
 
+import demoprojects.demo.service.interfaces.CloudinaryService;
+import demoprojects.demo.service.interfaces.shop.ImageService;
 import demoprojects.demo.service.interfaces.user.RoleService;
 import demoprojects.demo.service.interfaces.user.UserService;
+import demoprojects.demo.service.models.bind.ChangeAvatarServiceModel;
 import demoprojects.demo.service.models.bind.ProfileEditServiceModel;
+import demoprojects.demo.service.models.view.UserProfileViewServiceModel;
 import demoprojects.demo.web.models.ChangeAvatarModel;
 import demoprojects.demo.web.models.PasswordChangeModel;
 import demoprojects.demo.web.models.ProfileEditModel;
@@ -16,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.io.IOException;
 
 @Controller
 @RequestMapping("/mvn/users/api")
@@ -23,11 +28,15 @@ public class UserController extends BaseController {
     private final UserService userService;
     private final RoleService roleService;
     private final ModelMapper mapper;
+    private final CloudinaryService cloudinaryService;
+    private final ImageService imageService;
 
-    public UserController(UserService userService, RoleService roleService, ModelMapper mapper) {
+    public UserController(UserService userService, RoleService roleService, ModelMapper mapper, CloudinaryService cloudinaryService, ImageService imageService) {
         this.userService = userService;
         this.roleService = roleService;
         this.mapper = mapper;
+        this.cloudinaryService = cloudinaryService;
+        this.imageService = imageService;
     }
 
     @GetMapping("/insert")
@@ -48,7 +57,9 @@ public class UserController extends BaseController {
 
     @GetMapping("/profile")
     public ModelAndView getProfile(@RequestParam String id, ModelAndView modelAndView) {
-        modelAndView.addObject("user", this.userService.getUserProfile(id));
+        UserProfileViewServiceModel userProfile = this.userService.getUserProfile(id);
+        modelAndView.addObject("user", userProfile);
+        modelAndView.addObject("hasAvatar", userProfile.getImgUrl() == null);
         modelAndView.setViewName("user/profile");
 
         return modelAndView;
@@ -105,9 +116,35 @@ public class UserController extends BaseController {
     @GetMapping("/profile/change-avatar")
     public ModelAndView changeAvatarPage(@RequestParam String id, ModelAndView modelAndView, Model model) {
         if (!model.containsAttribute("changeAvatar")) {
-            model.addAttribute("changeAvatar", new ChangeAvatarModel());
+            ChangeAvatarModel changeAvatarModel = new ChangeAvatarModel();
+            changeAvatarModel.setUserId(id);
+            model.addAttribute("changeAvatar", changeAvatarModel);
         }
         modelAndView.setViewName("user/change-avatar");
+        return modelAndView;
+    }
+
+    @PostMapping("/profile/change-avatar")
+    public ModelAndView changeAvatarPageConfirm(@RequestParam String id,
+                                                @ModelAttribute("changeAvatar") ChangeAvatarModel changeAvatarModel,
+                                                RedirectAttributes redirectAttributes,
+                                                ModelAndView modelAndView) throws IOException {
+        boolean isMaxSizeCorrect = cloudinaryService.isFileSizeCorrect(changeAvatarModel.getImage());
+        boolean isFormatCorrect = cloudinaryService.isFileFormatCorrect(changeAvatarModel.getImage());
+
+        if (isMaxSizeCorrect && isFormatCorrect) {
+            ChangeAvatarServiceModel map = this.mapper.map(changeAvatarModel, ChangeAvatarServiceModel.class);
+            map.setFormat(changeAvatarModel.getImage().getContentType());
+            map.setName(changeAvatarModel.getImage().getName());
+            map.setImgUrl(this.cloudinaryService.upload(changeAvatarModel.getImage()));
+            this.imageService.uploadUserAvatar(map, id);
+            modelAndView.setViewName("redirect:/mvn/users/api/profile?id=" + id);
+        } else {
+            modelAndView.addObject("incorrectSize", !isMaxSizeCorrect);
+            modelAndView.addObject("incorrectFormat", !isFormatCorrect);
+            modelAndView.setViewName("redirect:/mvn/users/api/profile/change-avatar?id=" + id);
+        }
+
         return modelAndView;
     }
 

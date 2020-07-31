@@ -8,4 +8,8 @@ import java.util.List;
 public interface CloudinaryService {
 
     String upload(MultipartFile image) throws IOException;
+
+    boolean isFileSizeCorrect(MultipartFile image);
+
+    boolean isFileFormatCorrect(MultipartFile image);
 }

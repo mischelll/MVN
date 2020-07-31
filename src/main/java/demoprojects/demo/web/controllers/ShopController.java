@@ -168,8 +168,8 @@ public class ShopController extends BaseController {
         modelAndView.setViewName("shop/user-sold-products");
         return modelAndView;
     }
-    @GetMapping("/my-bought-products/{username}")
 
+    @GetMapping("/my-bought-products/{username}")
     public ModelAndView getUserBoughtProducts(ModelAndView modelAndView, @PathVariable String username, Principal principal) {
         if (!principal.getName().equals(username)) {
             modelAndView.setViewName("redirect:/mvn/shop/my-bought-products/" + principal.getName());
@@ -180,7 +180,6 @@ public class ShopController extends BaseController {
         modelAndView.setViewName("shop/user-bought-products");
         return modelAndView;
     }
-
 
     @GetMapping("/product/images/upload")
     @PageTitle("Images Upload")

@@ -39,7 +39,8 @@ public class User extends BaseEntity implements UserDetails {
         this.boughtProducts = new ArrayList<>();
     }
 
-    @OneToOne(targetEntity = Image.class,fetch = FetchType.LAZY)
+    @OneToOne(targetEntity = Image.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+
     public Image getAvatar() {
         return avatar;
     }
@@ -48,8 +49,8 @@ public class User extends BaseEntity implements UserDetails {
         this.avatar = avatar;
     }
 
-    @OneToMany(mappedBy = "seller", targetEntity = Product.class,fetch = FetchType.EAGER,
-             cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "seller", targetEntity = Product.class, fetch = FetchType.EAGER,
+            cascade = CascadeType.ALL)
     @Fetch(value = FetchMode.SUBSELECT)
     public List<Product> getSoldProducts() {
         return soldProducts;
@@ -79,7 +80,7 @@ public class User extends BaseEntity implements UserDetails {
     }
 
     @OneToMany(mappedBy = "author", targetEntity = Post.class,
-            fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+            fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @Fetch(value = FetchMode.SUBSELECT)
     public Set<Post> getPosts() {
         return posts;
@@ -104,7 +105,7 @@ public class User extends BaseEntity implements UserDetails {
         this.authorities = authorities;
     }
 
-    @ManyToMany(targetEntity = Role.class,fetch = FetchType.EAGER)
+    @ManyToMany(targetEntity = Role.class, fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_roles",
             joinColumns = @JoinColumn(
@@ -121,7 +122,7 @@ public class User extends BaseEntity implements UserDetails {
     }
 
     @OneToMany(mappedBy = "seller", targetEntity = Product.class,
-            fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+            fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @Fetch(value = FetchMode.SUBSELECT)
     public List<Product> getOffers() {
         return offers;
@@ -131,7 +132,7 @@ public class User extends BaseEntity implements UserDetails {
         this.offers = soldProducts;
     }
 
-    @OneToMany(mappedBy = "buyer", targetEntity = Product.class,fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "buyer", targetEntity = Product.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @Fetch(value = FetchMode.SUBSELECT)
     public List<Product> getBoughtProducts() {
         return boughtProducts;

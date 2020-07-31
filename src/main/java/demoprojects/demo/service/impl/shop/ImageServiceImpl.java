@@ -3,10 +3,12 @@ package demoprojects.demo.service.impl.shop;
 import demoprojects.demo.dao.models.entities.FileFormat;
 import demoprojects.demo.dao.models.entities.Image;
 import demoprojects.demo.dao.models.entities.Product;
+import demoprojects.demo.dao.models.entities.User;
 import demoprojects.demo.dao.repositories.shop.ProductRepository;
 import demoprojects.demo.dao.repositories.user.ImageRepository;
 import demoprojects.demo.dao.repositories.user.UserRepository;
 import demoprojects.demo.service.interfaces.shop.ImageService;
+import demoprojects.demo.service.models.bind.ChangeAvatarServiceModel;
 import demoprojects.demo.service.models.bind.ProductImageCreateServiceModel;
 import demoprojects.demo.service.models.bind.UserAvatarServiceModel;
 import org.modelmapper.ModelMapper;
@@ -40,7 +42,15 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public void uploadUserAvatar(UserAvatarServiceModel avatar, String userId) {
+    public void uploadUserAvatar(ChangeAvatarServiceModel avatar, String userId) {
+        Image map = this.mapper.map(avatar, Image.class);
+        String[] split = avatar.getFormat().split("/");
+        map.setFormat(FileFormat.valueOf(split[1]));
 
+        User user = this.userRepository.findById(userId).orElse(null);
+        assert user != null;
+        user.setAvatar(this.imageRepository.saveAndFlush(map));
+
+        this.userRepository.saveAndFlush(user);
     }
 }

@@ -97,6 +97,9 @@ public class UserServiceImpl implements UserService {
         User user = this.userRepository.findById(id).orElse(null);
         assert user != null;
         UserProfileViewServiceModel map = this.mapper.map(user, UserProfileViewServiceModel.class);
+        if (user.getAvatar() != null) {
+            map.setImgUrl(user.getAvatar().getImgUrl());
+        }
         map.setFullName(user.getFirstName() + " " + user.getLastName());
         map.setRegisteredOn(user.getRegisteredOn().format(DateTimeFormatter.ofPattern("dd/MMM/yyyy")));
         map.setBio(user.getBio() == null ? "No bio" : user.getBio());

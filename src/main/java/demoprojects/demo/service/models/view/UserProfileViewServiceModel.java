@@ -9,6 +9,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class UserProfileViewServiceModel {
     private String id;
+    private String imgUrl;
     private String username;
     private String gender;
     private String email;

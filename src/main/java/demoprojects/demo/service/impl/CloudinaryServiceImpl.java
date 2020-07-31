@@ -25,10 +25,21 @@ public class CloudinaryServiceImpl implements CloudinaryService {
                 image.transferTo(file);
         return   this.cloudinary
                         .uploader()
-   
                         .upload(file, new HashMap())
                         .get("url")
                         .toString();
 
+    }
+
+    @Override
+    public boolean isFileSizeCorrect(MultipartFile image) {
+        return image.getSize() * 0.00000095367432 <= 5000;
+    }
+
+    @Override
+    public boolean isFileFormatCorrect(MultipartFile image) {
+        return image.getContentType().contains("jpeg") ||
+                image.getContentType().contains("jpg") ||
+                image.getContentType().contains("png");
     }
 }

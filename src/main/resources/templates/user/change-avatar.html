@@ -10,20 +10,22 @@
 <body>
 <div class="login-page">
     <div class="form">
-        <form  enctype="multipart/form-data"
+        <form th:action="@{/mvn/users/api/profile/change-avatar(id=${changeAvatar.userId})}" enctype="multipart/form-data"
               th:method="POST" class="login-form">
-            <input type="file" class="form-control"  id="images" placeholder="Select photos" name="images" required  style="color: grey">
-          <small>Avatar must be maximum 5 MB.</small><br>
-          <small>Avatar must be a JPEG/JPG/PNG file.</small>
+            <input type="file" class="form-control" id="image" placeholder="Select photos" name="image" required
+                   style="color: grey">
+            <small>Avatar must be maximum 5 MB.</small><br>
+            <small>Avatar must be a JPEG/JPG/PNG file.</small>
 
-            <h5>Hello</h5>
+            <h5 th:if="${incorrectSize}" style="color: red">This file is too big!</h5>
+            <h5 th:if="${incorrectFormat}" style="color: red">This file format is not valid!</h5>
             <button>change</button>
         </form>
     </div>
 </div>
 
 <script>
-    $('.message a').click(function(){
+    $('.message a').click(function () {
         $('form').animate({height: "toggle", opacity: "toggle"}, "slow");
     });
 </script>
