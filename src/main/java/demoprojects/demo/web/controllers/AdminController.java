@@ -52,13 +52,22 @@ public class AdminController {
     @GetMapping("/shop")
     @PageTitle("Shop Settings")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_ROOT')")
-    public ModelAndView getShoSettings(ModelAndView modelAndView) {
+    public ModelAndView getShopSettings(ModelAndView modelAndView) {
         modelAndView.setViewName("admin/shop-settings");
+        return modelAndView;
+    }
+
+    @GetMapping("/gallery")
+    @PageTitle("Gallery Settings")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_ROOT')")
+    public ModelAndView getGallerySettings(ModelAndView modelAndView) {
+        modelAndView.setViewName("gallery/construction");
         return modelAndView;
     }
 
 
     @GetMapping("/edit-role/{username}")
+    @PageTitle("User Role Edit")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_ROOT')")
     public ModelAndView getEditRole(@PathVariable String username, ModelAndView modelAndView, Model model){
         if (!model.containsAttribute("roleChange")){

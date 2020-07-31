@@ -7,11 +7,11 @@ import demoprojects.demo.dao.repositories.user.UserRepository;
 import demoprojects.demo.service.interfaces.blog.PostService;
 import demoprojects.demo.service.interfaces.user.UserService;
 import demoprojects.demo.service.interfaces.user.RoleService;
+import demoprojects.demo.service.models.bind.ProfileEditServiceModel;
 import demoprojects.demo.service.models.bind.RoleChangeServiceModel;
 import demoprojects.demo.service.models.bind.UserLoginServiceModel;
 import demoprojects.demo.service.models.bind.UserRegisterServiceModel;
 import demoprojects.demo.service.models.view.RoleViewServiceModel;
-import demoprojects.demo.service.models.view.UserIdUsernameViewModel;
 import demoprojects.demo.service.models.view.UserProfileViewServiceModel;
 import demoprojects.demo.service.models.view.UserResponseModel;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -24,7 +24,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 @Service
@@ -104,7 +103,7 @@ public class UserServiceImpl implements UserService {
         map.setGender(user.getGender().name());
         map.setPostsSize(user.getPosts().size());
         map.setProductsSize(user.getOffers().size());
-        ;
+
         map.setProductsSoldSize(user.getSoldProducts().size());
         return map;
     }
@@ -119,14 +118,6 @@ public class UserServiceImpl implements UserService {
         return map;
     }
 
-    @Override
-    public UserIdUsernameViewModel getUserHome(String username) {
-        return this.mapper
-                .map(this.userRepository
-                                .findByUsername(username),
-                        UserIdUsernameViewModel.class);
-
-    }
 
     @Override
     public void activateAccount(String username) {
@@ -260,6 +251,31 @@ public class UserServiceImpl implements UserService {
                     return mapUser;
                 })
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public ProfileEditServiceModel getEditUserProfile(String id) {
+        User user = this.userRepository.findById(id).orElse(null);
+        ProfileEditServiceModel map = this.mapper.map(user, ProfileEditServiceModel.class);
+        map.setFullName(user.getFirstName() + " " + user.getLastName());
+        map.setRegisteredOn(user.getRegisteredOn().format(DateTimeFormatter.ofPattern("dd/MMM/yyyy")));
+        map.setGender(user.getGender().name());
+
+        return map;
+    }
+
+    @Override
+    public void editUserProfile(String id, ProfileEditServiceModel map) {
+        User user = this.userRepository.findById(id).orElse(null);
+        user.setBio(map.getBio());
+        user.setEmail(map.getEmail());
+        String[] split = map.getFullName().split("\\s+");
+        if (split.length >= 2) {
+            user.setFirstName(split[0]);
+            user.setLastName(split[1]);
+        }
+
+        this.userRepository.saveAndFlush(user);
     }
 
     private String generateNewPassword() {

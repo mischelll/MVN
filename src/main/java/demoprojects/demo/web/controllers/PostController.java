@@ -7,6 +7,7 @@ import demoprojects.demo.service.interfaces.blog.PostService;
 import demoprojects.demo.service.models.bind.CommentCreateServiceModel;
 import demoprojects.demo.service.models.view.PostCategoryCountModel;
 import demoprojects.demo.service.models.bind.PostCreateServiceModel;
+import demoprojects.demo.service.models.view.PostViewServiceModel;
 import demoprojects.demo.web.models.CommentCreateModel;
 import demoprojects.demo.web.models.EditPostModel;
 import demoprojects.demo.web.models.PostCreateModel;
@@ -72,7 +73,7 @@ public class PostController {
     }
 
     @GetMapping("/create")
-    @PreAuthorize("hasRole('ROLE_MODERATOR') or hasRole('ROLE_ADMIN') or hasRole('ROLE_BLOG-KING')")
+
     @PageTitle("Blog | Create")
     public ModelAndView createPost(ModelAndView modelAndView, Model model) {
         if(!model.containsAttribute("postSearch")){
@@ -86,7 +87,6 @@ public class PostController {
     }
 
     @PostMapping("/create")
-    @PreAuthorize("hasRole('ROLE_MODERATOR') or hasRole('ROLE_ADMIN') or hasRole('ROLE_BLOG-KING')")
     public ModelAndView createPostConfirm(@Valid @ModelAttribute("post") PostCreateModel post,
                                           BindingResult bindingResult,
                                           RedirectAttributes redirectAttributes,
@@ -124,7 +124,8 @@ public class PostController {
     @PageTitle("Article")
     public ModelAndView getSinglePost(ModelAndView modelAndView, @RequestParam String id,
                                       Model model,
-                                      RedirectAttributes redirectAttributes) {
+                                      RedirectAttributes redirectAttributes,
+                                      Principal principal) {
         redirectAttributes.addAttribute("id", id);
         if (!model.containsAttribute("postSearch") || !model.containsAttribute("comment")) {
             model.addAttribute("comment",new CommentCreateModel());
@@ -134,10 +135,11 @@ public class PostController {
         getCategoriesNames().forEach(categoryName -> categories
                 .add(this.postService
                         .findPostsByCategory(categoryName.name())));
-
+        PostViewServiceModel byId = this.postService.findById(id);
+        modelAndView.addObject("isPrincipalOwner",byId.getAuthor().equals(principal.getName()));
         modelAndView.addObject("categories", categories);
         modelAndView.addObject("popular", this.postService.getTopThreePosts());
-        modelAndView.addObject("post", this.postService.findById(id));
+        modelAndView.addObject("post", byId);
         modelAndView.addObject("comments",this.commentService.commentsOfPost(id));
         modelAndView.setViewName("blog/single");
 
@@ -184,12 +186,6 @@ public class PostController {
         return modelAndView;
     }
 
-    @GetMapping("/delete/{title}")
-    public ModelAndView deletePost(@PathVariable String title, ModelAndView modelAndView){
-        this.postService.deleteByTitle(title);
-        modelAndView.setViewName("blog/index");
-        return modelAndView;
-    }
 
     @GetMapping("/edit")
     @PreAuthorize("hasAnyRole('ROLE_ROOT','ROLE_ADMIN','ROLE_BLOG-KING')")
@@ -223,6 +219,12 @@ public class PostController {
         }
 
         return modelAndView;
+    }
+
+    @PostMapping("/article/delete/{author}/{postId}")
+    public ModelAndView deletePostByAuthor(@PathVariable String author,@PathVariable String post){
+
+        return  new ModelAndView();
     }
 
 

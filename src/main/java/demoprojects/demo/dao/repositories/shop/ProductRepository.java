@@ -9,9 +9,17 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Set;
 
-public interface ProductRepository extends  JpaRepository<Product, String> {
+public interface ProductRepository extends JpaRepository<Product, String> {
     Set<Product> findAllBySellerUsername(String username);
-    Set<Product> findAllByBuyerUsername(String username);
+
+    Set<Product> findAllByBuyerUsernameAndIsSoldIsTrueOrderBySold(String username);
+
+    List<Product> findAllByBuyerUsernameOrderBySold(String username);
+
+    List<Product> findAllByIsSoldFalseOrderByPrice();
+
+    List<Product> findAllByIsSoldFalseOrderByCreatedDesc();
+
 
 
 }

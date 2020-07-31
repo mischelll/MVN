@@ -1,5 +1,6 @@
 package demoprojects.demo.web.controllers;
 
+import demoprojects.demo.annottation.PageTitle;
 import org.dom4j.rule.Mode;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,8 +12,9 @@ import org.springframework.web.servlet.ModelAndView;
 public class GalleryController {
 
     @GetMapping("/")
+    @PageTitle("Under Construction")
     public ModelAndView getIndex(ModelAndView modelAndView){
-        modelAndView.setViewName("gallery/index");
+        modelAndView.setViewName("gallery/construction");
 
         return modelAndView;
     }

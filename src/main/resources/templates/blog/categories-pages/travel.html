@@ -11,7 +11,7 @@
                 <div class="row no-gutters">
                     <div class="col-md-12 blog-wrap" th:each="post : ${posts}">
                         <div class="row no-gutters align-items-center">
-                            <div class="col-md-6 img js-fullheight" th:style="'background:url('+ ${post.imgUrl} +');'">
+                            <div class="col-md-6 img js-fullheight" th:style="'background:url('+ ${post.imgUrl} +');background-repeat: no-repeat;'">
                             </div>
                             <div class="col-md-6">
                                 <div class="text p-md-5 p-4 ftco-animate">

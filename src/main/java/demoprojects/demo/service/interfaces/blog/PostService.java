@@ -10,7 +10,6 @@ import demoprojects.demo.service.models.view.PostViewServiceModel;
 import java.util.List;
 
 public interface PostService {
-    List<PostViewServiceModel> findAll();
 
     List<PostViewServiceModel> findLatest10();
 
@@ -20,13 +19,7 @@ public interface PostService {
 
     PostCreateServiceModel edit(PostCreateServiceModel post, String postId);
 
-    Post edit(Post post);
-
     void deleteById(String id);
-
-    void deleteByUser(String username);
-
-    void deleteByTitle(String title);
 
     PostCategoryCountModel findPostsByCategory(String category);
 

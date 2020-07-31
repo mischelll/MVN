@@ -13,8 +13,8 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
 <body>
-<form th:action="@{/mvn/users/api/profile/edit(id=${user.id})}" th:method="post" th:object=" ${user2}">
-<div class="container emp-profile" th:object="${user}">
+<form th:action="@{/mvn/users/api/profile/edit(id=${user.id})}" enctype="multipart/form-data" th:method="post" th:object="${user}">
+<div class="container emp-profile" >
     <div class="row">
         <div class="col-md-4">
             <div class="profile-img">
@@ -27,10 +27,9 @@
                 <th:block th:if="${user.gender.equals('Other')}">
                     <img  src="img/no-gender-profile.jpg" alt="Could not load image"/>
                 </th:block>
-
 <!--                <div class="file btn btn-lg btn-primary">-->
-<!--                    Change Photo-->
-<!--                    <input type="file" name="file"/>-->
+<!--                    <h6>Change Photo</h6>-->
+<!--                    <input type="file" name="avatar" id="avatar" value="Change Photo">-->
 <!--                </div>-->
             </div>
         </div>
@@ -39,7 +38,7 @@
             <div class="profile-head">
                 <h5 th:text="${user.fullName}">
                     Kshiti Ghelani</h5>
-                <input th:field="${user2.bio}" name="bio" type="text" th:placeholder="|Current: ${user.bio}|">
+                <input th:value="${user.bio}" name="bio" type="text" >
 
                 <h6 th:text="|Member since: ${user.registeredOn}|"></h6>
                 <p class="proile-rating">RANKINGS : <span>10/10</span></p>
@@ -92,7 +91,7 @@
                             <label>Name</label>
                         </div>
                         <div class="col-md-6">
-                            <input th:field="${user2.fullName}" name="fullName" type="text" th:placeholder="|Current: ${user.fullName}|">
+                            <input th:value="${user.fullName}" name="fullName" type="text" >
                         </div>
                     </div>
                     <div class="row">
@@ -100,42 +99,10 @@
                             <label>Email</label>
                         </div>
                         <div class="col-md-6">
-                            <input th:field="${user2.email}" name="email" type="text" th:placeholder="|Current: ${user.email}|">
+                            <input th:value="${user.email}" name="email" type="text" >
                         </div>
                     </div>
                     <br>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label>Blog Posts</label>
-                        </div>
-                        <div class="col-md-6">
-                            <p>99</p>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label>Blog Comments Likes</label>
-                        </div>
-                        <div class="col-md-6">
-                            <p>99</p>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label>Shop Products</label>
-                        </div>
-                        <div class="col-md-6">
-                            <p>99</p>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label>Shop Comments Likes</label>
-                        </div>
-                        <div class="col-md-6">
-                            <p>99</p>
-                        </div>
-                    </div>
                 </div>
 
             </div>

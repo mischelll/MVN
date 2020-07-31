@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <base href="/">
+    <link rel="stylesheet" href="/css/change-pass.css">
+</head>
+<body>
+<div class="login-page">
+    <div class="form">
+        <form  enctype="multipart/form-data"
+              th:method="POST" class="login-form">
+            <input type="file" class="form-control"  id="images" placeholder="Select photos" name="images" required  style="color: grey">
+          <small>Avatar must be maximum 5 MB.</small><br>
+          <small>Avatar must be a JPEG/JPG/PNG file.</small>
+
+            <h5>Hello</h5>
+            <button>change</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    $('.message a').click(function(){
+        $('form').animate({height: "toggle", opacity: "toggle"}, "slow");
+    });
+</script>
+</body>
+</html>

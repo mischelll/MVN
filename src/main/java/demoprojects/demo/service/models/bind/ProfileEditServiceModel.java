@@ -1,10 +1,10 @@
-package demoprojects.demo.web.models;
+package demoprojects.demo.service.models.bind;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.web.multipart.MultipartFile;
+
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -14,13 +14,12 @@ import javax.validation.constraints.Size;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProfileEditModel {
+public class ProfileEditServiceModel {
     private String id;
-    private String username;
     private String registeredOn;
     private String gender;
     private String bio;
-
+    private String username;
     @NotEmpty(message = "Field cannot be empty")
     @Size(min = 2, message = "FullName must be minimum 2 characters")
     private String fullName;
@@ -28,6 +27,4 @@ public class ProfileEditModel {
     @Email(message = "Please enter a valid email")
     @NotEmpty(message = "Field cannot be empty")
     private String email;
-
-
 }

@@ -13,10 +13,7 @@ public interface PostRepository extends JpaRepository<Post, String> {
 
     Post findByAuthor(User author);
 
-    List<Post> findAllByTitleContains(String text);
+    List<Post> findAllByTitleContainsOrderByPostedOnDesc(String text);
 
-    void deleteByAuthorUsername(String username);
-
-    void deleteByTitle(String title);
-
+    List<Post> findTop9ByOrderByPostedOnDesc();
 }

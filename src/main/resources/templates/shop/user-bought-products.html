@@ -84,17 +84,18 @@
         products: '/mvn/shop/api/my-bought-products/' + username,
     };
     const toString = ({id, title, price, soldOnDate, views, sellerUsername}) => {
-        `<tr id="${id}">
-    <td style="text-align: center;">${title}</td>
+      let columns =   `
+    <td style="text-align: center;"><a href="/mvn/shop/product?id=${id}">${title}</a></td>
     <td style="text-align: center;">${price}</td>
     <td style="text-align: center;">${soldOnDate}</td>
     <td style="text-align: center;">${views}</td>
     <td style="text-align: center;"  ><a href="/mvn/users/api/profile-view/${sellerUsername}">${sellerUsername}</a>
     </td>
-    </tr>
+
 `;
         revenue += Number(price);
-    }
+        return `<tr id="${id}">${columns}</tr>`
+    };
 
     fetch(URLS.products)
         .then(response => response.json())

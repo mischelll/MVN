@@ -2,9 +2,11 @@ package demoprojects.demo.web.controllers;
 
 import demoprojects.demo.service.interfaces.user.RoleService;
 import demoprojects.demo.service.interfaces.user.UserService;
+import demoprojects.demo.service.models.bind.ProfileEditServiceModel;
+import demoprojects.demo.web.models.ChangeAvatarModel;
 import demoprojects.demo.web.models.PasswordChangeModel;
 import demoprojects.demo.web.models.ProfileEditModel;
-import demoprojects.demo.web.models.RoleChangeModel;
+import org.modelmapper.ModelMapper;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,10 +22,12 @@ import javax.validation.Valid;
 public class UserController extends BaseController {
     private final UserService userService;
     private final RoleService roleService;
+    private final ModelMapper mapper;
 
-    public UserController(UserService userService, RoleService roleService) {
+    public UserController(UserService userService, RoleService roleService, ModelMapper mapper) {
         this.userService = userService;
         this.roleService = roleService;
+        this.mapper = mapper;
     }
 
     @GetMapping("/insert")
@@ -83,7 +87,7 @@ public class UserController extends BaseController {
             redirectAttributes.addFlashAttribute("notMatchingOld", !matchOldPassword);
             modelAndView.setViewName("redirect:/mvn/users/api/profile/change-pass?id=" + id);
 
-        }else {
+        } else {
             this.userService.changePassword(id, passChange.getNewPassword());
             modelAndView.setViewName("redirect:/mvn/users/api/profile?id=" + id);
         }
@@ -98,21 +102,40 @@ public class UserController extends BaseController {
         return modelAndView;
     }
 
+    @GetMapping("/profile/change-avatar")
+    public ModelAndView changeAvatarPage(@RequestParam String id, ModelAndView modelAndView, Model model) {
+        if (!model.containsAttribute("changeAvatar")) {
+            model.addAttribute("changeAvatar", new ChangeAvatarModel());
+        }
+        modelAndView.setViewName("user/change-avatar");
+        return modelAndView;
+    }
+
     @GetMapping("/profile/edit")
-    public ModelAndView getEditProfile(@RequestParam String id, ModelAndView modelAndView) {
-        modelAndView.addObject("user", this.userService.getUserProfile(id));
-        modelAndView.addObject("user2", new ProfileEditModel());
+    public ModelAndView getEditProfile(@RequestParam String id, ModelAndView modelAndView, Model model) {
+        if (!model.containsAttribute("user")) {
+            modelAndView.addObject("user", this.mapper.map(this.userService.getEditUserProfile(id), ProfileEditModel.class));
+        }
+
         modelAndView.setViewName("user/profile-edit");
 
         return modelAndView;
     }
 
     @PostMapping("/profile/edit")
-    public ModelAndView getEditProfileConfirm(@Valid @ModelAttribute("user2") ProfileEditModel user2,
+    public ModelAndView getEditProfileConfirm(@Valid @ModelAttribute("user") ProfileEditModel user,
                                               BindingResult bindingResult,
                                               @RequestParam String id,
+                                              RedirectAttributes redirectAttributes,
                                               ModelAndView modelAndView) {
-
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("user", user);
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.user", bindingResult);
+            modelAndView.setViewName("redirect:/mvn/users/api/profile/edit?id=" + id);
+        } else {
+            ProfileEditServiceModel map = this.mapper.map(user, ProfileEditServiceModel.class);
+            this.userService.editUserProfile(map.getId(), map);
+        }
 
         modelAndView.setViewName("redirect:/mvn/users/api/profile?id=" + id);
 

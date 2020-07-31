@@ -5,6 +5,7 @@ import demoprojects.demo.service.interfaces.shop.ProductService;
 import demoprojects.demo.service.interfaces.user.UserService;
 import demoprojects.demo.service.models.view.PostResponseModel;
 import demoprojects.demo.service.models.view.ProductNewResponseModel;
+import demoprojects.demo.service.models.view.ProductViewServiceModel;
 import demoprojects.demo.service.models.view.UserResponseModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -60,8 +61,8 @@ public class AdminApiController {
 
     @GetMapping("/products")
     @PreAuthorize("hasRole('ROLE_ROOT') or hasRole('ROLE_ADMIN')")
-    public List<ProductNewResponseModel> listAllProducts(HttpSession session) {
-        List<ProductNewResponseModel> productNewResponseModels = this.productService.listAllProducts();
+    public List<ProductViewServiceModel> listAllProducts(HttpSession session) {
+        List<ProductViewServiceModel> productNewResponseModels = this.productService.listAllProducts();
         int a = 4;
         return this.productService.listAllProducts();
     }

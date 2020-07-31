@@ -38,7 +38,6 @@
         <div class="container">
             <div class="row">
                 <div class="col">
-
                     <!-- Product Sorting -->
                     <div class="sorting_bar d-flex flex-md-row flex-column align-items-md-center justify-content-md-start">
                         <div class="results">Showing <span>12</span> results</div>
@@ -68,7 +67,7 @@
                 <div class="col"  >
                     <div  class="product_grid" >
                         <div class="product" th:each="product : ${products}">
-                            <div class="product_image"><img src="img/merc.jpg" alt=""></div>
+                            <div class="product_image" th:each="image,counter : ${product.imgUrls}"><img   th:if="${counter.first}" th:src="${image}" alt=""></div>
 
                             <div class="product_content">
                                 <div class="product_title"><a style="font-size: 22px" th:href="@{/mvn/shop/product(id=${product.id})}" th:text="${product.title}">${title}</a></div>

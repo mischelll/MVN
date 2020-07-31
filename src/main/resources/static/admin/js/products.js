@@ -18,14 +18,14 @@ const toString = ({
                       price,
                       email,
                       categories,
-                      contactNumber
+                      telephone
                   }) =>
     `<tr>
     <td>${title} </td>
     <td>${price} </td>
     <td>${created} </td>
     <td>${username} </td>
-    <td>${contactNumber} </td>
+    <td>${telephone} </td>
     <td>${email} </td>
     <td>${categories}</td>
     <td>${views} </td>

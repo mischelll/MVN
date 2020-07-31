@@ -44,9 +44,8 @@ public class ProductServiceImpl implements ProductService {
         product1.setCreated(LocalDateTime.now().withNano(0));
         product1.setComments(new HashSet<>());
         Set<ProductCategory> categories = new HashSet<>();
-        product.getCategory().forEach(productCategoryName -> {
-            categories.add(this.productCategoryService.findByName(productCategoryName.name()));
-        });
+        product.getCategory().forEach(productCategoryName ->
+                categories.add(this.productCategoryService.findByName(productCategoryName.name())));
         product1.setCategories(categories);
         return this
                 .mappper
@@ -58,11 +57,8 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductNewResponseModel> listNewestProducts() {
         return this.productRepository
-                .findAll()
+                .findAllByIsSoldFalseOrderByCreatedDesc()
                 .stream()
-                .filter(product -> !product.getIsSold())
-                .sorted((a, b) -> b.getCreated().compareTo(a.getCreated()))
-                .limit(16)
                 .map(product -> {
                     ProductNewResponseModel map = this.mappper.map(product, ProductNewResponseModel.class);
                     map.setFullName(product.getSeller().getFirstName() + " " + product.getSeller().getLastName());
@@ -75,23 +71,26 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductNewResponseModel> listAllProducts() {
+    public List<ProductViewServiceModel> listAllProducts() {
         return this.productRepository
-                .findAll()
+                .findAllByIsSoldFalseOrderByPrice()
                 .stream()
-                .filter(product -> !product.getIsSold() && product.getSeller().isEnabled())
-                .sorted(Comparator.comparing(Product::getPrice))
+                .filter(product -> product.getSeller().isEnabled())
                 .map(product -> {
-                    ProductNewResponseModel map = this.mappper.map(product, ProductNewResponseModel.class);
+                    ProductViewServiceModel map = this.mappper.map(product, ProductViewServiceModel.class);
                     map.setFullName(product.getSeller().getFirstName() + " " + product.getSeller().getLastName());
                     map.setUsername(product.getSeller().getUsername());
                     map.setCreated(product.getCreated().format(DateTimeFormatter.ofPattern("dd/MMM/yyyy HH:mm")));
                     map.setEmail(product.getSeller().getEmail());
-                    map.setContactNumber(product.getTelephoneNumber());
+                    map.setTelephone(product.getTelephoneNumber());
                     List<String> cat = new ArrayList<>();
                     product.getCategories().forEach(category -> cat.add(category.getName().name()));
                     map.setCategories(String.join(", ", cat));
-
+                    map.setImgUrls(product
+                            .getProductImages()
+                            .stream()
+                            .map(Image::getImgUrl)
+                            .collect(Collectors.toList()));
                     return map;
                 })
                 .collect(Collectors.toList());
@@ -151,24 +150,14 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductViewServiceModel> findProductsByUsername(String username) {
-        Set<Product> allBySellerUsername = this.productRepository
-                .findAllBySellerUsername(username);
-        return generateProducts(allBySellerUsername);
-    }
-
-    @Override
     public List<ProductsUserResponseModel> findSoldProductsByUsername(String username) {
         Set<Product> allBySellerUsername = this.productRepository
-                .findAllBySellerUsername(username);
+                .findAllByBuyerUsernameAndIsSoldIsTrueOrderBySold(username);
         return allBySellerUsername
                 .stream()
-                .filter(Product::getIsSold)
-                .sorted((a, b) -> b.getSold().compareTo(a.getSold()))
                 .map(product -> {
                     ProductsUserResponseModel map = this.mappper.map(product,
                             ProductsUserResponseModel.class);
-
                     map.setBuyerUsername(product.getBuyer().getUsername());
                     map.setSoldOnDate(product.getSold().format(
                             DateTimeFormatter.ofPattern("dd/MMM/yyyy HH:mm")));
@@ -180,12 +169,11 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductsUserResponseModel> findBoughtProductsByUsername(String username) {
-        Set<Product> allByBuyerUsername = this.productRepository
-                .findAllByBuyerUsername(username);
+        List<Product> allByBuyerUsername = this.productRepository
+                .findAllByBuyerUsernameOrderBySold(username);
         return allByBuyerUsername
                 .stream()
                 .filter(product -> product.getBuyer().getUsername().equals(username))
-                .sorted((a, b) -> b.getSold().compareTo(a.getSold()))
                 .map(product -> {
                     ProductsUserResponseModel map = this.mappper.map(product,
                             ProductsUserResponseModel.class);
@@ -235,7 +223,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductEditServiceModel editProduct(ProductEditServiceModel editServiceModel, String id) {
+    public void editProduct(ProductEditServiceModel editServiceModel, String id) {
         Product product = this.productRepository.findById(id).orElse(null);
 
         Set<ProductCategory> categories = new HashSet<>();
@@ -243,6 +231,7 @@ public class ProductServiceImpl implements ProductService {
             ProductCategory byName = this.productCategoryService.findByName(productCategoryName.name());
             categories.add(byName);
         });
+        assert product != null;
         product.setCategories(categories);
         product.setPreview(editServiceModel.getPreview());
         product.setPrice(editServiceModel.getPrice());
@@ -251,7 +240,6 @@ public class ProductServiceImpl implements ProductService {
         product.setDescription(editServiceModel.getDescription());
 
         this.productRepository.saveAndFlush(product);
-        return editServiceModel;
     }
 
     @Override
@@ -264,6 +252,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void removeProductFromSold(String productId) {
         Product product = this.productRepository.findById(productId).orElse(null);
+        assert product != null;
         product.setIsSold(false);
         product.getBuyer().getBoughtProducts().remove(product);
         product.setBuyer(null);
@@ -275,15 +264,6 @@ public class ProductServiceImpl implements ProductService {
         byUsername.setSoldProducts(soldProducts);
 
         this.productRepository.saveAndFlush(product);
-    }
-
-    @Override
-    public BigDecimal calculateBoughtRevenue(String username) {
-        return this.productRepository
-                .findAllByBuyerUsername(username)
-                .stream()
-                .map(Product::getPrice)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     @Override

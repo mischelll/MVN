@@ -5,7 +5,6 @@ import demoprojects.demo.service.models.bind.ProductEditServiceModel;
 import demoprojects.demo.service.models.view.ProductNewResponseModel;
 import demoprojects.demo.service.models.view.ProductViewServiceModel;
 import demoprojects.demo.service.models.view.ProductsUserResponseModel;
-import demoprojects.demo.web.models.ProductCreateModel;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -15,7 +14,7 @@ public interface ProductService {
 
     List<ProductNewResponseModel> listNewestProducts();
 
-    List<ProductNewResponseModel> listAllProducts();
+    List<ProductViewServiceModel> listAllProducts();
 
     ProductViewServiceModel findProduct(String id);
 
@@ -25,8 +24,6 @@ public interface ProductService {
 
     List<ProductViewServiceModel> findProductsByCategory(String category);
 
-    List<ProductViewServiceModel> findProductsByUsername(String username);
-
     List<ProductsUserResponseModel> findSoldProductsByUsername(String username);
 
     List<ProductsUserResponseModel> findBoughtProductsByUsername(String username);
@@ -35,13 +32,12 @@ public interface ProductService {
 
     List<ProductsUserResponseModel> listProductsByUser(String username);
 
-    ProductEditServiceModel editProduct(ProductEditServiceModel editServiceModel, String id);
+    void editProduct(ProductEditServiceModel editServiceModel, String id);
 
     ProductEditServiceModel findProductToEdit(String id);
 
     void removeProductFromSold(String productId);
 
-    BigDecimal calculateBoughtRevenue(String username);
 
     BigDecimal calculateSoldRevenue(String username);
 }

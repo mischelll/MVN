@@ -21,6 +21,7 @@ public class ProductViewServiceModel {
     private String preview;
     private String created;
     private String email;
+    private String categories;
     private BigDecimal price;
     private String username;
     private String telephone;

@@ -24,9 +24,15 @@
                         <br>
                         <br>
                         <br>
-                        <a sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_BLOG-KING','ROLE_ROOT')"
-                           th:href="@{/posts/edit(id=${post.id})}" >
+                        <a th:if="${isPrincipalOwner}"
+                           th:href="@{/posts/edit(id=${post.id})}">
                             <button type="submit" class="btn btn-outline-info">Edit
+                            </button>
+                        </a>
+
+                        <a th:if="${isPrincipalOwner}"
+                           th:href="@{/mvn/admin/api/posts/delete(id=${post.id})}">
+                            <button type="submit" class="btn btn-outline-danger">Delete
                             </button>
                         </a>
                         <br>
@@ -68,10 +74,18 @@
                                            class="reply">Like <span th:text="|(${comment1.likes})|"></span></a>
                                         <a th:href="@{/comments/dislike (postID=${comment1.postID}, commentId=(${comment1.id}))}"
                                            class="reply">Dislike <span
-                                                th:text="|(${comment1.dislikes})|"></span></a></p>
-                                        <p sec:authorize="hasAnyRole('ROLE_MODERATOR', 'ROLE_ADMIN','ROLE_BLOG-KING','ROLE_ROOT')">
+                                                th:text="|(${comment1.dislikes})|"></span></a>
+
+                                        <p th:if="${comment1.author} == ${#authorization.getAuthentication().getName()}">
                                             <a th:href="@{/comments/delete (postID=${comment1.postID}, commentId=(${comment1.id}))}"
                                                class="reply">Delete</a></p>
+
+                                        <div th:unless="${comment1.author} == ${#authorization.getAuthentication().getName()}">
+                                        <p sec:authorize="hasAnyRole('ROLE_BLOG-KING','ROLE_ADMIN','ROLE_ROOT')">
+                                            <a th:href="@{/comments/delete (postID=${comment1.postID}, commentId=(${comment1.id}))}"
+                                               class="reply">Delete</a>
+                                        </p>
+                                        </div>
                                     </div>
                                 </li>
                             </ul>
@@ -149,14 +163,15 @@
                     </div>
 
                     <div class="sidebar-box ftco-animate">
+                        <h5 class="sidebar-heading">--Expect soon--</h5>
                         <h3 class="sidebar-heading">Archives</h3>
                         <ul class="categories">
-                            <li><a href="#">December 2018 <span>(10)</span></a></li>
-                            <li><a href="#">September 2018 <span>(6)</span></a></li>
-                            <li><a href="#">August 2018 <span>(8)</span></a></li>
-                            <li><a href="#">July 2018 <span>(2)</span></a></li>
-                            <li><a href="#">June 2018 <span>(7)</span></a></li>
-                            <li><a href="#">May 2018 <span>(5)</span></a></li>
+                            <li><a>December 2019 <span>(10)</span></a></li>
+                            <li><a>September 2019 <span>(6)</span></a></li>
+                            <li><a>August 2019 <span>(8)</span></a></li>
+                            <li><a>July 2020 <span>(2)</span></a></li>
+                            <li><a>June 2020 <span>(7)</span></a></li>
+                            <li><a>May 2020 <span>(5)</span></a></li>
                         </ul>
                     </div>
 

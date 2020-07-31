@@ -1,11 +1,11 @@
 package demoprojects.demo.service.interfaces.user;
 
 import demoprojects.demo.dao.models.entities.User;
+import demoprojects.demo.service.models.bind.ProfileEditServiceModel;
 import demoprojects.demo.service.models.bind.RoleChangeServiceModel;
 import demoprojects.demo.service.models.bind.UserLoginServiceModel;
 import demoprojects.demo.service.models.bind.UserRegisterServiceModel;
 import demoprojects.demo.service.models.view.RoleViewServiceModel;
-import demoprojects.demo.service.models.view.UserIdUsernameViewModel;
 import demoprojects.demo.service.models.view.UserProfileViewServiceModel;
 import demoprojects.demo.service.models.view.UserResponseModel;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -24,8 +24,6 @@ public interface UserService extends UserDetailsService {
     UserProfileViewServiceModel getUserProfile(String id);
 
     UserProfileViewServiceModel getUserVIewProfile(String username);
-
-    UserIdUsernameViewModel getUserHome(String username);
 
     void activateAccount(String username);
 
@@ -50,4 +48,8 @@ public interface UserService extends UserDetailsService {
     void activateByUsername(String username);
 
     List<UserResponseModel> listAllAdmins();
+
+    ProfileEditServiceModel getEditUserProfile(String id);
+
+    void editUserProfile(String id, ProfileEditServiceModel map);
 }

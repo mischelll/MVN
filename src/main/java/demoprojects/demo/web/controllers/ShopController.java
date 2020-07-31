@@ -115,6 +115,7 @@ public class ShopController extends BaseController {
     }
 
     @GetMapping("/product/edit")
+    @PageTitle("Product Edit")
     public ModelAndView getEditProduct(@RequestParam String id, ModelAndView modelAndView, Model model) {
         if (!model.containsAttribute("productEdit")) {
             model.addAttribute("productEdit", this.mapper.map(this.productService.findProductToEdit(id), ProductEditModel.class));
@@ -168,13 +169,13 @@ public class ShopController extends BaseController {
         return modelAndView;
     }
     @GetMapping("/my-bought-products/{username}")
-    @PageTitle("User Bought Products")
+
     public ModelAndView getUserBoughtProducts(ModelAndView modelAndView, @PathVariable String username, Principal principal) {
         if (!principal.getName().equals(username)) {
             modelAndView.setViewName("redirect:/mvn/shop/my-bought-products/" + principal.getName());
             return modelAndView;
         }
-        modelAndView.addObject("boughtRevenue",this.productService.calculateBoughtRevenue(username));
+
         modelAndView.addObject("user", username);
         modelAndView.setViewName("shop/user-bought-products");
         return modelAndView;
@@ -182,6 +183,7 @@ public class ShopController extends BaseController {
 
 
     @GetMapping("/product/images/upload")
+    @PageTitle("Images Upload")
     public ModelAndView uploadProductImages(@RequestParam String id, ModelAndView modelAndView, Model model) {
         if (!model.containsAttribute("image")) {
             ProductImageCreateModel productImageCreateModel = new ProductImageCreateModel();

@@ -86,7 +86,7 @@
     };
     const toString = ({id, title, price, soldOnDate, views,buyerUsername, isSold}) => {
         let columns = `
-    <td style="text-align: center;">${title}</td>
+    <td style="text-align: center;"><a href="/mvn/shop/product?id=${id}">${title}</a></td>
     <td style="text-align: center;">${price}</td>
     <td style="text-align: center;">${soldOnDate}</td>
     <td style="text-align: center;">${views}</td>

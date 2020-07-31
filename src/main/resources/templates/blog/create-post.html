@@ -29,8 +29,8 @@
                         </th:block>
 
                         <div class="form-group">
-                            <input th:field="*{preview}" th:errorclass="bg-danger" type="text" id="preview"
-                                   name="preview" class="form-control" placeholder="Preview" required>
+                            <input th:field="*{preview}" th:errorclass="bg-danger"  type="text" id="preview"
+                                   name="preview" style=" -webkit-user-select: all;-moz-user-select: all; -ms-user-select: all;user-select: all; " class="form-control" placeholder="Preview" required>
                         </div>
                         <th:block th:each="e : ${#fields.errors('preview')}">
                             <small th:text="${e}" class="text-danger"></small>
