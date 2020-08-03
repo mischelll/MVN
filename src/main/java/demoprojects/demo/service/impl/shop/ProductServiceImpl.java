@@ -5,6 +5,7 @@ import demoprojects.demo.dao.models.entities.Product;
 import demoprojects.demo.dao.models.entities.ProductCategory;
 import demoprojects.demo.dao.models.entities.User;
 import demoprojects.demo.dao.repositories.shop.ProductRepository;
+import demoprojects.demo.service.interfaces.CloudinaryService;
 import demoprojects.demo.service.interfaces.shop.ProductCategoryService;
 import demoprojects.demo.service.interfaces.shop.ProductService;
 import demoprojects.demo.service.interfaces.user.UserService;
@@ -13,7 +14,6 @@ import demoprojects.demo.service.models.bind.ProductEditServiceModel;
 import demoprojects.demo.service.models.view.ProductNewResponseModel;
 import demoprojects.demo.service.models.view.ProductViewServiceModel;
 import demoprojects.demo.service.models.view.ProductsUserResponseModel;
-import demoprojects.demo.service.models.view.UserResponseModel;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -29,12 +29,15 @@ public class ProductServiceImpl implements ProductService {
     private final ProductCategoryService productCategoryService;
     private final ModelMapper mappper;
     private final UserService userService;
+    private final CloudinaryService cloudinaryService;
 
-    public ProductServiceImpl(ProductRepository productRepository, ProductCategoryService productCategoryService, ModelMapper mappper, UserService userService) {
+
+    public ProductServiceImpl(ProductRepository productRepository, ProductCategoryService productCategoryService, ModelMapper mappper, UserService userService, CloudinaryService cloudinaryService) {
         this.productRepository = productRepository;
         this.productCategoryService = productCategoryService;
         this.mappper = mappper;
         this.userService = userService;
+        this.cloudinaryService = cloudinaryService;
     }
 
     @Override
@@ -63,6 +66,7 @@ public class ProductServiceImpl implements ProductService {
                     ProductNewResponseModel map = this.mappper.map(product, ProductNewResponseModel.class);
                     map.setFullName(product.getSeller().getFirstName() + " " + product.getSeller().getLastName());
                     map.setUsername(product.getSeller().getUsername());
+                    map.setImgURL(product.getProductImages().get(0).getImgUrl());
                     map.setCreated(product.getCreated().format(DateTimeFormatter.ofPattern("dd/MMM/yyyy")));
 
                     return map;
@@ -140,7 +144,6 @@ public class ProductServiceImpl implements ProductService {
                 })
                 .map(this::mapEntity)
                 .collect(Collectors.toList());
-
     }
 
     @Override
@@ -152,7 +155,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductsUserResponseModel> findSoldProductsByUsername(String username) {
         Set<Product> allBySellerUsername = this.productRepository
-                .findAllByBuyerUsernameAndIsSoldIsTrueOrderBySold(username);
+                .findAllBySellerUsernameAndIsSoldIsTrueOrderBySold(username);
         return allBySellerUsername
                 .stream()
                 .map(product -> {
@@ -200,6 +203,7 @@ public class ProductServiceImpl implements ProductService {
         buyer.getBoughtProducts().add(product);
 
         User seller = this.userService.findByUsername(product.getSeller().getUsername());
+
         seller.getSoldProducts().add(product);
 
         this.productRepository.saveAndFlush(product);
@@ -214,7 +218,7 @@ public class ProductServiceImpl implements ProductService {
                 .map(product -> {
                     ProductsUserResponseModel map = this.mappper.map(product, ProductsUserResponseModel.class);
                     map.setCreatedOnDate(product.getCreated().format(DateTimeFormatter.ofPattern("dd/MMM/yyyy HH:mm")));
-                    List<UserResponseModel> userResponseModels = this.userService.listAll();
+
 
 
                     return map;
@@ -259,7 +263,7 @@ public class ProductServiceImpl implements ProductService {
         product.setSold(null);
 
         User byUsername = this.userService.findByUsername(product.getSeller().getUsername());
-        List<Product> soldProducts = byUsername.getSoldProducts();
+        Set<Product> soldProducts = byUsername.getSoldProducts();
         soldProducts.removeIf(product1 -> product.getId().equals(product1.getId()));
         byUsername.setSoldProducts(soldProducts);
 
@@ -273,6 +277,26 @@ public class ProductServiceImpl implements ProductService {
                 .stream()
                 .map(Product::getPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    @Override
+    public Integer getNewProductsCount() {
+        return this.productRepository.getLastWeekProductsCount();
+    }
+
+    @Override
+    public void deleteById(String id) {
+        Product product = this.productRepository.findById(id).orElse(null);
+        assert product != null;
+        product.setCategories(null);
+        product.setComments(null);
+        product.setBuyer(null);
+        product.setSeller(null);
+        product.getProductImages().forEach(image ->
+                this.cloudinaryService.delete(image.getImgUrl()));
+
+        this.productRepository.saveAndFlush(product);
+        this.productRepository.deleteById(id);
     }
 
     private List<ProductViewServiceModel> generateProducts(Set<Product> products) {
@@ -296,6 +320,11 @@ public class ProductServiceImpl implements ProductService {
         productViewServiceModel.setFullName(product.getSeller().getFirstName() + " " + product.getSeller().getLastName());
         productViewServiceModel.setEmail(product.getSeller().getEmail());
         productViewServiceModel.setUsername(product.getSeller().getUsername());
+        productViewServiceModel.setImgUrls(product
+                .getProductImages()
+                .stream()
+                .map(Image::getImgUrl)
+                .collect(Collectors.toList()));
         return productViewServiceModel;
     }
 }

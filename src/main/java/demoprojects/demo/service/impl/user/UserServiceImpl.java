@@ -1,6 +1,7 @@
 package demoprojects.demo.service.impl.user;
 
 import demoprojects.demo.dao.models.entities.Gender;
+import demoprojects.demo.dao.models.entities.Product;
 import demoprojects.demo.dao.models.entities.Role;
 import demoprojects.demo.dao.models.entities.User;
 import demoprojects.demo.dao.repositories.user.UserRepository;
@@ -11,6 +12,7 @@ import demoprojects.demo.service.models.bind.ProfileEditServiceModel;
 import demoprojects.demo.service.models.bind.RoleChangeServiceModel;
 import demoprojects.demo.service.models.bind.UserLoginServiceModel;
 import demoprojects.demo.service.models.bind.UserRegisterServiceModel;
+import demoprojects.demo.service.models.view.ProductViewServiceModel;
 import demoprojects.demo.service.models.view.RoleViewServiceModel;
 import demoprojects.demo.service.models.view.UserProfileViewServiceModel;
 import demoprojects.demo.service.models.view.UserResponseModel;
@@ -105,9 +107,9 @@ public class UserServiceImpl implements UserService {
         map.setBio(user.getBio() == null ? "No bio" : user.getBio());
         map.setGender(user.getGender().name());
         map.setPostsSize(user.getPosts().size());
+        map.setProductsBoughtSize(user.getBoughtProducts().size());
         map.setProductsSize(user.getOffers().size());
-
-        map.setProductsSoldSize(user.getSoldProducts().size());
+        map.setProductsSoldSize((int) user.getSoldProducts().stream().filter(Product::getIsSold).count());
         return map;
     }
 
@@ -280,6 +282,31 @@ public class UserServiceImpl implements UserService {
 
         this.userRepository.saveAndFlush(user);
     }
+
+    @Override
+    public String getUserEmail(String username) {
+        User byUsername = this.userRepository.findByUsername(username);
+        return byUsername.getEmail();
+    }
+
+    @Override
+    public List<String> listAllUserEmails() {
+        List<String> allUserEmail = this.userRepository.getAllUserEmail();
+        int a = 5;
+        return allUserEmail;
+    }
+
+    @Override
+    public List<ProductViewServiceModel> listAllProductsFromLastWeek() {
+        return null;
+    }
+
+    @Override
+    public String findPreviousAvatarURL(String name) {
+        User byUsername = this.userRepository.findByUsername(name);
+        return byUsername.getAvatar().getImgUrl();
+    }
+
 
     private String generateNewPassword() {
         Random random = new Random();

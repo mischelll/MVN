@@ -20,7 +20,7 @@ const toString = ({
                       categories,
                       telephone
                   }) =>
-    `<tr>
+    `<tr id="${id}">
     <td>${title} </td>
     <td>${price} </td>
     <td>${created} </td>
@@ -36,7 +36,7 @@ const toString = ({
              <button class = "btn btn-warning" onclick="window.location.href='mvn/shop/product/edit?id=${id}'"> Edit </button>
     </td>
        <td>
-            <form action = "#">
+            <form class="delete-product" data-id=${id} action = "/mvn/admin/api/products/delete?id=${id}" method="post">
                 <button class= "btn btn-danger"> Delete </button>
             </form>
        </td>
@@ -55,3 +55,22 @@ fetch(URLS.products)
         document.getElementById('products-table').innerHTML = result;
         loader.hide();
     });
+
+$('#products-table').on('submit', '.delete-product', function (ev) {
+    if (confirm('Are you sure you want to delete this Product?')) {
+        const url = $(this).attr('action');
+        loader.show();
+        fetch(url, {method: 'post'})
+            .then(data => {
+                const id = $(this).attr('data-id');
+                loader.hide();
+                $('#' + id).hide();
+                alert("Product deleted!");
+            });
+
+        ev.preventDefault();
+        return false;
+    }else {
+        console.log("Declined deletion")
+    }
+});

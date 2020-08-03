@@ -38,6 +38,9 @@ public interface ProductService {
 
     void removeProductFromSold(String productId);
 
-
     BigDecimal calculateSoldRevenue(String username);
+
+    Integer getNewProductsCount();
+
+    void deleteById(String id);
 }

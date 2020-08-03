@@ -8,6 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -25,9 +26,9 @@ public class User extends BaseEntity implements UserDetails {
     private LocalDateTime registeredOn = LocalDateTime.now();
     private Set<Role> authorities;
     private Set<Post> posts;
-    private List<Product> offers;
-    private List<Product> soldProducts;
-    private List<Product> boughtProducts;
+    private Set<Product> offers;
+    private Set<Product> soldProducts;
+    private Set<Product> boughtProducts;
     private boolean isAccountNonExpired;
     private boolean isAccountNonLocked;
     private boolean isCredentialsNonExpired;
@@ -35,8 +36,8 @@ public class User extends BaseEntity implements UserDetails {
 
 
     public User() {
-        this.soldProducts = new ArrayList<>();
-        this.boughtProducts = new ArrayList<>();
+        this.soldProducts = new HashSet<>();
+        this.boughtProducts = new HashSet<>();
     }
 
     @OneToOne(targetEntity = Image.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -52,11 +53,11 @@ public class User extends BaseEntity implements UserDetails {
     @OneToMany(mappedBy = "seller", targetEntity = Product.class, fetch = FetchType.EAGER,
             cascade = CascadeType.ALL)
     @Fetch(value = FetchMode.SUBSELECT)
-    public List<Product> getSoldProducts() {
+    public Set<Product> getSoldProducts() {
         return soldProducts;
     }
 
-    public void setSoldProducts(List<Product> soldProducts) {
+    public void setSoldProducts(Set<Product> soldProducts) {
         this.soldProducts = soldProducts;
     }
 
@@ -124,21 +125,21 @@ public class User extends BaseEntity implements UserDetails {
     @OneToMany(mappedBy = "seller", targetEntity = Product.class,
             fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @Fetch(value = FetchMode.SUBSELECT)
-    public List<Product> getOffers() {
+    public Set<Product> getOffers() {
         return offers;
     }
 
-    public void setOffers(List<Product> soldProducts) {
+    public void setOffers(Set<Product> soldProducts) {
         this.offers = soldProducts;
     }
 
     @OneToMany(mappedBy = "buyer", targetEntity = Product.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @Fetch(value = FetchMode.SUBSELECT)
-    public List<Product> getBoughtProducts() {
+    public Set<Product> getBoughtProducts() {
         return boughtProducts;
     }
 
-    public void setBoughtProducts(List<Product> boughtProducts) {
+    public void setBoughtProducts(Set<Product> boughtProducts) {
         this.boughtProducts = boughtProducts;
     }
 

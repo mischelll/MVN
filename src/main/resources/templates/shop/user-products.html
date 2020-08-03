@@ -9,7 +9,7 @@
     <style>
         .my-custom-scrollbar {
             position: relative;
-            height: 400px;
+            height: 200px;
             overflow: auto;
         }
 
@@ -34,6 +34,7 @@
                                 <div class="home_title">My Products<span>.</span></div>
                                 <div class="home_text"><p>Below are listed the products you offer in the MVN |
                                     Shop.</p></div>
+                                <div class="home_text"><small>*For some unknown front-end reasons to me, the tables might not be responsive.<br>I am sorry for the inconvenience *</small></div>
                             </div>
                         </div>
                     </div>
@@ -134,20 +135,22 @@
         });
 
     $('#user-products').on('submit', '.sell-product-form', function (ev) {
+        if (confirm('Are you sure you want to sell this Product?')) {
 
-        let url = $(this).attr('action');
-        url += '/' + $('.user-list').children("option:selected").val();
+            let url = $(this).attr('action');
+            url += '/' + $('.user-list').children("option:selected").val();
 
-        fetch(url, {method: 'post'})
-            .then(data => {
-                const id = $(this).attr('data-id');
+            fetch(url, {method: 'post'})
+                .then(data => {
+                    const id = $(this).attr('data-id');
 
-                $('#' + id).hide();
-                $('#revenue').load(document.URL +  " #revenue>*","");
+                    $('#' + id).hide();
+                    $('#revenue').load(document.URL + " #revenue>*", "");
 
-            });
-        ev.preventDefault();
-        return false;
+                });
+            ev.preventDefault();
+            return false;
+        }
     });
 </script>
 </body>

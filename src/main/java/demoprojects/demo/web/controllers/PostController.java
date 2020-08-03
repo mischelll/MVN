@@ -136,6 +136,7 @@ public class PostController {
                 .add(this.postService
                         .findPostsByCategory(categoryName.name())));
         PostViewServiceModel byId = this.postService.findById(id);
+        modelAndView.addObject("hasAvatar",byId.getAuthorImgUrl() == null);
         modelAndView.addObject("isPrincipalOwner",byId.getAuthor().equals(principal.getName()));
         modelAndView.addObject("categories", categories);
         modelAndView.addObject("popular", this.postService.getTopThreePosts());

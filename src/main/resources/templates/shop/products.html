@@ -22,6 +22,8 @@
                     <div class="row">
                         <div class="col">
                             <div class="home_content">
+                                <div th:if="${created}" class="home_title" style="color: green">Product created!</div>
+                                <div th:if="${deleted}" class="home_title" style="color: green">Product deleted!</div>
                                 <div class="home_title">Products Page<span>.</span></div>
                                 <div class="home_text"><p>Discover the things other users sell. You might like something.</p></div>
                             </div>
@@ -40,7 +42,7 @@
                 <div class="col">
                     <!-- Product Sorting -->
                     <div class="sorting_bar d-flex flex-md-row flex-column align-items-md-center justify-content-md-start">
-                        <div class="results">Showing <span>12</span> results</div>
+                        <div class="results">Showing <span>all</span> products</div>
                         <div class="sorting_container ml-md-auto">
                             <div class="sorting">
                                 <ul class="item_sorting">
@@ -80,9 +82,9 @@
                     </div>
                     <div class="product_pagination">
                         <ul>
-                            <li class="active"><a href="#">01.</a></li>
-                            <li><a href="#">02.</a></li>
-                            <li><a href="#">03.</a></li>
+                            <li class="active"><a >01.</a></li>
+                            <li><a >02.</a></li>
+                            <li><a >03.</a></li>
                         </ul>
                     </div>
 

@@ -1,5 +1,6 @@
 package demoprojects.demo.web.controllers;
 
+import demoprojects.demo.service.interfaces.user.EmailService;
 import demoprojects.demo.service.interfaces.user.UserService;
 import demoprojects.demo.util.messaging.SmsSenderAndReceiver;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -16,9 +17,11 @@ public class HomeController extends BaseController {
     private final UserService userService;
     private final SmsSenderAndReceiver smsSenderAndReceiver;
 
-    public HomeController(UserService userService, SmsSenderAndReceiver smsSenderAndReceiver) {
+
+    public HomeController(UserService userService, SmsSenderAndReceiver smsSenderAndReceiver, EmailService emailService) {
         this.userService = userService;
         this.smsSenderAndReceiver = smsSenderAndReceiver;
+
     }
 
 
@@ -37,6 +40,7 @@ public class HomeController extends BaseController {
         modelAndView.addObject("user",
                 this.userService.findByUsername(principal.getName()));
         modelAndView.setViewName("home/home");
+
 
 
         return modelAndView;

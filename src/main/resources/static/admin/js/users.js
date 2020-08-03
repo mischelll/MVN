@@ -103,9 +103,7 @@ $('#users-table').on('submit', '.delete-user', function (ev) {
                 const id = $(this).attr('data-id');
                 window.location.reload();
                 loader.hide();
-
-
-
+                alert("User deactivated!");
             });
         ev.preventDefault();
         return false;
@@ -122,7 +120,7 @@ $('#users-table').on('submit', '.activate-user', function (ev) {
                 const id = $(this).attr('data-id');
                 window.location.reload();
                 loader.hide();
-
+                alert("User activated!");
             });
         ev.preventDefault();
         return false;

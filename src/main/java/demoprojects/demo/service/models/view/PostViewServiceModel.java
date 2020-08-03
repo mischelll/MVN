@@ -16,6 +16,8 @@ public class PostViewServiceModel {
     private String preview;
     private String content;
     private String author;
+    private String authorBio;
+    private String authorImgUrl;
     private String imgUrl;
     private PostCategoryName categories;
     private Integer commentsCount;

@@ -63,8 +63,14 @@ public class AdminApiController {
     @PreAuthorize("hasRole('ROLE_ROOT') or hasRole('ROLE_ADMIN')")
     public List<ProductViewServiceModel> listAllProducts(HttpSession session) {
         List<ProductViewServiceModel> productNewResponseModels = this.productService.listAllProducts();
-        int a = 4;
         return this.productService.listAllProducts();
+    }
+
+    @PostMapping("/products/delete")
+    @PreAuthorize("hasRole('ROLE_ROOT') or hasRole('ROLE_ADMIN') or hasRole('ROLE_MICHAEL-SCOTT')")
+    public ResponseEntity<Void> deleteProduct(@RequestParam String id){
+        this.productService.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/users/deactivate/{username}")

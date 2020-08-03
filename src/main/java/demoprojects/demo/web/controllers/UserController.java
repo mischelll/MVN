@@ -21,6 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.security.Principal;
 
 @Controller
 @RequestMapping("/mvn/users/api")
@@ -128,7 +129,8 @@ public class UserController extends BaseController {
     public ModelAndView changeAvatarPageConfirm(@RequestParam String id,
                                                 @ModelAttribute("changeAvatar") ChangeAvatarModel changeAvatarModel,
                                                 RedirectAttributes redirectAttributes,
-                                                ModelAndView modelAndView) throws IOException {
+                                                ModelAndView modelAndView,
+                                                Principal principal) throws IOException {
         boolean isMaxSizeCorrect = cloudinaryService.isFileSizeCorrect(changeAvatarModel.getImage());
         boolean isFormatCorrect = cloudinaryService.isFileFormatCorrect(changeAvatarModel.getImage());
 
@@ -136,6 +138,8 @@ public class UserController extends BaseController {
             ChangeAvatarServiceModel map = this.mapper.map(changeAvatarModel, ChangeAvatarServiceModel.class);
             map.setFormat(changeAvatarModel.getImage().getContentType());
             map.setName(changeAvatarModel.getImage().getName());
+            String previousProfileAvatarURL = this.userService.findPreviousAvatarURL(principal.getName());
+            this.cloudinaryService.delete(previousProfileAvatarURL);
             map.setImgUrl(this.cloudinaryService.upload(changeAvatarModel.getImage()));
             this.imageService.uploadUserAvatar(map, id);
             modelAndView.setViewName("redirect:/mvn/users/api/profile?id=" + id);

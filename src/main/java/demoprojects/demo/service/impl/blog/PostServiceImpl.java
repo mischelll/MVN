@@ -39,7 +39,6 @@ public class PostServiceImpl implements PostService {
     }
 
 
-
     @Override
     public List<PostViewServiceModel> findLatest10() {
         return this.postRepository
@@ -50,7 +49,7 @@ public class PostServiceImpl implements PostService {
                 .collect(Collectors.toList());
     }
 
-    private PostViewServiceModel mapViewModel(Post post){
+    private PostViewServiceModel mapViewModel(Post post) {
         PostViewServiceModel map = this.modelMapper.map(post, PostViewServiceModel.class);
         map.setCategories(post.getCategories().iterator().next().getName());
         map.setCommentsCount(post.getComments().size());
@@ -67,6 +66,10 @@ public class PostServiceImpl implements PostService {
         PostViewServiceModel map = this.modelMapper.map(byId, PostViewServiceModel.class);
         map.setCommentsCount(byId.getComments().size());
         map.setAuthor(byId.getAuthor().getUsername());
+        map.setAuthorBio(byId.getAuthor().getBio());
+        if (byId.getAuthor().getAvatar() != null) {
+            map.setAuthorImgUrl(byId.getAuthor().getAvatar().getImgUrl());
+        }
         return map;
     }
 
@@ -77,8 +80,9 @@ public class PostServiceImpl implements PostService {
         map.setPostedOn(LocalDateTime.now());
         return getPostCreateServiceModel(post, map);
     }
+
     @Override
-    public PostCreateServiceModel edit(PostCreateServiceModel post,String postId) {
+    public PostCreateServiceModel edit(PostCreateServiceModel post, String postId) {
         Post post1 = this.postRepository.findById(postId).orElse(null);
         Post editPost = this.modelMapper.map(post, Post.class);
         assert post1 != null;

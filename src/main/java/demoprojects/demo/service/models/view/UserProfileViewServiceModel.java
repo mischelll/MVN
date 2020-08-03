@@ -20,6 +20,7 @@ public class UserProfileViewServiceModel {
     private Integer postsComments;
     private Integer productsSize;
     private Integer productsSoldSize;
+    private Integer productsBoughtSize;
     private Integer gallerySize;
     private Integer galleryComments;
 

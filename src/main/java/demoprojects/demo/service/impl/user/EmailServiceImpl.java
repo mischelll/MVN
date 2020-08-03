@@ -6,6 +6,8 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import javax.mail.internet.MimeMessage;
+
 @Service
 public class EmailServiceImpl implements EmailService {
     private final JavaMailSender javaMailSender;
@@ -23,4 +25,7 @@ public class EmailServiceImpl implements EmailService {
         message.setText(text);
         javaMailSender.send(message);
     }
+
+
+
 }

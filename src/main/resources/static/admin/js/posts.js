@@ -60,8 +60,11 @@ $('#posts-table').on('submit', '.delete-post', function (ev) {
                 loader.hide();
 
                 $('#' + id).hide();
+                alert("Post deleted!");
             });
         ev.preventDefault();
         return false;
+    }else {
+        console.log("Declined sale")
     }
 });

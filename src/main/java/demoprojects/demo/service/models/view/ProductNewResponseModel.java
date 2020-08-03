@@ -18,6 +18,7 @@ public class ProductNewResponseModel {
     private String username;
     private String created;
     private BigDecimal price;
+    private String imgURL;
     private Integer views;
     private String email;
     private String contactNumber;

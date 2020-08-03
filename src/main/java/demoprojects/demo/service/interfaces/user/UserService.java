@@ -5,6 +5,7 @@ import demoprojects.demo.service.models.bind.ProfileEditServiceModel;
 import demoprojects.demo.service.models.bind.RoleChangeServiceModel;
 import demoprojects.demo.service.models.bind.UserLoginServiceModel;
 import demoprojects.demo.service.models.bind.UserRegisterServiceModel;
+import demoprojects.demo.service.models.view.ProductViewServiceModel;
 import demoprojects.demo.service.models.view.RoleViewServiceModel;
 import demoprojects.demo.service.models.view.UserProfileViewServiceModel;
 import demoprojects.demo.service.models.view.UserResponseModel;
@@ -52,4 +53,13 @@ public interface UserService extends UserDetailsService {
     ProfileEditServiceModel getEditUserProfile(String id);
 
     void editUserProfile(String id, ProfileEditServiceModel map);
+
+    String getUserEmail(String username);
+
+    List<String> listAllUserEmails();
+
+    List<ProductViewServiceModel> listAllProductsFromLastWeek();
+
+
+    String findPreviousAvatarURL(String name);
 }
