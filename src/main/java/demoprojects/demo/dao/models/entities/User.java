@@ -33,15 +33,34 @@ public class User extends BaseEntity implements UserDetails {
     private boolean isAccountNonLocked;
     private boolean isCredentialsNonExpired;
     private boolean isEnabled;
-
+    private Boolean isSubscribedToBlog;
+    private Boolean isSubscribedToShop;
 
     public User() {
         this.soldProducts = new HashSet<>();
         this.boughtProducts = new HashSet<>();
+        this.isSubscribedToBlog = false;
+        this.isSubscribedToShop = false;
+    }
+
+    @Column(name = "is_subscribed_blog")
+    public Boolean getSubscribedToBlog() {
+        return isSubscribedToBlog;
+    }
+
+    public void setSubscribedToBlog(Boolean subscribedToBlog) {
+        isSubscribedToBlog = subscribedToBlog;
+    }
+    @Column(name = "is_subscribed_shop")
+    public Boolean getSubscribedToShop() {
+        return isSubscribedToShop;
+    }
+
+    public void setSubscribedToShop(Boolean subscribedToShop) {
+        isSubscribedToShop = subscribedToShop;
     }
 
     @OneToOne(targetEntity = Image.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-
     public Image getAvatar() {
         return avatar;
     }

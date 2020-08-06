@@ -56,9 +56,8 @@
                         <div class="newsletter_text"><p>Receive emails about newly added products by users.</p></div>
                         <div class="newsletter_text"><p>Start by hitting the subscribe button and sending us an email.</p></div>
                         <div class="newsletter_form_container">
-                            <form  action="mailto:team@mvn.com?subject=Subscribe to newsletter&body=Dear MVN | Team,nI want to subscribe the the newsletter. " id="newsletter_form" class="newsletter_form">
-                                <button onclick="location.href='mailto:team@mvn.com?subject=Subscribe to newsletter&body=Dear MVN | Team, ' + '\n'+
-                                 'I want to subscribe to the MVN | Shop newsletter. '" class="newsletter_button trans_200"><span>Subscribe</span></button>
+                            <form  th:action="@{'/mvn/shop/subscribe-newsletter/' + ${#authentication.getPrincipal().getUsername()}}" id="newsletter_form" class="newsletter_form">
+                                <button type="submit" class="newsletter_button trans_200"><span>Subscribe</span></button>
 
                             </form>
                         </div>

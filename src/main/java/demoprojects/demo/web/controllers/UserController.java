@@ -139,7 +139,10 @@ public class UserController extends BaseController {
             map.setFormat(changeAvatarModel.getImage().getContentType());
             map.setName(changeAvatarModel.getImage().getName());
             String previousProfileAvatarURL = this.userService.findPreviousAvatarURL(principal.getName());
-            this.cloudinaryService.delete(previousProfileAvatarURL);
+            if (previousProfileAvatarURL != null) {
+                this.cloudinaryService.delete(previousProfileAvatarURL);
+
+            }
             map.setImgUrl(this.cloudinaryService.upload(changeAvatarModel.getImage()));
             this.imageService.uploadUserAvatar(map, id);
             modelAndView.setViewName("redirect:/mvn/users/api/profile?id=" + id);

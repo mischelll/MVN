@@ -1,8 +1,10 @@
 package demoprojects.demo.service.interfaces.shop;
 
+import demoprojects.demo.dao.models.entities.Product;
 import demoprojects.demo.service.models.bind.ProductCreateServiceModel;
 import demoprojects.demo.service.models.bind.ProductEditServiceModel;
-import demoprojects.demo.service.models.view.ProductNewResponseModel;
+import demoprojects.demo.service.models.view.PostViewServiceModel;
+import demoprojects.demo.service.models.view.ProductNewServiceModel;
 import demoprojects.demo.service.models.view.ProductViewServiceModel;
 import demoprojects.demo.service.models.view.ProductsUserResponseModel;
 
@@ -12,7 +14,7 @@ import java.util.List;
 public interface ProductService {
     ProductCreateServiceModel createProduct(ProductCreateServiceModel product);
 
-    List<ProductNewResponseModel> listNewestProducts();
+    List<ProductNewServiceModel> listNewestProducts();
 
     List<ProductViewServiceModel> listAllProducts();
 
@@ -43,4 +45,8 @@ public interface ProductService {
     Integer getNewProductsCount();
 
     void deleteById(String id);
+
+    List<ProductViewServiceModel> listOneDayOldProducts();
+
+    List<ProductViewServiceModel> findByTitle(String title);
 }

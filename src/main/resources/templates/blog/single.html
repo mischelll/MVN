@@ -45,7 +45,7 @@
                         </a>
 
                         <form th:if="${isPrincipalOwner}"
-                           th:action="@{/mvn/admin/api/posts/delete(id=${post.id})}" th:method="post">
+                           th:action="@{/posts/delete(id=${post.id})}" th:method="post">
                             <button onclick="window.location.href='http://localhost:8080/posts/all'" type="submit" class="btn btn-outline-danger">Delete
                             </button>
                         </form>
@@ -179,9 +179,19 @@
                             for becoming a proud
                             <i>Moderator</i> in the MVN | Blog
                             Society.</p>
-                        <form action="#" class="subscribe-form">
+                        <form name="moderatorSubscribe" th:action="@{/posts/become-moderator}" th:method="post" class="subscribe-form">
                             <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Email Address">
+                                <input type="submit" value="Subscribe" class="mt-2 btn btn-white submit">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="sidebar-box subs-wrap img px-4 py-5"
+                         style="background-image: url(blog/ionize/images/bg_1.jpg);">
+                        <div class="overlay"></div>
+                        <h3 class="mb-4 sidebar-heading">Subscribe to newsletter</h3>
+                        <p class="mb-4">Receive emails about new posts daily.</p>
+                        <form name="moderatorSubscribe" th:action="@{'/posts/subscribe-newsletter/' + ${#authorization.getAuthentication().getName()} + '/' + ${post.id}}" th:method="get" class="subscribe-form">
+                            <div class="form-group">
                                 <input type="submit" value="Subscribe" class="mt-2 btn btn-white submit">
                             </div>
                         </form>
@@ -228,6 +238,8 @@
             x.style.display = "none";
         }
     }
+
+
 </script>
 </body>
 </html>

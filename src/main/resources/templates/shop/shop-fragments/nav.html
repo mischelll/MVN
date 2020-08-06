@@ -106,8 +106,8 @@
                 <div class="row">
                     <div class="col">
                         <div class="search_panel_content d-flex flex-row align-items-center justify-content-end">
-                            <form action="#">
-                                <input type="text" class="search_input" placeholder="Search" required="required">
+                            <form th:action="@{/mvn/shop/product/search}" th:object="${productSearch}">
+                                <input th:field="*{title}" type="text" class="search_input" placeholder="Search Product by title" required="required">
                             </form>
                         </div>
                     </div>

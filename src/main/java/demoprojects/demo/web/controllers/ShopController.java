@@ -9,10 +9,8 @@ import demoprojects.demo.service.interfaces.user.UserService;
 import demoprojects.demo.service.models.bind.ProductCreateServiceModel;
 import demoprojects.demo.service.models.bind.ProductEditServiceModel;
 import demoprojects.demo.service.models.bind.ProductImageCreateServiceModel;
-import demoprojects.demo.web.models.ProductImageCreateModel;
-import demoprojects.demo.web.models.ProductCreateModel;
-import demoprojects.demo.web.models.ProductEditModel;
-import demoprojects.demo.web.models.ProductRequestModel;
+import demoprojects.demo.util.filesIO.FileManager;
+import demoprojects.demo.web.models.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,14 +34,15 @@ public class ShopController extends BaseController {
     private final CloudinaryService cloudinaryService;
     private final ImageService imageService;
     private final EmailService emailService;
+    private final FileManager fileManager;
 
 
     public ShopController(ProductService productService, ModelMapper mapper,
                           UserService userService,
                           CloudinaryService cloudinaryService,
                           ImageService imageService,
-                          EmailService emailService
-    ) {
+                          EmailService emailService,
+                          FileManager fileManager) {
 
         this.productService = productService;
         this.mapper = mapper;
@@ -51,12 +50,15 @@ public class ShopController extends BaseController {
         this.cloudinaryService = cloudinaryService;
         this.imageService = imageService;
         this.emailService = emailService;
-
+        this.fileManager = fileManager;
     }
 
     @GetMapping("/")
     @PageTitle("Shop | Home")
-    public ModelAndView getShopIndex(ModelAndView modelAndView) {
+    public ModelAndView getShopIndex(ModelAndView modelAndView,Model model) {
+        if (!model.containsAttribute("productSearch")) {
+            model.addAttribute("productSearch", new ProductSearchModel());
+        }
         modelAndView.addObject("newestProducts", this.productService.listNewestProducts());
         modelAndView.setViewName("shop/index");
         return modelAndView;
@@ -64,7 +66,10 @@ public class ShopController extends BaseController {
 
     @GetMapping("/products")
     @PageTitle("Shop | Products")
-    public ModelAndView getProducts(ModelAndView modelAndView) {
+    public ModelAndView getProducts(ModelAndView modelAndView,Model model) {
+        if (!model.containsAttribute("productSearch")) {
+            model.addAttribute("productSearch", new ProductSearchModel());
+        }
         modelAndView.addObject("products", this.productService.listAllProducts());
         modelAndView.setViewName("shop/products");
         return modelAndView;
@@ -79,7 +84,10 @@ public class ShopController extends BaseController {
 
     @GetMapping("/about")
     @PageTitle("Shop | About")
-    public ModelAndView getAbout(ModelAndView modelAndView) {
+    public ModelAndView getAbout(ModelAndView modelAndView,Model model) {
+        if (!model.containsAttribute("productSearch")) {
+            model.addAttribute("productSearch", new ProductSearchModel());
+        }
         modelAndView.setViewName("shop/contact");
 
         return modelAndView;
@@ -91,6 +99,9 @@ public class ShopController extends BaseController {
     public ModelAndView getProductCreate(ModelAndView modelAndView, Model model) {
         if (!model.containsAttribute("product")) {
             model.addAttribute("product", new ProductCreateModel());
+        }
+        if (!model.containsAttribute("productSearch")) {
+            model.addAttribute("productSearch", new ProductSearchModel());
         }
         modelAndView.setViewName("shop/create-product");
         return modelAndView;
@@ -126,6 +137,9 @@ public class ShopController extends BaseController {
     @GetMapping("/product")
     @PageTitle("Shop | Product")
     public ModelAndView getSingleProduct(@RequestParam String id, ModelAndView modelAndView, Model model, Principal principal) {
+        if (!model.containsAttribute("productSearch")) {
+            model.addAttribute("productSearch", new ProductSearchModel());
+        }
         if (!model.containsAttribute("request")) {
             ProductRequestModel productRequestModel = new ProductRequestModel();
             model.addAttribute("request", productRequestModel);
@@ -190,6 +204,9 @@ public class ShopController extends BaseController {
     @GetMapping("/product/edit")
     @PageTitle("Product Edit")
     public ModelAndView getEditProduct(@RequestParam String id, ModelAndView modelAndView, Model model) {
+        if (!model.containsAttribute("productSearch")) {
+            model.addAttribute("productSearch", new ProductSearchModel());
+        }
         if (!model.containsAttribute("productEdit")) {
             model.addAttribute("productEdit", this.mapper.map(this.productService.findProductToEdit(id), ProductEditModel.class));
         }
@@ -217,21 +234,27 @@ public class ShopController extends BaseController {
     }
 
     @GetMapping("/my-products/{username}")
-    @PageTitle("User Products")
-    public ModelAndView getUserProducts(ModelAndView modelAndView, @PathVariable String username, Principal principal) {
+    @PageTitle("My Active Products")
+    public ModelAndView getUserProducts(ModelAndView modelAndView, @PathVariable String username, Principal principal,Model model) {
+        if (!model.containsAttribute("productSearch")) {
+            model.addAttribute("productSearch", new ProductSearchModel());
+        }
         if (!principal.getName().equals(username)) {
             modelAndView.setViewName("redirect:/mvn/shop/my-products/" + principal.getName());
             return modelAndView;
         }
         modelAndView.addObject("user", username);
-        modelAndView.addObject("usersList", this.userService.listAllUsernames());
+        modelAndView.addObject("usersList", this.userService.listAllUsernamesWithoutPrincipal(principal.getName()));
         modelAndView.setViewName("shop/user-products");
         return modelAndView;
     }
 
     @GetMapping("/my-sold-products/{username}")
-    @PageTitle("User Sold Products")
-    public ModelAndView getUserSoldProducts(ModelAndView modelAndView, @PathVariable String username, Principal principal) {
+    @PageTitle("My Sold Products")
+    public ModelAndView getUserSoldProducts(ModelAndView modelAndView, @PathVariable String username, Principal principal,Model model) {
+        if (!model.containsAttribute("productSearch")) {
+            model.addAttribute("productSearch", new ProductSearchModel());
+        }
         if (!principal.getName().equals(username)) {
             modelAndView.setViewName("redirect:/mvn/shop/my-sold-products/" + principal.getName());
             return modelAndView;
@@ -243,7 +266,11 @@ public class ShopController extends BaseController {
     }
 
     @GetMapping("/my-bought-products/{username}")
-    public ModelAndView getUserBoughtProducts(ModelAndView modelAndView, @PathVariable String username, Principal principal) {
+    @PageTitle("My Bought Products")
+    public ModelAndView getUserBoughtProducts(ModelAndView modelAndView, @PathVariable String username, Principal principal,Model model) {
+        if (!model.containsAttribute("productSearch")) {
+            model.addAttribute("productSearch", new ProductSearchModel());
+        }
         if (!principal.getName().equals(username)) {
             modelAndView.setViewName("redirect:/mvn/shop/my-bought-products/" + principal.getName());
             return modelAndView;
@@ -257,6 +284,9 @@ public class ShopController extends BaseController {
     @GetMapping("/product/images/upload")
     @PageTitle("Images Upload")
     public ModelAndView uploadProductImages(@RequestParam String id, ModelAndView modelAndView, Model model) {
+        if (!model.containsAttribute("productSearch")) {
+            model.addAttribute("productSearch", new ProductSearchModel());
+        }
         if (!model.containsAttribute("image")) {
             ProductImageCreateModel productImageCreateModel = new ProductImageCreateModel();
             productImageCreateModel.setProductId(id);
@@ -273,17 +303,19 @@ public class ShopController extends BaseController {
                                                    @RequestParam String id,
                                                    RedirectAttributes redirectAttributes,
                                                    ModelAndView modelAndView) {
-        boolean maxFilesCheck = image.getImages().size() > 5;
+        boolean fileFormatCorrect =fileManager.isFileFormatCorrect(image.getImages());
+        boolean fileSizeCorrect = fileManager.isFileSizeCorrect(image.getImages());
+        boolean fileCountCorrect = fileManager.isFileCountCorrect(image.getImages());
 
-        boolean filesSizeCheck;
-        if (bindingResult.hasErrors() || maxFilesCheck) {
+        if (bindingResult.hasErrors() || !fileFormatCorrect || !fileSizeCorrect || !fileCountCorrect) {
             redirectAttributes.addFlashAttribute("image", image);
-            redirectAttributes.addFlashAttribute("maxFilesError", maxFilesCheck);
+            redirectAttributes.addFlashAttribute("maxFilesError", !fileCountCorrect);
+            redirectAttributes.addFlashAttribute("maxFilesSizeError", !fileSizeCorrect);
+            redirectAttributes.addFlashAttribute("filesFormatError", !fileFormatCorrect);
 
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.image", bindingResult);
             modelAndView.setViewName("redirect:/mvn/shop/product/images/upload?id=" + id);
         } else {
-
             image.getImages().forEach(imageCreate -> {
                 ProductImageCreateServiceModel serviceModel = new ProductImageCreateServiceModel();
                 serviceModel.setFormat(imageCreate.getContentType());
@@ -291,14 +323,50 @@ public class ShopController extends BaseController {
                 try {
                     serviceModel.setImgUrl(this.cloudinaryService.upload(imageCreate));
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    modelAndView.addObject("productID",id);
+                    modelAndView.setViewName("shop/unsuccessful-images-upload");
                 }
-
                 this.imageService.uploadProductsPicture(serviceModel, id);
             });
 
             modelAndView.setViewName("redirect:/mvn/shop/products");
         }
+
+        return modelAndView;
+    }
+
+
+    @GetMapping("/subscribe-newsletter/{username}")
+    @PageTitle("Shop Subscription Info")
+    public ModelAndView subscribeForNewsletter(@PathVariable String username,
+                                               ModelAndView modelAndView) {
+
+        if (this.userService.isShopSubscriptionSuccessful(username)) {
+            modelAndView.setViewName("shop/newsletter/successful-subscription");
+        } else {
+
+            modelAndView.setViewName("shop/newsletter/unsuccessful-subscription");
+        }
+        return modelAndView;
+    }
+
+    @GetMapping("/product/search")
+    @PageTitle("Product Search")
+    public ModelAndView searchFunction(@RequestParam String title, ModelAndView modelAndView, Model model) {
+        if (!model.containsAttribute("productSearch")) {
+            model.addAttribute("productSearch", new ProductSearchModel());
+        }
+        model.addAttribute("products", this.productService.findByTitle(title));
+        modelAndView.setViewName("shop/products");
+
+        return modelAndView;
+    }
+
+    @PostMapping("/product/search")
+    public ModelAndView searchFunctionConfirm(@Valid @ModelAttribute("product") ProductSearchModel product,
+                                              BindingResult bindingResult,
+                                              ModelAndView modelAndView) {
+        modelAndView.setViewName("redirect:/mvn/shop/product/search");
 
         return modelAndView;
     }

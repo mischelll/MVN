@@ -1,11 +1,8 @@
 package demoprojects.demo.service.interfaces.blog;
 
 import demoprojects.demo.dao.models.entities.Post;
-import demoprojects.demo.service.models.view.PostCategoryCountModel;
+import demoprojects.demo.service.models.view.*;
 import demoprojects.demo.service.models.bind.PostCreateServiceModel;
-import demoprojects.demo.service.models.view.PostPopularViewModel;
-import demoprojects.demo.service.models.view.PostResponseModel;
-import demoprojects.demo.service.models.view.PostViewServiceModel;
 
 import java.util.List;
 
@@ -33,4 +30,5 @@ public interface PostService {
 
     List<PostResponseModel> listAll();
 
+    List<PostViewServiceModel> listOneDayOldPosts();
 }

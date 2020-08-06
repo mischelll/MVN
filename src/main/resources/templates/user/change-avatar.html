@@ -19,7 +19,7 @@
 
             <h5 th:if="${incorrectSize}" style="color: red">This file is too big!</h5>
             <h5 th:if="${incorrectFormat}" style="color: red">This file format is not valid!</h5>
-            <button>change</button>
+            <button id="change-button">change</button>
         </form>
     </div>
 </div>
@@ -27,6 +27,21 @@
 <script>
     $('.message a').click(function () {
         $('form').animate({height: "toggle", opacity: "toggle"}, "slow");
+    });
+
+    $(document).ready(function(){
+        let myVar;
+        $( "#myDiv" ).click(function() {
+            myFunction(this);
+        });
+
+        function myFunction(div) {
+            $("#loader").toggle();
+            $(div).toggle();
+
+        }
+
+
     });
 </script>
 </body>

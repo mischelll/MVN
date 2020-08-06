@@ -11,7 +11,7 @@ import demoprojects.demo.service.interfaces.shop.ProductService;
 import demoprojects.demo.service.interfaces.user.UserService;
 import demoprojects.demo.service.models.bind.ProductCreateServiceModel;
 import demoprojects.demo.service.models.bind.ProductEditServiceModel;
-import demoprojects.demo.service.models.view.ProductNewResponseModel;
+import demoprojects.demo.service.models.view.ProductNewServiceModel;
 import demoprojects.demo.service.models.view.ProductViewServiceModel;
 import demoprojects.demo.service.models.view.ProductsUserResponseModel;
 import org.modelmapper.ModelMapper;
@@ -58,15 +58,20 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductNewResponseModel> listNewestProducts() {
+    public List<ProductNewServiceModel> listNewestProducts() {
+        this.productRepository
+                .findAllByIsSoldFalseOrderByCreatedDesc();
         return this.productRepository
                 .findAllByIsSoldFalseOrderByCreatedDesc()
                 .stream()
                 .map(product -> {
-                    ProductNewResponseModel map = this.mappper.map(product, ProductNewResponseModel.class);
+                    ProductNewServiceModel map = this.mappper.map(product, ProductNewServiceModel.class);
                     map.setFullName(product.getSeller().getFirstName() + " " + product.getSeller().getLastName());
                     map.setUsername(product.getSeller().getUsername());
-                    map.setImgURL(product.getProductImages().get(0).getImgUrl());
+                    if (product.getProductImages().size() >= 1) {
+
+                        map.setImgURL(product.getProductImages().get(0).getImgUrl());
+                    }
                     map.setCreated(product.getCreated().format(DateTimeFormatter.ofPattern("dd/MMM/yyyy")));
 
                     return map;
@@ -90,11 +95,14 @@ public class ProductServiceImpl implements ProductService {
                     List<String> cat = new ArrayList<>();
                     product.getCategories().forEach(category -> cat.add(category.getName().name()));
                     map.setCategories(String.join(", ", cat));
-                    map.setImgUrls(product
-                            .getProductImages()
-                            .stream()
-                            .map(Image::getImgUrl)
-                            .collect(Collectors.toList()));
+                    if (product
+                            .getProductImages() != null) {
+                        map.setImgUrls(product
+                                .getProductImages()
+                                .stream()
+                                .map(Image::getImgUrl)
+                                .collect(Collectors.toList()));
+                    }
                     return map;
                 })
                 .collect(Collectors.toList());
@@ -220,7 +228,6 @@ public class ProductServiceImpl implements ProductService {
                     map.setCreatedOnDate(product.getCreated().format(DateTimeFormatter.ofPattern("dd/MMM/yyyy HH:mm")));
 
 
-
                     return map;
                 })
                 .collect(Collectors.toList());
@@ -297,6 +304,45 @@ public class ProductServiceImpl implements ProductService {
 
         this.productRepository.saveAndFlush(product);
         this.productRepository.deleteById(id);
+    }
+
+    @Override
+    public List<ProductViewServiceModel> listOneDayOldProducts() {
+        return this.productRepository
+                .findOneDayOldPorducts()
+                .stream()
+                .map(product -> {
+                    ProductViewServiceModel map = this.mappper.map(product, ProductViewServiceModel.class);
+                    map.setUsername(product.getSeller().getUsername());
+                    return map;
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ProductViewServiceModel> findByTitle(String title) {
+        return this
+                .productRepository
+                .findAllByIsSoldFalseAndTitleContainsOrderByCreatedDesc(title)
+                .stream()
+                .map(product -> {
+                    ProductViewServiceModel map = this.mappper.map(product, ProductViewServiceModel.class);
+                    map.setFullName(product.getSeller().getFirstName() + " " + product.getSeller().getLastName());
+                    map.setUsername(product.getSeller().getUsername());
+                    map.setCreated(product.getCreated().format(DateTimeFormatter.ofPattern("dd/MMM/yyyy HH:mm")));
+                    map.setEmail(product.getSeller().getEmail());
+                    map.setTelephone(product.getTelephoneNumber());
+                    List<String> cat = new ArrayList<>();
+                    product.getCategories().forEach(category -> cat.add(category.getName().name()));
+                    map.setCategories(String.join(", ", cat));
+                    map.setImgUrls(product
+                            .getProductImages()
+                            .stream()
+                            .map(Image::getImgUrl)
+                            .collect(Collectors.toList()));
+                    return map;
+                })
+                .collect(Collectors.toList());
     }
 
     private List<ProductViewServiceModel> generateProducts(Set<Product> products) {

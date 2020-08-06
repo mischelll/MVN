@@ -1,17 +1,14 @@
 package demoprojects.demo.web.rest;
 
 import demoprojects.demo.service.interfaces.shop.ProductService;
-import demoprojects.demo.service.models.view.ProductNewResponseModel;
-import demoprojects.demo.service.models.view.ProductViewServiceModel;
+import demoprojects.demo.service.models.view.ProductNewServiceModel;
 import demoprojects.demo.service.models.view.ProductsUserResponseModel;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
@@ -28,7 +25,7 @@ public class ShopApiController {
 
     @GetMapping("/products")
     @ResponseBody
-    public List<ProductNewResponseModel> listNewestProducts() throws InterruptedException {
+    public List<ProductNewServiceModel> listNewestProducts() throws InterruptedException {
         return this.productService.listNewestProducts();
     }
 

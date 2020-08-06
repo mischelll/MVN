@@ -1,7 +1,8 @@
 
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org" lang="en">
+      xmlns:th="http://www.thymeleaf.org" lang="en"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <th:block th:include="~{shop/shop-fragments/head}"/>
 <body>
 <!-- Header -->
@@ -18,6 +19,15 @@
         <div class="form-group">
             <label for="images">Photos</label>
             <input type="file" class="form-control"  id="images" placeholder="Select photos" name="images" multiple  style="color: grey">
+            <th:block th:if="${maxFilesError}">
+                <small style="color: red">More than 5 files tried to be uploaded</small>
+            </th:block>
+            <th:block th:if="${maxFilesSizeError}">
+                <small style="color: red">Some of the files might be bigger than 5MB</small>
+            </th:block>
+            <th:block th:if="${filesFormatError}">
+                <small style="color: red">Some of the files might not be in the correct format (jpeg, jpg, png)</small>
+            </th:block>
         </div>
 
 

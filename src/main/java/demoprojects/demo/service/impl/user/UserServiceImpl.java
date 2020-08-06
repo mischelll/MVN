@@ -5,14 +5,12 @@ import demoprojects.demo.dao.models.entities.Product;
 import demoprojects.demo.dao.models.entities.Role;
 import demoprojects.demo.dao.models.entities.User;
 import demoprojects.demo.dao.repositories.user.UserRepository;
-import demoprojects.demo.service.interfaces.blog.PostService;
 import demoprojects.demo.service.interfaces.user.UserService;
 import demoprojects.demo.service.interfaces.user.RoleService;
 import demoprojects.demo.service.models.bind.ProfileEditServiceModel;
 import demoprojects.demo.service.models.bind.RoleChangeServiceModel;
 import demoprojects.demo.service.models.bind.UserLoginServiceModel;
 import demoprojects.demo.service.models.bind.UserRegisterServiceModel;
-import demoprojects.demo.service.models.view.ProductViewServiceModel;
 import demoprojects.demo.service.models.view.RoleViewServiceModel;
 import demoprojects.demo.service.models.view.UserProfileViewServiceModel;
 import demoprojects.demo.service.models.view.UserResponseModel;
@@ -32,20 +30,17 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RoleService roleService;
-    private final PostService postService;
     private final ModelMapper mapper;
     private final PasswordEncoder passwordEncoder;
 
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, RoleService roleService, PostService postService, ModelMapper mapper,
+    public UserServiceImpl(UserRepository userRepository, RoleService roleService, ModelMapper mapper,
                            PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleService = roleService;
-        this.postService = postService;
         this.mapper = mapper;
         this.passwordEncoder = passwordEncoder;
-
     }
 
     @Override
@@ -70,17 +65,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean login(UserLoginServiceModel user) {
-        User byUsername = this.userRepository.findByUsername(user.getUsername());
+        User byUsername = this.userRepository.findByUsername(user.getUsername())
+                .orElseThrow(() -> new UsernameNotFoundException("User with given username does not exist! "));
         return byUsername != null && this.passwordEncoder.matches(user.getPassword(),
                 byUsername.getPassword());
     }
 
     @Override
     public boolean deactivateByUsername(String username) {
-        User byUsername = this.userRepository.findByUsername(username);
-        if (byUsername == null) {
-            return false;
-        }
+        User byUsername = this.userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User with given username does not exist! "));
         byUsername.setEnabled(false);
 
         this.userRepository.saveAndFlush(byUsername);
@@ -89,9 +83,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findByUsername(String name) {
-        return this
-                .userRepository
-                .findByUsername(name);
+        return this.userRepository.findByUsername(name)
+                .orElseThrow(() -> new UsernameNotFoundException("User with given username does not exist! "));
     }
 
     @Override
@@ -115,10 +108,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserProfileViewServiceModel getUserVIewProfile(String username) {
-        User user = this.userRepository.findByUsername(username);
-        UserProfileViewServiceModel map = this.mapper.map(user, UserProfileViewServiceModel.class);
-        map.setFullName(user.getFirstName() + " " + user.getLastName());
-        map.setRegisteredOn(user.getRegisteredOn().format(DateTimeFormatter.ofPattern("dd/MMM/yyyy")));
+        User byUsername = this.userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User with given username does not exist! "));
+        UserProfileViewServiceModel map = this.mapper.map(byUsername, UserProfileViewServiceModel.class);
+        map.setFullName(byUsername.getFirstName() + " " + byUsername.getLastName());
+        map.setRegisteredOn(byUsername.getRegisteredOn().format(DateTimeFormatter.ofPattern("dd/MMM/yyyy")));
 
         return map;
     }
@@ -126,7 +120,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void activateAccount(String username) {
-        User byUsername = this.userRepository.findByUsername(username);
+        User byUsername = this.userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User with given username does not exist! "));
         byUsername.setAccountNonExpired(true);
         byUsername.setAccountNonLocked(true);
         byUsername.setCredentialsNonExpired(true);
@@ -169,7 +164,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean isUsernameAvailable(String username) {
         boolean check = true;
-        if (this.userRepository.findByUsername(username) != null) {
+        if (this.userRepository.findByUsername(username).isPresent()) {
             check = false;
         }
         return check;
@@ -177,7 +172,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void changeRoles(RoleChangeServiceModel roles, String username) {
-        User byUsername = this.userRepository.findByUsername(username);
+        User byUsername = this.userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User with given username does not exist! "));
         Set<Role> newRoles = new HashSet<>();
         roles.getRoles().forEach(el -> {
             Role byAuthority = this.roleService.findByAuthority(el);
@@ -189,16 +185,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<String> listAllUsernames() {
-        List<String> names = new ArrayList<>();
-        this.userRepository
-                .findAll()
-                .stream()
-                .filter(User::isEnabled)
-                .forEach(user -> names
-                        .add(user.getUsername()));
-
-        return names;
+    public List<String> listAllUsernamesWithoutPrincipal(String principalUsername) {
+        return this.userRepository
+                .findAllWithoutPrincipal(principalUsername);
     }
 
     @Override
@@ -229,7 +218,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void activateByUsername(String username) {
-        User byUsername = this.userRepository.findByUsername(username);
+        User byUsername = this.userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User with given username does not exist! "));
         byUsername.setEnabled(true);
 
         this.userRepository.saveAndFlush(byUsername);
@@ -261,6 +251,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public ProfileEditServiceModel getEditUserProfile(String id) {
         User user = this.userRepository.findById(id).orElse(null);
+        assert user != null;
         ProfileEditServiceModel map = this.mapper.map(user, ProfileEditServiceModel.class);
         map.setFullName(user.getFirstName() + " " + user.getLastName());
         map.setRegisteredOn(user.getRegisteredOn().format(DateTimeFormatter.ofPattern("dd/MMM/yyyy")));
@@ -272,6 +263,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void editUserProfile(String id, ProfileEditServiceModel map) {
         User user = this.userRepository.findById(id).orElse(null);
+        assert user != null;
         user.setBio(map.getBio());
         user.setEmail(map.getEmail());
         String[] split = map.getFullName().split("\\s+");
@@ -285,28 +277,64 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String getUserEmail(String username) {
-        User byUsername = this.userRepository.findByUsername(username);
+        User byUsername = this.userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User with given username does not exist! "));
         return byUsername.getEmail();
     }
 
     @Override
     public List<String> listAllUserEmails() {
-        List<String> allUserEmail = this.userRepository.getAllUserEmail();
-        int a = 5;
-        return allUserEmail;
-    }
 
-    @Override
-    public List<ProductViewServiceModel> listAllProductsFromLastWeek() {
-        return null;
+        return this.userRepository.getAllUserEmail();
     }
 
     @Override
     public String findPreviousAvatarURL(String name) {
-        User byUsername = this.userRepository.findByUsername(name);
-        return byUsername.getAvatar().getImgUrl();
+        User byUsername = this.userRepository.findByUsername(name)
+                .orElseThrow(() -> new UsernameNotFoundException("User with given username does not exist! "));
+
+        return this.userRepository.findUserAvatarURL(name);
     }
 
+    @Override
+    public boolean isBlogSubscriptionSuccessful(String username) {
+        User user = this.userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User with given username does not exist! "));
+        boolean subscribed = false;
+
+        if (!user.getSubscribedToBlog()) {
+            user.setSubscribedToBlog(true);
+            this.userRepository.saveAndFlush(user);
+            subscribed = true;
+        }
+
+        return subscribed;
+    }
+
+    @Override
+    public boolean isShopSubscriptionSuccessful(String username) {
+        User user = this.userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User with given username does not exist! "));
+        boolean subscribed = false;
+
+        if (!user.getSubscribedToShop()) {
+            user.setSubscribedToShop(true);
+            this.userRepository.saveAndFlush(user);
+            subscribed = true;
+        }
+
+        return subscribed;
+    }
+
+    @Override
+    public List<String> findUsersSubscribedToBlog() {
+        return this.userRepository.getAllSubscribedToBlogUserEmails();
+    }
+
+    @Override
+    public List<String> findUsersSubscribedToShop() {
+        return this.userRepository.getAllSubscribedToShopUserEmails();
+    }
 
     private String generateNewPassword() {
         Random random = new Random();
@@ -322,17 +350,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User byUsername = this.userRepository.findByUsername(username);
-        if (byUsername == null) {
-            throw new UsernameNotFoundException("User not found!");
-        }
-        return this.userRepository.findByUsername(username);
+
+        return this.userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User with given username does not exist! "));
 
     }
 
     @Override
     public List<RoleViewServiceModel> listRolesByUser(String username) {
-        User byUsername = this.userRepository.findByUsername(username);
+        User byUsername = this.userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User with given username does not exist! "));
+
         return byUsername
                 .getAuthorities()
                 .stream()

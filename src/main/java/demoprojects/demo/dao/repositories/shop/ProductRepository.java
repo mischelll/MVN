@@ -1,9 +1,7 @@
 package demoprojects.demo.dao.repositories.shop;
 
+
 import demoprojects.demo.dao.models.entities.Product;
-import demoprojects.demo.dao.models.entities.ProductCategory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -19,6 +17,8 @@ public interface ProductRepository extends JpaRepository<Product, String> {
 
     List<Product> findAllByIsSoldFalseOrderByPrice();
 
+    List<Product> findAllByIsSoldFalseAndTitleContainsOrderByCreatedDesc(String text);
+
     @Query(value = "SELECT P FROM Product P WHERE P.isSold = false " +
             "AND FUNCTION('DATEDIFF', P.created, current_date ) >= -7 " +
             "AND FUNCTION('DATEDIFF', P.created, current_date ) <= 0")
@@ -28,4 +28,7 @@ public interface ProductRepository extends JpaRepository<Product, String> {
             " WHERE DATEDIFF(p.created_on,CURDATE()) >= -7 and  DATEDIFF(p.created_on,CURDATE()) <= 0", nativeQuery = true)
     Integer getLastWeekProductsCount();
 
+    @Query(value = "SELECT P FROM Product P WHERE P.isSold = false " +
+            "AND FUNCTION('DATEDIFF', P.created, current_date ) = -1")
+    List<Product> findOneDayOldPorducts();
 }

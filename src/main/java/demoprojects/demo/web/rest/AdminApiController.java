@@ -4,7 +4,6 @@ import demoprojects.demo.service.interfaces.blog.PostService;
 import demoprojects.demo.service.interfaces.shop.ProductService;
 import demoprojects.demo.service.interfaces.user.UserService;
 import demoprojects.demo.service.models.view.PostResponseModel;
-import demoprojects.demo.service.models.view.ProductNewResponseModel;
 import demoprojects.demo.service.models.view.ProductViewServiceModel;
 import demoprojects.demo.service.models.view.UserResponseModel;
 import org.springframework.http.HttpStatus;

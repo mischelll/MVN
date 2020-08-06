@@ -3,6 +3,7 @@ package demoprojects.demo.service.impl.blog;
 import demoprojects.demo.dao.models.entities.PostCategory;
 import demoprojects.demo.dao.models.entities.PostCategoryName;
 import demoprojects.demo.dao.models.entities.Post;
+import demoprojects.demo.dao.models.entities.User;
 import demoprojects.demo.dao.repositories.blog.PostRepository;
 import demoprojects.demo.dao.repositories.user.UserRepository;
 import demoprojects.demo.service.interfaces.blog.PostCategoryService;
@@ -13,6 +14,7 @@ import demoprojects.demo.service.models.view.PostPopularViewModel;
 import demoprojects.demo.service.models.view.PostResponseModel;
 import demoprojects.demo.service.models.view.PostViewServiceModel;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -76,7 +78,11 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostCreateServiceModel create(PostCreateServiceModel post) {
         Post map = this.modelMapper.map(post, Post.class);
-        map.setAuthor(this.userRepository.findByUsername(post.getAuthor()));
+        User byUsername = this.userRepository.findByUsername(post.getAuthor()).orElse(null);
+        if (byUsername == null) {
+            throw new UsernameNotFoundException("User not found!");
+        }
+        map.setAuthor(byUsername);
         map.setPostedOn(LocalDateTime.now());
         return getPostCreateServiceModel(post, map);
     }
@@ -213,5 +219,16 @@ public class PostServiceImpl implements PostService {
                     return mapPost;
                 })
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<PostViewServiceModel> listOneDayOldPosts() {
+        return this.postRepository.findOneDayOldPosts().stream().map(post -> {
+            PostViewServiceModel map = this.modelMapper.map(post, PostViewServiceModel.class);
+            map.setAuthor(post.getAuthor().getUsername());
+
+            return map;
+        }).collect(Collectors.toList());
+
     }
 }

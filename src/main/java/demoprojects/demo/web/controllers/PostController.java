@@ -4,6 +4,7 @@ import demoprojects.demo.annottation.PageTitle;
 import demoprojects.demo.dao.models.entities.PostCategoryName;
 import demoprojects.demo.service.interfaces.blog.PostCommentService;
 import demoprojects.demo.service.interfaces.blog.PostService;
+import demoprojects.demo.service.interfaces.user.UserService;
 import demoprojects.demo.service.models.bind.CommentCreateServiceModel;
 import demoprojects.demo.service.models.view.PostCategoryCountModel;
 import demoprojects.demo.service.models.bind.PostCreateServiceModel;
@@ -34,11 +35,13 @@ public class PostController {
     private final PostService postService;
     private final ModelMapper mapper;
     private final PostCommentService commentService;
+    private final UserService userService;
 
-    public PostController(PostService postService, ModelMapper mapper, PostCommentService commentService) {
+    public PostController(PostService postService, ModelMapper mapper, PostCommentService commentService, UserService userService) {
         this.postService = postService;
         this.mapper = mapper;
         this.commentService = commentService;
+        this.userService = userService;
     }
 
     @GetMapping("/all")
@@ -76,7 +79,7 @@ public class PostController {
 
     @PageTitle("Blog | Create")
     public ModelAndView createPost(ModelAndView modelAndView, Model model) {
-        if(!model.containsAttribute("postSearch")){
+        if (!model.containsAttribute("postSearch")) {
             model.addAttribute("postSearch", new PostSearchModel());
         }
         if (!model.containsAttribute("post")) {
@@ -128,7 +131,7 @@ public class PostController {
                                       Principal principal) {
         redirectAttributes.addAttribute("id", id);
         if (!model.containsAttribute("postSearch") || !model.containsAttribute("comment")) {
-            model.addAttribute("comment",new CommentCreateModel());
+            model.addAttribute("comment", new CommentCreateModel());
             model.addAttribute("postSearch", new PostSearchModel());
         }
         List<PostCategoryCountModel> categories = new ArrayList<>();
@@ -136,12 +139,12 @@ public class PostController {
                 .add(this.postService
                         .findPostsByCategory(categoryName.name())));
         PostViewServiceModel byId = this.postService.findById(id);
-        modelAndView.addObject("hasAvatar",byId.getAuthorImgUrl() == null);
-        modelAndView.addObject("isPrincipalOwner",byId.getAuthor().equals(principal.getName()));
+        modelAndView.addObject("hasAvatar", byId.getAuthorImgUrl() == null);
+        modelAndView.addObject("isPrincipalOwner", byId.getAuthor().equals(principal.getName()));
         modelAndView.addObject("categories", categories);
         modelAndView.addObject("popular", this.postService.getTopThreePosts());
         modelAndView.addObject("post", byId);
-        modelAndView.addObject("comments",this.commentService.commentsOfPost(id));
+        modelAndView.addObject("comments", this.commentService.commentsOfPost(id));
         modelAndView.setViewName("blog/single");
 
         return modelAndView;
@@ -189,10 +192,10 @@ public class PostController {
 
 
     @GetMapping("/edit")
-    @PreAuthorize("hasAnyRole('ROLE_ROOT','ROLE_ADMIN','ROLE_BLOG-KING')")
-    public ModelAndView editPost(@RequestParam String id,Model model, ModelAndView modelAndView){
-        if (!model.containsAttribute("editPost")){
-            model.addAttribute("editPost",this.mapper.map(this.postService.findById(id),EditPostModel.class));
+    public ModelAndView editPost(@RequestParam String id, Model model, ModelAndView modelAndView,Principal principal) {
+
+        if (!model.containsAttribute("editPost")) {
+            model.addAttribute("editPost", this.mapper.map(this.postService.findById(id), EditPostModel.class));
         }
         if (!model.containsAttribute("postSearch")) {
             model.addAttribute("postSearch", new PostSearchModel());
@@ -202,20 +205,19 @@ public class PostController {
     }
 
     @PostMapping("/edit")
-    @PreAuthorize("hasAnyRole('ROLE_ROOT','ROLE_ADMIN','ROLE_BLOG-KING')")
     public ModelAndView editPostConfirm(@Valid @ModelAttribute("editPost") EditPostModel editPost,
                                         BindingResult bindingResult,
                                         RedirectAttributes redirectAttributes,
                                         ModelAndView modelAndView,
-                                        @RequestParam String id){
+                                        @RequestParam String id) {
 
-        if (bindingResult.hasErrors()){
-            redirectAttributes.addFlashAttribute("editPost",editPost);
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.editPost",bindingResult);
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("editPost", editPost);
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.editPost", bindingResult);
             modelAndView.setViewName("redirect:/posts/edit?id=" + id);
-        }else {
+        } else {
             PostCreateServiceModel map = this.mapper.map(editPost, PostCreateServiceModel.class);
-            this.postService.edit(map,id);
+            this.postService.edit(map, id);
             modelAndView.setViewName("redirect:/posts/all");
         }
 
@@ -223,10 +225,43 @@ public class PostController {
     }
 
     @PostMapping("/article/delete/{author}/{postId}")
-    public ModelAndView deletePostByAuthor(@PathVariable String author,@PathVariable String post){
+    public ModelAndView deletePostByAuthor(@PathVariable String author, @PathVariable String post) {
 
-        return  new ModelAndView();
+        return new ModelAndView();
     }
 
+    @PostMapping("/become-moderator/{username}/{postID}")
+    public ModelAndView subscribeForModerator(@PathVariable String username,@PathVariable String postID
+            , ModelAndView modelAndView) {
 
+        return modelAndView;
+    }
+
+    @GetMapping("/subscribe-newsletter/{username}/{postID}")
+    @PageTitle("Blog Subscription Info")
+    public ModelAndView subscribeForNewsletter(@PathVariable String username,@PathVariable String postID,
+             ModelAndView modelAndView) {
+        modelAndView.addObject("postID",postID);
+        if (this.userService.isBlogSubscriptionSuccessful(username)) {
+            modelAndView.setViewName("blog/newsletter/successful-subscription");
+        } else {
+            modelAndView.addObject("postID",postID);
+
+            modelAndView.setViewName("blog/newsletter/unsuccessful-subscription");
+        }
+        return modelAndView;
+    }
+
+    @PostMapping("/delete")
+    public ModelAndView deleteOwnPost(@RequestParam String id, Principal principal, ModelAndView modelAndView){
+        PostViewServiceModel byId = this.postService.findById(id);
+        if (byId.getAuthor().equals(principal.getName())){
+            this.postService.deleteById(id);
+            modelAndView.setViewName("redirect:/posts/all");
+        }else {
+            modelAndView.setViewName("redirect:/posts/article?id="  +id);
+        }
+
+        return modelAndView;
+    }
 }

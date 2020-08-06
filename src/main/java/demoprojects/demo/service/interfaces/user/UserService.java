@@ -38,7 +38,7 @@ public interface UserService extends UserDetailsService {
 
     void changeRoles(RoleChangeServiceModel roles, String username);
 
-    List<String> listAllUsernames();
+    List<String> listAllUsernamesWithoutPrincipal(String principalUsername);
 
     String resetPassword(String email);
 
@@ -58,8 +58,13 @@ public interface UserService extends UserDetailsService {
 
     List<String> listAllUserEmails();
 
-    List<ProductViewServiceModel> listAllProductsFromLastWeek();
-
-
     String findPreviousAvatarURL(String name);
+
+    boolean isBlogSubscriptionSuccessful(String username);
+
+    boolean isShopSubscriptionSuccessful(String username);
+
+    List<String> findUsersSubscribedToBlog();
+
+    List<String> findUsersSubscribedToShop();
 }
