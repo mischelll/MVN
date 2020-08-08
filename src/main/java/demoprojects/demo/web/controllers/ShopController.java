@@ -9,6 +9,7 @@ import demoprojects.demo.service.interfaces.user.UserService;
 import demoprojects.demo.service.models.bind.ProductCreateServiceModel;
 import demoprojects.demo.service.models.bind.ProductEditServiceModel;
 import demoprojects.demo.service.models.bind.ProductImageCreateServiceModel;
+import demoprojects.demo.util.constants.controllers.ShopConstants;
 import demoprojects.demo.util.filesIO.FileManager;
 import demoprojects.demo.web.models.*;
 import org.modelmapper.ModelMapper;
@@ -24,6 +25,7 @@ import java.io.IOException;
 import java.security.Principal;
 
 import static demoprojects.demo.util.Messages.*;
+import static demoprojects.demo.util.constants.controllers.ShopConstants.*;
 
 @Controller
 @RequestMapping("/mvn/shop")
@@ -60,7 +62,7 @@ public class ShopController extends BaseController {
             model.addAttribute("productSearch", new ProductSearchModel());
         }
         modelAndView.addObject("newestProducts", this.productService.listNewestProducts());
-        modelAndView.setViewName("shop/index");
+        modelAndView.setViewName(INDEX_PAGE);
         return modelAndView;
     }
 
@@ -71,7 +73,7 @@ public class ShopController extends BaseController {
             model.addAttribute("productSearch", new ProductSearchModel());
         }
         modelAndView.addObject("products", this.productService.listAllProducts());
-        modelAndView.setViewName("shop/products");
+        modelAndView.setViewName(PRODUCTS_PAGE);
         return modelAndView;
     }
 
@@ -88,7 +90,7 @@ public class ShopController extends BaseController {
         if (!model.containsAttribute("productSearch")) {
             model.addAttribute("productSearch", new ProductSearchModel());
         }
-        modelAndView.setViewName("shop/contact");
+        modelAndView.setViewName(CONTACT_PAGE);
 
         return modelAndView;
     }
@@ -103,7 +105,7 @@ public class ShopController extends BaseController {
         if (!model.containsAttribute("productSearch")) {
             model.addAttribute("productSearch", new ProductSearchModel());
         }
-        modelAndView.setViewName("shop/create-product");
+        modelAndView.setViewName(CREATE_PRODUCT_PAGE);
         return modelAndView;
     }
 
@@ -116,12 +118,12 @@ public class ShopController extends BaseController {
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("product", product);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.product", bindingResult);
-            modelAndView.setViewName("redirect:/mvn/shop/product/create");
+            modelAndView.setViewName(REDIRECT_CREATE_PRODUCT_PAGE);
         } else {
             ProductCreateServiceModel productCreateServiceModel = this.mapper.map(product, ProductCreateServiceModel.class);
             productCreateServiceModel.setAuthor(principal.getName());
             ProductCreateServiceModel productCreate = this.productService.createProduct(productCreateServiceModel);
-            modelAndView.setViewName("redirect:/mvn/shop/product/images/upload?id=" + productCreate.getId());
+            modelAndView.setViewName(REDIRECT_IMAGES_UPLOAD_PAGE + productCreate.getId());
         }
 
         return modelAndView;
@@ -130,7 +132,7 @@ public class ShopController extends BaseController {
     @PostMapping("/product/delete")
     public ModelAndView deleteProduct(@RequestParam String id, ModelAndView modelAndView) {
         this.productService.deleteById(id);
-        modelAndView.setViewName("shop/success-deletion");
+        modelAndView.setViewName(DELETE_PRODUCT_SUCCESS_PAGE);
         return modelAndView;
     }
 
@@ -148,7 +150,7 @@ public class ShopController extends BaseController {
         modelAndView.addObject("product", this.productService.findProduct(id));
         modelAndView.addObject("relatedProducts", this.productService.findRelatedProducts(id));
 
-        modelAndView.setViewName("shop/product");
+        modelAndView.setViewName(PRODUCT_PAGE);
         return modelAndView;
     }
 
@@ -163,7 +165,7 @@ public class ShopController extends BaseController {
         this.emailService.sendEmail(sellerEmail, interestInProductCC(sellerUsername, productTitle),
                 interestInProductThroughUs(this.userService.getUserEmail(client), productTitle,
                         CONTACT_THROUGH_US_MESSAGE));
-        modelAndView.setViewName("redirect:/mvn/shop/successful-request?id=" + productId);
+        modelAndView.setViewName(REDIRECT_SUCCESSFUL_REQUEST_PAGE + productId);
 
         return modelAndView;
     }
@@ -171,7 +173,7 @@ public class ShopController extends BaseController {
     @GetMapping("/successful-request")
     public ModelAndView getSuccessPage(ModelAndView modelAndView, @RequestParam String id) {
         modelAndView.addObject("id", id);
-        modelAndView.setViewName("shop/success-request");
+        modelAndView.setViewName(SUCCESSFUL_REQUEST_PAGE);
 
         return modelAndView;
     }
@@ -196,7 +198,7 @@ public class ShopController extends BaseController {
             redirectAttributes.addFlashAttribute("success", true);
         }
 
-        modelAndView.setViewName("redirect:/mvn/shop/product?id=" + id);
+        modelAndView.setViewName(REDIRECT_PRODUCT_PAGE + id);
         return modelAndView;
     }
 
@@ -210,7 +212,7 @@ public class ShopController extends BaseController {
         if (!model.containsAttribute("productEdit")) {
             model.addAttribute("productEdit", this.mapper.map(this.productService.findProductToEdit(id), ProductEditModel.class));
         }
-        modelAndView.setViewName("shop/product-edit");
+        modelAndView.setViewName(EDIT_PRODUCT_PAGE);
         return modelAndView;
     }
 
@@ -223,11 +225,11 @@ public class ShopController extends BaseController {
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("productEdit", productEdit);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.productEdit", bindingResult);
-            modelAndView.setViewName("redirect:/mvn/shop/product/edit?id=" + id);
+            modelAndView.setViewName(REDIRECT_EDIT_PRODUCT_PAGE + id);
         } else {
             ProductEditServiceModel map = this.mapper.map(productEdit, ProductEditServiceModel.class);
             this.productService.editProduct(map, id);
-            modelAndView.setViewName("redirect:/mvn/shop/product?id=" + id);
+            modelAndView.setViewName(REDIRECT_PRODUCT_PAGE + id);
         }
 
         return modelAndView;
@@ -240,12 +242,12 @@ public class ShopController extends BaseController {
             model.addAttribute("productSearch", new ProductSearchModel());
         }
         if (!principal.getName().equals(username)) {
-            modelAndView.setViewName("redirect:/mvn/shop/my-products/" + principal.getName());
+            modelAndView.setViewName(REDIRECT_MY_PRODUCTS_PAGE + principal.getName());
             return modelAndView;
         }
         modelAndView.addObject("user", username);
         modelAndView.addObject("usersList", this.userService.listAllUsernamesWithoutPrincipal(principal.getName()));
-        modelAndView.setViewName("shop/user-products");
+        modelAndView.setViewName(USER_PRODUCTS_PAGE);
         return modelAndView;
     }
 
@@ -256,12 +258,12 @@ public class ShopController extends BaseController {
             model.addAttribute("productSearch", new ProductSearchModel());
         }
         if (!principal.getName().equals(username)) {
-            modelAndView.setViewName("redirect:/mvn/shop/my-sold-products/" + principal.getName());
+            modelAndView.setViewName(REDIRECT_MY_SOLD_PRODUCTS_PAGE + principal.getName());
             return modelAndView;
         }
         modelAndView.addObject("soldRevenue", this.productService.calculateSoldRevenue(username));
         modelAndView.addObject("user", username);
-        modelAndView.setViewName("shop/user-sold-products");
+        modelAndView.setViewName(USER_SOLD_PRODUCTS_PAGE);
         return modelAndView;
     }
 
@@ -272,12 +274,12 @@ public class ShopController extends BaseController {
             model.addAttribute("productSearch", new ProductSearchModel());
         }
         if (!principal.getName().equals(username)) {
-            modelAndView.setViewName("redirect:/mvn/shop/my-bought-products/" + principal.getName());
+            modelAndView.setViewName(REDIRECT_MY_BOUGHT_PRODUCTS_PAGE + principal.getName());
             return modelAndView;
         }
 
         modelAndView.addObject("user", username);
-        modelAndView.setViewName("shop/user-bought-products");
+        modelAndView.setViewName(USER_BOUGHT_PRODUCTS_PAGE);
         return modelAndView;
     }
 
@@ -293,7 +295,7 @@ public class ShopController extends BaseController {
             model.addAttribute("image", productImageCreateModel);
         }
 
-        modelAndView.setViewName("shop/upload-product-images");
+        modelAndView.setViewName(UPLOAD_PRODUCT_IMAGES_PAGE);
         return modelAndView;
     }
 
@@ -314,7 +316,7 @@ public class ShopController extends BaseController {
             redirectAttributes.addFlashAttribute("filesFormatError", !fileFormatCorrect);
 
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.image", bindingResult);
-            modelAndView.setViewName("redirect:/mvn/shop/product/images/upload?id=" + id);
+            modelAndView.setViewName(REDIRECT_IMAGES_UPLOAD_PRODUCT_PAGE + id);
         } else {
             image.getImages().forEach(imageCreate -> {
                 ProductImageCreateServiceModel serviceModel = new ProductImageCreateServiceModel();
@@ -324,12 +326,12 @@ public class ShopController extends BaseController {
                     serviceModel.setImgUrl(this.cloudinaryService.upload(imageCreate));
                 } catch (IOException e) {
                     modelAndView.addObject("productID",id);
-                    modelAndView.setViewName("shop/unsuccessful-images-upload");
+                    modelAndView.setViewName(UNSUCCESSFUL_IMAGES_UPLOAD_PAGE);
                 }
                 this.imageService.uploadProductsPicture(serviceModel, id);
             });
 
-            modelAndView.setViewName("redirect:/mvn/shop/products");
+            modelAndView.setViewName(REDIRECT_PRODUCTS_PAGE);
         }
 
         return modelAndView;
@@ -342,10 +344,10 @@ public class ShopController extends BaseController {
                                                ModelAndView modelAndView) {
 
         if (this.userService.isShopSubscriptionSuccessful(username)) {
-            modelAndView.setViewName("shop/newsletter/successful-subscription");
+            modelAndView.setViewName(NEWSLETTER_SUCCESSFUL_PAGE);
         } else {
 
-            modelAndView.setViewName("shop/newsletter/unsuccessful-subscription");
+            modelAndView.setViewName(NEWSLETTER_UNSUCCESSFUL_PAGE);
         }
         return modelAndView;
     }
@@ -357,7 +359,7 @@ public class ShopController extends BaseController {
             model.addAttribute("productSearch", new ProductSearchModel());
         }
         model.addAttribute("products", this.productService.findByTitle(title));
-        modelAndView.setViewName("shop/products");
+        modelAndView.setViewName(PRODUCTS_PAGE);
 
         return modelAndView;
     }

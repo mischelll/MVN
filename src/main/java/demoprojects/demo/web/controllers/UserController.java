@@ -7,6 +7,7 @@ import demoprojects.demo.service.interfaces.user.UserService;
 import demoprojects.demo.service.models.bind.ChangeAvatarServiceModel;
 import demoprojects.demo.service.models.bind.ProfileEditServiceModel;
 import demoprojects.demo.service.models.view.UserProfileViewServiceModel;
+import demoprojects.demo.util.constants.controllers.UserConstants;
 import demoprojects.demo.web.models.ChangeAvatarModel;
 import demoprojects.demo.web.models.PasswordChangeModel;
 import demoprojects.demo.web.models.ProfileEditModel;
@@ -22,6 +23,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.security.Principal;
+
+import static demoprojects.demo.util.constants.controllers.UserConstants.*;
 
 @Controller
 @RequestMapping("/mvn/users/api")
@@ -53,7 +56,7 @@ public class UserController extends BaseController {
             super.redirect("/logout");//change it
         }
 
-        return new ModelAndView("home/home");
+        return new ModelAndView(HOME_PAGE);
     }
 
     @GetMapping("/profile")
@@ -61,7 +64,7 @@ public class UserController extends BaseController {
         UserProfileViewServiceModel userProfile = this.userService.getUserProfile(id);
         modelAndView.addObject("user", userProfile);
         modelAndView.addObject("hasAvatar", userProfile.getImgUrl() == null);
-        modelAndView.setViewName("user/profile");
+        modelAndView.setViewName(USER_PROFILE_PAGE);
 
         return modelAndView;
     }
@@ -73,7 +76,7 @@ public class UserController extends BaseController {
             passwordChangeModel.setId(id);
             model.addAttribute("passChange", passwordChangeModel);
         }
-        modelAndView.setViewName("user/change-password");
+        modelAndView.setViewName(USER_CHANGE_PASS_PAGE);
 
         return modelAndView;
     }
@@ -97,11 +100,11 @@ public class UserController extends BaseController {
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.passChange", bindingResult);
             redirectAttributes.addFlashAttribute("notMatching", !matching);
             redirectAttributes.addFlashAttribute("notMatchingOld", !matchOldPassword);
-            modelAndView.setViewName("redirect:/mvn/users/api/profile/change-pass?id=" + id);
+            modelAndView.setViewName(REDIRECT_USER_CHANGE_PASS_PAGE + id);
 
         } else {
             this.userService.changePassword(id, passChange.getNewPassword());
-            modelAndView.setViewName("redirect:/mvn/users/api/profile?id=" + id);
+            modelAndView.setViewName(REDIRECT_USER_PROFILE_PAGE + id);
         }
         return modelAndView;
     }
@@ -109,7 +112,7 @@ public class UserController extends BaseController {
     @GetMapping("/profile-view/{username}")
     public ModelAndView getProfileView(@PathVariable String username, ModelAndView modelAndView) {
         modelAndView.addObject("user", this.userService.getUserVIewProfile(username));
-        modelAndView.setViewName("user/profile-view");
+        modelAndView.setViewName(USER_PROFILE_VIEW_PAGE);
 
         return modelAndView;
     }
@@ -121,7 +124,7 @@ public class UserController extends BaseController {
             changeAvatarModel.setUserId(id);
             model.addAttribute("changeAvatar", changeAvatarModel);
         }
-        modelAndView.setViewName("user/change-avatar");
+        modelAndView.setViewName(USER_CHANGE_AVATAR_PAGE);
         return modelAndView;
     }
 
@@ -145,11 +148,11 @@ public class UserController extends BaseController {
             }
             map.setImgUrl(this.cloudinaryService.upload(changeAvatarModel.getImage()));
             this.imageService.uploadUserAvatar(map, id);
-            modelAndView.setViewName("redirect:/mvn/users/api/profile?id=" + id);
+            modelAndView.setViewName(REDIRECT_USER_PROFILE_PAGE + id);
         } else {
             modelAndView.addObject("incorrectSize", !isMaxSizeCorrect);
             modelAndView.addObject("incorrectFormat", !isFormatCorrect);
-            modelAndView.setViewName("redirect:/mvn/users/api/profile/change-avatar?id=" + id);
+            modelAndView.setViewName(REDIRECT_USER_CHANGE_AVATAR_PAGE + id);
         }
 
         return modelAndView;
@@ -161,7 +164,7 @@ public class UserController extends BaseController {
             modelAndView.addObject("user", this.mapper.map(this.userService.getEditUserProfile(id), ProfileEditModel.class));
         }
 
-        modelAndView.setViewName("user/profile-edit");
+        modelAndView.setViewName(USER_PROFILE_EDIT_PAGE);
 
         return modelAndView;
     }
@@ -175,13 +178,13 @@ public class UserController extends BaseController {
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("user", user);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.user", bindingResult);
-            modelAndView.setViewName("redirect:/mvn/users/api/profile/edit?id=" + id);
+            modelAndView.setViewName(REDIRECT_USER_PROFILE_EDIT_PAGE + id);
         } else {
             ProfileEditServiceModel map = this.mapper.map(user, ProfileEditServiceModel.class);
             this.userService.editUserProfile(map.getId(), map);
         }
 
-        modelAndView.setViewName("redirect:/mvn/users/api/profile?id=" + id);
+        modelAndView.setViewName(REDIRECT_USER_PROFILE_PAGE + id);
 
         return modelAndView;
     }

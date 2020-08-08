@@ -9,6 +9,7 @@ import demoprojects.demo.service.models.bind.CommentCreateServiceModel;
 import demoprojects.demo.service.models.view.PostCategoryCountModel;
 import demoprojects.demo.service.models.bind.PostCreateServiceModel;
 import demoprojects.demo.service.models.view.PostViewServiceModel;
+import demoprojects.demo.util.constants.controllers.BlogConstants;
 import demoprojects.demo.web.models.CommentCreateModel;
 import demoprojects.demo.web.models.EditPostModel;
 import demoprojects.demo.web.models.PostCreateModel;
@@ -28,6 +29,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static demoprojects.demo.util.constants.controllers.BlogConstants.*;
 
 @Controller
 @RequestMapping("/posts")
@@ -51,7 +54,7 @@ public class PostController {
             model.addAttribute("postSearch", new PostSearchModel());
         }
         model.addAttribute("posts", this.postService.findLatest10());
-        return new ModelAndView("blog/index");
+        return new ModelAndView(INDEX_PAGE);
     }
 
     @GetMapping("/all/search")
@@ -61,7 +64,7 @@ public class PostController {
         }
         String name = title;
         model.addAttribute("posts", this.postService.findByTitle(title));
-        modelAndView.setViewName("blog/index");
+        modelAndView.setViewName(INDEX_PAGE);
 
         return modelAndView;
     }
@@ -76,7 +79,6 @@ public class PostController {
     }
 
     @GetMapping("/create")
-
     @PageTitle("Blog | Create")
     public ModelAndView createPost(ModelAndView modelAndView, Model model) {
         if (!model.containsAttribute("postSearch")) {
@@ -85,7 +87,7 @@ public class PostController {
         if (!model.containsAttribute("post")) {
             model.addAttribute("post", new PostCreateModel());
         }
-        modelAndView.setViewName("blog/create-post");
+        modelAndView.setViewName(CREATE_PAGE);
         return modelAndView;
     }
 
@@ -99,7 +101,7 @@ public class PostController {
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("post", post);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.post", bindingResult);
-            modelAndView.setViewName("redirect:/posts/create");
+            modelAndView.setViewName(REDIRECT_CREATE_PAGE);
         } else {
             PostCreateServiceModel postServiceModel = this.mapper.map(post, PostCreateServiceModel.class);
             postServiceModel.setAuthor(principal.getName());
@@ -108,9 +110,9 @@ public class PostController {
             if (model == null) {
                 redirectAttributes.addFlashAttribute("post", post);
                 redirectAttributes.addFlashAttribute("found", true);
-                modelAndView.setViewName("redirect:/posts/create");
+                modelAndView.setViewName(REDIRECT_CREATE_PAGE);
             } else {
-                modelAndView.setViewName("redirect:/posts/all");
+                modelAndView.setViewName(REDIRECT_ALL_POSTS_PAGE);
             }
 
         }
@@ -145,7 +147,7 @@ public class PostController {
         modelAndView.addObject("popular", this.postService.getTopThreePosts());
         modelAndView.addObject("post", byId);
         modelAndView.addObject("comments", this.commentService.commentsOfPost(id));
-        modelAndView.setViewName("blog/single");
+        modelAndView.setViewName(SINGLE_PAGE);
 
         return modelAndView;
     }
@@ -171,7 +173,7 @@ public class PostController {
                     this.commentService.createComment(map);
         }
 
-        modelAndView.setViewName("redirect:/posts/article?id=" + id);
+        modelAndView.setViewName(REDIRECT_ARTICLE_PAGE + id);
         return modelAndView;
     }
 
@@ -185,7 +187,7 @@ public class PostController {
         if (!model.containsAttribute("postSearch")) {
             model.addAttribute("postSearch", new PostSearchModel());
         }
-        modelAndView.setViewName("blog/about");
+        modelAndView.setViewName(ABOUT_PAGE);
 
         return modelAndView;
     }
@@ -200,7 +202,7 @@ public class PostController {
         if (!model.containsAttribute("postSearch")) {
             model.addAttribute("postSearch", new PostSearchModel());
         }
-        modelAndView.setViewName("blog/edit-post");
+        modelAndView.setViewName(EDIT_POST_PAGE);
         return modelAndView;
     }
 
@@ -214,21 +216,16 @@ public class PostController {
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("editPost", editPost);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.editPost", bindingResult);
-            modelAndView.setViewName("redirect:/posts/edit?id=" + id);
+            modelAndView.setViewName(REDIRECT_EDIT_POST_PAGE + id);
         } else {
             PostCreateServiceModel map = this.mapper.map(editPost, PostCreateServiceModel.class);
             this.postService.edit(map, id);
-            modelAndView.setViewName("redirect:/posts/all");
+            modelAndView.setViewName(REDIRECT_ALL_POSTS_PAGE);
         }
 
         return modelAndView;
     }
 
-    @PostMapping("/article/delete/{author}/{postId}")
-    public ModelAndView deletePostByAuthor(@PathVariable String author, @PathVariable String post) {
-
-        return new ModelAndView();
-    }
 
     @PostMapping("/become-moderator/{username}/{postID}")
     public ModelAndView subscribeForModerator(@PathVariable String username,@PathVariable String postID
@@ -243,11 +240,11 @@ public class PostController {
              ModelAndView modelAndView) {
         modelAndView.addObject("postID",postID);
         if (this.userService.isBlogSubscriptionSuccessful(username)) {
-            modelAndView.setViewName("blog/newsletter/successful-subscription");
+            modelAndView.setViewName(NEWSLETTER_SUCCESSFUL_PAGE);
         } else {
             modelAndView.addObject("postID",postID);
 
-            modelAndView.setViewName("blog/newsletter/unsuccessful-subscription");
+            modelAndView.setViewName(NEWSLETTER_UNSUCCESSFUL_PAGE);
         }
         return modelAndView;
     }
@@ -257,9 +254,9 @@ public class PostController {
         PostViewServiceModel byId = this.postService.findById(id);
         if (byId.getAuthor().equals(principal.getName())){
             this.postService.deleteById(id);
-            modelAndView.setViewName("redirect:/posts/all");
+            modelAndView.setViewName(REDIRECT_ALL_POSTS_PAGE);
         }else {
-            modelAndView.setViewName("redirect:/posts/article?id="  +id);
+            modelAndView.setViewName(REDIRECT_ARTICLE_PAGE  +id);
         }
 
         return modelAndView;
