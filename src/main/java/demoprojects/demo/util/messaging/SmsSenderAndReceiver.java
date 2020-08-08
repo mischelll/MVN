@@ -20,7 +20,7 @@ public class SmsSenderAndReceiver  {
     public void sendMessage(){
         Twilio.init(ACCOUNT_SID,ACCOUNT_TOKEN);
 
-        Message.creator(new PhoneNumber("+359878237116"),new PhoneNumber(phoneNumber),"Имате незаплатен фиш към КАТ Перник. Моля заплатете фиша в 7-дневен срок. КАТ Перник").create();
+       
     }
 
 }
